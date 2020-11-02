@@ -5,7 +5,13 @@ create table "HOSPITAL"
             primary key,
     "HOSPITAL_NAME" VARCHAR2(255) not null,
     "LOCATION"      VARCHAR2(255),
-    "CAPACITY"      NUMBER(10)
+    "CAPACITY"      NUMBER(10),
+    "FIRST_NAME" VARCHAR2(255) not null ,
+    "LAST_NAME" VARCHAR2(255) not null ,
+    "PASSWORD" VARCHAR2(255) not null,
+    "GENDER" VARCHAR2(1) not null ,
+    "EMAIL" VARCHAR2(255) not null,
+    "PHONE" VARCHAR2(255)
 );
 create table "DOCTOR"
 (
@@ -22,7 +28,8 @@ create table "DOCTOR"
     "isBLOOD_AVAILABLE" VARCHAR2(1),
     "GENDER"              VARCHAR2(1)   not null,
     "FEES"                NUMBER(10),
-    "HOSPITAL_ID"         NUMBER(10) CONSTRAINT D_HOSPITAL_ID_FK REFERENCES HOSPITAL
+    "HOSPITAL_ID"         NUMBER(10) CONSTRAINT D_HOSPITAL_ID_FK REFERENCES HOSPITAL,
+    "LOCATION" VARCHAR2(255)
 );
 
 create table "USERS"
@@ -53,7 +60,13 @@ create table "BLOOD_BANK"
     "O+"          NUMBER(10),
     "O-"          NUMBER(10),
     "AB+"         NUMBER(10),
-    "AB-"         NUMBER(10)
+    "AB-"         NUMBER(10),
+    "FIRST_NAME" VARCHAR2(255) not null,
+    "LAST_NAME" VARCHAR2(255) not null ,
+    "PASSWORD" VARCHAR2(255) not null ,
+    "GENDER" VARCHAR2(1) not null ,
+    "EMAIL" VARCHAR2(255) not null ,
+    "PHONE" VARCHAR2(255)
 );
 
 create table "DOCTOR_USER_HISTORY"
