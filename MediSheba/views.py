@@ -7,8 +7,9 @@ from HelperClasses import json_extractor
 
 from .models import DoctorName
 
-
 # login
+user_info = {}  # holds user data across pages
+
 
 def login(request):
     return render(request, "auth/LogInOrSignUp.html")
@@ -27,7 +28,6 @@ def submit(request):
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
 
     c = conn.cursor()
-    user_info = {}
 
     # TODO: connect database and verify
     if user == "Doctor":
@@ -53,12 +53,18 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "User":
-        statement = "SELECT USER_ID, PASSWORD from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT USER_ID, PASSWORD, FIRST_NAME||' '||LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
+
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
+            return_name = x[2]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -70,12 +76,17 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "HospitalAdmin":
-        statement = "SELECT HOSPITAL_ID,PASSWORD from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT HOSPITAL_ID,PASSWORD, FIRST_NAME||' '||LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
+            return_name = x[2]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -87,12 +98,17 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "BloodBankAdmin":
-        statement = "SELECT BLOOD_BANK_ID,PASSWORD from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT BLOOD_BANK_ID,PASSWORD, FIRST_NAME||' '|| LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
+            return_name = x[2]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -205,13 +221,20 @@ def doctor_edit_profile(request):
 
     hospital_names = []
 
+    '''
+    print(user_info['pk'])
+    print(user_info['name'])
+    print(user_info['email'])
+    '''
+
     for i in c:
         hospital_names.append(i[0])
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
 
-    return render(request, 'homepage/DoctorProfileEditor.html', {'hospital_names': hospital_names, 'locations':location_names})
+    return render(request, 'homepage/DoctorProfileEditor.html',
+                  {'hospital_names': hospital_names, 'locations': location_names})
 
 
 def search_options(request):
@@ -263,5 +286,5 @@ def see_doctors(request):
         index = index + 1
     conn.close()
 
-    return render(request, "query_pages/doctor_query.html", {'doc': docList, 'opt': location_names,'specialization':specialization})
-
+    return render(request, "query_pages/doctor_query.html",
+                  {'doc': docList, 'opt': location_names, 'specialization': specialization})
