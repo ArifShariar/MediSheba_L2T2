@@ -1,0 +1,41 @@
+{% load static %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Doctor Home</title>
+    <link rel="stylesheet" href="{% static 'css/docHome.css' %}">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  </head>
+  <body>
+    <input type="checkbox" id="check">
+    <label for="check">
+      <i class="fas fa-bars" id="btn"></i>
+      <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+    <header>Menu</header>
+  <ul>
+    <li><a href="{% url 'doctor_settings' %}"><i class="fas fa-link"></i>Settings</a></li>
+    <li><a href="{% url 'logout' %}"><i class="fas fa-link"></i>Log Out</a></li>
+  </ul>
+</div>
+<h1>MediSheba Doctor</h1>
+
+        <div>
+            <button class="block">View Calendar</button>
+            <button class="block">View Appointments</button>
+
+
+            <button class="block">History</button>
+            <button class="block">Change Schedule</button>
+
+
+        </div>
+
+        <div>
+            <button class="block"><a href="{% url 'doctor_edit_profile' %}"><i class="fas fa-link"></i> Profile</a> </button>
+        </div>
+<section></section>
+  </body>
+</html>
