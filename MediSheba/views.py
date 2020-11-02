@@ -147,29 +147,31 @@ def signupSubmit(request):
     else:
         gender = "F"
 
-    '''
-    print("USER TYPE: " + usertype)
-    print("F NAME: " + firstname)
-    print("L NAME: " + lastname)
-    print("EMAIL: " + email)
-    print("PASS: " + password)
-    print("C PASS: " + confirm)
-    print("PHONE: " + phone)
-    print("GENDER: " + gender)
-    '''
     if usertype == 'doctor':
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
+        c2 = conn.cursor()
 
         statement = "INSERT INTO MEDI_SHEBA.DOCTOR(FIRST_NAME, LAST_NAME, EMAIL, PHONE,PASSWORD, GENDER) VALUES (" + "\'" + firstname + \
                     "\', " + "\'" + lastname + "\'," + "\'" + email + "\', " + "\'" + phone + "\', " + "\'" + password + "\', " + "\'" + gender + "\'" + ")"
         c.execute(statement)
         conn.commit()
-        print("SUCCESS INSERTING INTO DOCTORS")
 
-        return render(request, "homepage/DoctorHome2.html")
+        statement = "SELECT DOCTOR_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.DOCTOR WHERE EMAIL=" + "\'" + email + "\'"
+        c2.execute(statement)
+
+        if c2:
+            x = c2.fetchone()
+            return_id = x[0]
+            return_name = x[1]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
+
+        return render(request, "homepage/DoctorHome2.html", {'name': return_name})
 
     elif usertype == 'user':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -179,8 +181,22 @@ def signupSubmit(request):
                     "\', " + "\'" + lastname + "\'," + "\'" + email + "\', " + "\'" + phone + "\', " + "\'" + password + "\', " + "\'" + gender + "\'" + ")"
         c.execute(statement)
         conn.commit()
-        print(statement)
-        print("SUCCESS INSERTING INTO USERS")
+
+        c2 = conn.cursor()
+
+        statement = "SELECT USER_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
+
+        c2.execute(statement)
+
+        if c2:
+            x = c2.fetchone()
+            return_id = x[0]
+            return_name = x[1]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
+
         return render(request, "homepage/UserHome.html")
 
     elif usertype == 'hospitalAdmin':
@@ -194,6 +210,22 @@ def signupSubmit(request):
 
         c.execute(statement)
         conn.commit()
+
+        c2 = conn.cursor()
+
+        statement = "SELECT HOSPITAL_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
+
+        c2.execute(statement)
+
+        if c2:
+            x = c2.fetchone()
+            return_id = x[0]
+            return_name = x[1]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
+
         return render(request, "homepage/HospitalAdminHome.html")
 
     elif usertype == 'bloodbankAdmin':
@@ -207,6 +239,22 @@ def signupSubmit(request):
 
         c.execute(statement)
         conn.commit()
+
+        c2 = conn.cursor()
+
+        statement = "SELECT BLOOD_BANK_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
+
+        c2.execute(statement)
+
+        if c2:
+            x = c2.fetchone()
+            return_id = x[0]
+            return_name = x[1]
+
+            user_info['pk'] = return_id
+            user_info['name'] = return_name
+            user_info['email'] = email
+
         return render(request, "homepage/BloodbankAdminHome.html")
 
 
