@@ -3,6 +3,8 @@ from django.urls import path
 
 from MediSheba import views as MediSheba_views
 
+app_name = 'main'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 

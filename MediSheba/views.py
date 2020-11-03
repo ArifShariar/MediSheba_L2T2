@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import cx_Oracle
 
 import HelperClasses.encryptPass as decoder_encoder
@@ -261,56 +261,80 @@ def signupSubmit(request):
 # doctor
 
 def doctor_edit_profile(request):
-    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-    c = conn.cursor()
-    statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
-    c.execute(statement)
+    if bool(user_info):
 
-    hospital_names = []
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
 
-    '''
-    print(user_info['pk'])
-    print(user_info['name'])
-    print(user_info['email'])
-    '''
+        hospital_names = []
 
-    for i in c:
-        hospital_names.append(i[0])
+        '''
+        print(user_info['pk'])
+        print(user_info['name'])
+        print(user_info['email'])
+        '''
 
-    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
-    location_names.sort()
+        for i in c:
+            hospital_names.append(i[0])
 
-    return render(request, 'homepage/DoctorProfileEditor.html',
-                  {'hospital_names': hospital_names, 'locations': location_names})
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
+
+        return render(request, 'homepage/DoctorProfileEditor.html',
+                      {'hospital_names': hospital_names, 'locations': location_names, 'name': user_info['name']})
+
+    else:
+        return HttpResponse("NO ACCESS")
 
 
 def search_options(request):
-    return HttpResponse("SEARCH HERE")
+    if bool(user_info):
+        return HttpResponse("SEARCH HERE")
+    else:
+        return HttpResponse("NO ACCESS")
 
 
 def view_appointments(request):
-    return HttpResponse("Appointments Here")
+    if bool(user_info):
+        return HttpResponse("Appointments Here")
+    else:
+        return HttpResponse("No Access")
 
 
 def blood_bank_appointment(request):
-    return HttpResponse("Blood Bank Appointment Here")
+    if bool(user_info):
+        return HttpResponse("Blood Bank Appointment Here")
+    else:
+        return HttpResponse("No Access")
 
 
 def view_calender(request):
-    return HttpResponse("View Calender Here")
+    if bool(user_info):
+        return HttpResponse("View Calender Here")
+    else:
+        return HttpResponse("No Access")
 
 
 def view_records(request):
-    return HttpResponse("view records")
+    if bool(user_info):
+        return HttpResponse("view records")
+    else:
+        return HttpResponse("No Access")
 
 
 def change_schedule(request):
-    return render(request, 'schedule_editor/AddSchedule.html')
+    if bool(user_info):
+        return render(request, 'schedule_editor/AddSchedule.html')
+    else:
+        return HttpResponse("No Access")
 
 
 def logout(request):
-    return HttpResponse("Log Out")
+    user_info.clear()
+    return redirect("login")
 
 
 # USERS
