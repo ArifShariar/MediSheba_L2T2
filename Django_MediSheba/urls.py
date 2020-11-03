@@ -21,5 +21,10 @@ urlpatterns = [
     path('doctor/change_schedule', MediSheba_views.change_schedule, name='change_schedule'),
     path('doctor/logout', MediSheba_views.logout, name='log_out'),
 
-    path('users/see_doctors', MediSheba_views.see_doctors, name='see_doctors')
+    path('users/see_doctors', MediSheba_views.see_doctors, name='see_doctors'),
+
+    path('doctor/search_doctors', MediSheba_views.search_doctors, name='search_doctors'),
+    path('hospital/search_hospitals', MediSheba_views.search_hospitals, name='search_hospitals'),
+    path('blood_bank/search_blood_banks', MediSheba_views.search_blood_banks, name='search_blood_banks')
+
 ]

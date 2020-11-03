@@ -286,7 +286,10 @@ def doctor_edit_profile(request):
 
 
 def search_options(request):
-    return HttpResponse("SEARCH HERE")
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    return render(request, 'homepage/Search.html')
 
 
 def view_appointments(request):
@@ -312,6 +315,8 @@ def change_schedule(request):
 def logout(request):
     return HttpResponse("Log Out")
 
+def search_doctors(request):
+    return HttpResponse("Available doctors:")
 
 # USERS
 
@@ -336,3 +341,13 @@ def see_doctors(request):
 
     return render(request, "query_pages/doctor_query.html",
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
+
+# Hospital
+
+def search_hospitals(request):
+    return HttpResponse("Available hospitals:")
+
+# Blood_Bank
+
+def search_blood_banks(request):
+    return HttpResponse("Available blood banks:")
