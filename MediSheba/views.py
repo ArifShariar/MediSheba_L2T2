@@ -10,10 +10,27 @@ from .models import DoctorName
 # login
 user_info = {}  # holds user data across pages
 
-
 def login(request):
     return render(request, "auth/LogInOrSignUp.html")
 
+def signup(request):
+    return render(request, "auth/SignUp.html")
+
+# homepage URLs
+def doctor_home(request):
+    return render(request, "homepage/DoctorHome2.html", {'name': user_info['name']})
+
+
+def user_home(request):
+    return render(request, "homepage/UserHome2.html")
+
+
+def hospital_admin_home(request):
+    return render(request, 'homepage/HospitalAdminHome2.html')
+
+
+def blood_bank_admin_home(request):
+    return render(request,'homepage/BloodbankHome2.html')
 
 def submit(request):
     email = request.POST['email']
@@ -119,11 +136,6 @@ def submit(request):
         else:
             return HttpResponse("Database Error or You don't exist")
     return render(request, "auth/LogInOrSignUp.html")
-
-
-def signup(request):
-    return render(request, "auth/SignUp.html")
-
 
 # signup
 
@@ -285,9 +297,36 @@ def doctor_edit_profile(request):
                   {'hospital_names': hospital_names, 'locations': location_names})
 
 
-def search_options(request):
-    return HttpResponse("SEARCH HERE")
+def submit_changed_profile_doctor(request):
+    first_name = request.POST['f_name']
+    last_name = request.POST['l_name']
+    phone_number = request.POST['phone']
+    location = request.POST['address']
+    email = request.POST['email']
+    blood_type = request.POST['blood_type']
+    hospital_name = request.POST['hospital_name']
+    fee = request.POST['fee']
+    specialization = request.POST['specialization']
+    additional_details = request.POST['additional_details']
 
+    print(first_name)
+    print(last_name)
+    print(phone_number)
+    print(location)
+    print(email)
+    print(blood_type)
+    print(hospital_name)
+    print(fee)
+    print(specialization)
+    print(additional_details)
+
+    return HttpResponse("CHANGED PROFILE")
+
+def search_options(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    return render(request, 'homepage/Search.html')
 
 def view_appointments(request):
     return HttpResponse("Appointments Here")
@@ -312,6 +351,8 @@ def change_schedule(request):
 def logout(request):
     return HttpResponse("Log Out")
 
+def search_doctors(request):
+    return HttpResponse("Available Doctors:")
 
 # USERS
 
@@ -336,3 +377,13 @@ def see_doctors(request):
 
     return render(request, "query_pages/doctor_query.html",
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
+
+# Hospital
+
+def search_hospitals(request):
+    return HttpResponse("Available Hospitals:")
+
+# Blood_Bank
+
+def search_blood_banks(request):
+    return HttpResponse("Available Blood Banks:")
