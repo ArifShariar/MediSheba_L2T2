@@ -12,6 +12,11 @@ urlpatterns = [
     path('signup', MediSheba_views.signup, name='signup'),
     path('', MediSheba_views.login, name='login'),
 
+    path('doctor', MediSheba_views.doctor_home, name='doctor_home'),
+    path('user', MediSheba_views.user_home, name='user_home'),
+    path('hospital_admin', MediSheba_views.hospital_admin_home, name='hospital_admin_home'),
+    path('blood_bank_admin', MediSheba_views.blood_bank_admin_home, name='blood_bank_admin_home'),
+
     path('signupSubmit', MediSheba_views.signupSubmit, name='submit'),
 
     path('doctor/edit_profile_details', MediSheba_views.doctor_edit_profile, name='doctor_edit_profile'),
@@ -22,6 +27,7 @@ urlpatterns = [
     path('doctor/view_records', MediSheba_views.view_records, name='view_records'),
     path('doctor/change_schedule', MediSheba_views.change_schedule, name='change_schedule'),
     path('doctor/logout', MediSheba_views.logout, name='log_out'),
+    path('doctor/submit_changed_profile_doctor', MediSheba_views.submit_changed_profile_doctor, name='submit_changed_profile_doctor'),
 
     path('users/see_doctors', MediSheba_views.see_doctors, name='see_doctors')
 ]

@@ -15,6 +15,27 @@ def login(request):
     return render(request, "auth/LogInOrSignUp.html")
 
 
+def signup(request):
+    return render(request, "auth/SignUp.html")
+
+
+# homepage URLS
+def doctor_home(request):
+    return render(request, "homepage/DoctorHome2.html", {'name': user_info['name']})
+
+
+def user_home(request):
+    return render(request, "homepage/UserHome2.html")
+
+
+def hospital_admin_home(request):
+    return render(request, 'homepage/HospitalAdminHome2.html')
+
+
+def blood_bank_admin_home(request):
+    return render(request,'homepage/BloodbankHome2.html')
+
+
 def submit(request):
     email = request.POST['email']
     password = request.POST['pass']
@@ -46,9 +67,9 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/DoctorHome2.html", {'name': return_name})
+                return redirect("doctor_home")
             else:
-                return HttpResponse("Wrong Pass")
+                return HttpResponse("Access Restricted")
         else:
             return HttpResponse("Database Error or You don't exist")
 
@@ -69,9 +90,9 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/UserHome2.html")
+                return redirect("user_home")
             else:
-                return HttpResponse("Wrong Pass")
+                return HttpResponse("Access restricted")
         else:
             return HttpResponse("Database Error or You don't exist")
 
@@ -91,9 +112,9 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/HospitalAdminHome2.html")
+                return redirect("hospital_admin_home")
             else:
-                return HttpResponse("Wrong Pass")
+                return HttpResponse("Access Restricted")
         else:
             return HttpResponse("Database Error or You don't exist")
 
@@ -113,16 +134,15 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/BloodbankHome2.html")
+                return redirect("blood_bank_admin_home")
             else:
-                return HttpResponse("Wrong Pass")
+                return HttpResponse("Access Restricted")
         else:
             return HttpResponse("Database Error or You don't exist")
     return render(request, "auth/LogInOrSignUp.html")
 
 
-def signup(request):
-    return render(request, "auth/SignUp.html")
+
 
 
 # signup
@@ -288,6 +308,32 @@ def doctor_edit_profile(request):
 
     else:
         return HttpResponse("NO ACCESS")
+
+
+def submit_changed_profile_doctor(request):
+    first_name = request.POST['f_name']
+    last_name = request.POST['l_name']
+    phone_number = request.POST['phone']
+    location = request.POST['address']
+    email = request.POST['email']
+    blood_type = request.POST['blood_type']
+    hospital_name = request.POST['hospital_name']
+    fee = request.POST['fee']
+    specialization = request.POST['specialization']
+    additional_details = request.POST['additional_details']
+
+    print(first_name)
+    print(last_name)
+    print(phone_number)
+    print(location)
+    print(email)
+    print(blood_type)
+    print(hospital_name)
+    print(fee)
+    print(specialization)
+    print(additional_details)
+
+    return HttpResponse("CHANGED PROFILE")
 
 
 def search_options(request):
