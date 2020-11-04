@@ -6,6 +6,7 @@ import HelperClasses.encryptPass as decoder_encoder
 from HelperClasses import json_extractor
 
 from .models import DoctorName
+from .models import BloodBankList
 
 # login
 user_info = {}  # holds user data across pages
@@ -360,7 +361,8 @@ def logout(request):
 
 
 def search_doctors(request):
-    return HttpResponse("Available Doctors:")
+    '''return HttpResponse("Available Doctors:")'''
+    return see_doctors(request)
 
 
 # USERS
@@ -397,4 +399,28 @@ def search_hospitals(request):
 # Blood_Bank
 
 def search_blood_banks(request):
-    return HttpResponse("Available Blood Banks:")
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+
+    bbankList=[]
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    '''
+    
+    ---------
+    Showed  Error in c.execute() 
+    First,Run & See what happens
+    ---------
+    
+    '''
+    c.execute("SELECT NAME,'A+','A-','B+','B-','O+','O-','AB+','AB-'"
+              "from MEDI_SHEBA.BLOOD_BANK")
+
+    index = 1
+    for row in c:
+        bbankList.append(BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],row[8]))
+        index = index + 1
+    conn.close()
+
+    return render(request, "query_pages/blood_bank_query.html", {'b_banks': bbankList,'opt':location_names})
