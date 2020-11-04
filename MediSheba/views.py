@@ -21,19 +21,19 @@ def signup(request):
 
 # homepage URLs
 def doctor_home(request):
-    return render(request, "homepage/DoctorHome2.html", {'name': user_info['name']})
+    return render(request, "homepage/DoctorHome.html", {'name': user_info['name']})
 
 
 def user_home(request):
-    return render(request, "homepage/UserHome2.html")
+    return render(request, "homepage/UserHome.html")
 
 
 def hospital_admin_home(request):
-    return render(request, 'homepage/HospitalAdminHome2.html')
+    return render(request, 'homepage/HospitalAdminHome.html')
 
 
 def blood_bank_admin_home(request):
-    return render(request, 'homepage/BloodbankHome2.html')
+    return render(request, 'homepage/Blood_Bank_Home.html')
 
 
 def submit(request):
@@ -67,7 +67,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/DoctorHome2.html", {'name': return_name})
+                return render(request, "homepage/DoctorHome.html", {'name': return_name})
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -90,7 +90,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/UserHome2.html")
+                return render(request, "homepage/UserHome.html")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -112,7 +112,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/HospitalAdminHome2.html")
+                return render(request, "homepage/HospitalAdminHome.html")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -134,7 +134,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/BloodbankHome2.html")
+                return render(request, "homepage/Blood_Bank_Home.html")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -188,7 +188,7 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/DoctorHome2.html", {'name': return_name})
+        return render(request, "homepage/DoctorHome.html", {'name': return_name})
 
     elif usertype == 'user':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -214,7 +214,7 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/UserHome2.html")
+        return render(request, "homepage/UserHome.html")
 
     elif usertype == 'hospitalAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
