@@ -10,11 +10,14 @@ from .models import DoctorName
 # login
 user_info = {}  # holds user data across pages
 
+
 def login(request):
     return render(request, "auth/LogInOrSignUp.html")
 
+
 def signup(request):
     return render(request, "auth/SignUp.html")
+
 
 # homepage URLs
 def doctor_home(request):
@@ -30,7 +33,8 @@ def hospital_admin_home(request):
 
 
 def blood_bank_admin_home(request):
-    return render(request,'homepage/BloodbankHome2.html')
+    return render(request, 'homepage/BloodbankHome2.html')
+
 
 def submit(request):
     email = request.POST['email']
@@ -137,6 +141,7 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
     return render(request, "auth/LogInOrSignUp.html")
 
+
 # signup
 
 
@@ -209,7 +214,7 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/UserHome.html")
+        return render(request, "homepage/UserHome2.html")
 
     elif usertype == 'hospitalAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -322,11 +327,13 @@ def submit_changed_profile_doctor(request):
 
     return HttpResponse("CHANGED PROFILE")
 
+
 def search_options(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
     return render(request, 'homepage/Search.html')
+
 
 def view_appointments(request):
     return HttpResponse("Appointments Here")
@@ -351,8 +358,10 @@ def change_schedule(request):
 def logout(request):
     return HttpResponse("Log Out")
 
+
 def search_doctors(request):
     return HttpResponse("Available Doctors:")
+
 
 # USERS
 
@@ -378,10 +387,12 @@ def see_doctors(request):
     return render(request, "query_pages/doctor_query.html",
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
+
 # Hospital
 
 def search_hospitals(request):
     return HttpResponse("Available Hospitals:")
+
 
 # Blood_Bank
 
