@@ -13,7 +13,8 @@ class DoctorName:
         self.specialization = specialization
         self.hospital_name = hospital_name
 
-class  BloodBankList:
+
+class BloodBankList:
 
     def __init__(self, id, name, a_plus, a_minus, b_plus, b_minus, o_plus, o_minus, ab_plus, ab_minus):
         self.id = id

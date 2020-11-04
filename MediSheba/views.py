@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import cx_Oracle
 
 import HelperClasses.encryptPass as decoder_encoder
@@ -68,7 +68,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/DoctorHome.html", {'name': return_name})
+                return redirect("doctor_home")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -91,7 +91,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/UserHome.html")
+                return redirect("user_home")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -113,7 +113,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/HospitalAdminHome.html")
+                return redirect("hospital_admin_home")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -135,7 +135,7 @@ def submit(request):
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
             if decoded_password == password:
-                return render(request, "homepage/Blood_Bank_Home.html")
+                return redirect("blood_bank_admin_home")
             else:
                 return HttpResponse("Wrong Pass")
         else:
@@ -189,7 +189,8 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/DoctorHome.html", {'name': return_name})
+        return redirect("doctor_home")
+
 
     elif usertype == 'user':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -215,7 +216,7 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/UserHome.html")
+        return redirect("user_home")
 
     elif usertype == 'hospitalAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -244,14 +245,15 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/HospitalAdminHome.html")
+        return redirect("hospital_admin_home")
 
     elif usertype == 'bloodbankAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
 
-        statement = "INSERT INTO MEDI_SHEBA.BLOOD_BANK(NAME, FIRST_NAME, LAST_NAME, PASSWORD, GENDER, EMAIL, PHONE) VALUES" \
+        statement = "INSERT INTO MEDI_SHEBA.BLOOD_BANK(NAME, FIRST_NAME, LAST_NAME, PASSWORD, GENDER, EMAIL, PHONE) " \
+                    "VALUES" \
                     " (" + "\'" + blood_bank_name + "\'," + "\'" + firstname + "\'," + "\'" + lastname + "\'," + "\'" + password + "\'," + "\'" + gender \
                     + "\'," + "\'" + email + "\'," + "\'" + phone + "\'" + ")"
 
@@ -273,7 +275,7 @@ def signupSubmit(request):
             user_info['name'] = return_name
             user_info['email'] = email
 
-        return render(request, "homepage/BloodbankAdminHome.html")
+        return redirect("blood_bank_admin_home")
 
 
 # doctor
@@ -357,11 +359,11 @@ def change_schedule(request):
 
 
 def logout(request):
-    return HttpResponse("Log Out")
+    user_info.clear()
+    return redirect("login")
 
 
 def search_doctors(request):
-    '''return HttpResponse("Available Doctors:")'''
     return see_doctors(request)
 
 
@@ -407,15 +409,12 @@ def search_blood_banks(request):
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
     '''
-    
-    ---------
-    Showed  Error in c.execute() 
-    First,Run & See what happens
-    ---------
-    
-    '''
     c.execute("SELECT NAME,'A+','A-','B+','B-','O+','O-','AB+','AB-'"
               "from MEDI_SHEBA.BLOOD_BANK")
+    '''
+
+    statement = "SELECT NAME, \"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\" FROM MEDI_SHEBA.BLOOD_BANK"
+    c.execute(statement)
 
     index = 1
     for row in c:
@@ -423,4 +422,4 @@ def search_blood_banks(request):
         index = index + 1
     conn.close()
 
-    return render(request, "query_pages/blood_bank_query.html", {'b_banks': bbankList,'opt':location_names})
+    return render(request, "query_pages/blood_bank_query.html", {'b_banks': bbankList, 'opt': location_names})
