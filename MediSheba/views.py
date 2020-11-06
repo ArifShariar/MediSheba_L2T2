@@ -22,7 +22,7 @@ def signup(request):
 
 # homepage URLs
 def doctor_home(request):
-    return render(request, "homepage/DoctorHome.html", {'name': user_info['name']})
+    return render(request, "homepage/DoctorHome.html", {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 def user_home(request):
@@ -36,6 +36,8 @@ def hospital_admin_home(request):
 def blood_bank_admin_home(request):
     return render(request, 'homepage/Blood_Bank_Home.html')
 
+
+# log in
 
 def submit(request):
     email = request.POST['email']
@@ -53,17 +55,20 @@ def submit(request):
 
     # TODO: connect database and verify
     if user == "Doctor":
-        statement = "SELECT DOCTOR_ID, PASSWORD, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.DOCTOR WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT DOCTOR_ID, PASSWORD, FIRST_NAME, LAST_NAME from MEDI_SHEBA.DOCTOR WHERE EMAIL=" + "\'" + email + "\'"
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
-            return_name = x[2]
+            return_f_name = x[2]
+            return_l_name = x[3]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "doctor"
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -75,18 +80,21 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "User":
-        statement = "SELECT USER_ID, PASSWORD, FIRST_NAME||' '||LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT USER_ID, PASSWORD, FIRST_NAME, LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
 
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
-            return_name = x[2]
+            return_f_name = x[2]
+            return_l_name = x[3]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "user"
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -98,17 +106,20 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "HospitalAdmin":
-        statement = "SELECT HOSPITAL_ID,PASSWORD, FIRST_NAME||' '||LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT HOSPITAL_ID,PASSWORD, FIRST_NAME, LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
-            return_name = x[2]
+            return_f_name = x[2]
+            return_l_name = x[3]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "hospital_admin"
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -120,17 +131,20 @@ def submit(request):
             return HttpResponse("Database Error or You don't exist")
 
     elif user == "BloodBankAdmin":
-        statement = "SELECT BLOOD_BANK_ID,PASSWORD, FIRST_NAME||' '|| LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT BLOOD_BANK_ID,PASSWORD, FIRST_NAME, LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
         c.execute(statement)
         if c:
             x = c.fetchone()
             return_id = x[0]
             return_password = x[1]
-            return_name = x[2]
+            return_f_name = x[2]
+            return_l_name = x[3]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "blood_bank_admin"
 
             decoded_password = decoder_encoder.EncryptPasswords(return_password).decryptPassword()
 
@@ -177,19 +191,24 @@ def signupSubmit(request):
         c.execute(statement)
         conn.commit()
 
-        statement = "SELECT DOCTOR_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.DOCTOR WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME from MEDI_SHEBA.DOCTOR WHERE EMAIL=" + "\'" + email + "\'"
         c2.execute(statement)
 
         if c2:
             x = c2.fetchone()
             return_id = x[0]
-            return_name = x[1]
+            return_f_name = x[1]
+            return_l_name = x[2]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "doctor"
 
-        return redirect("doctor_home")
+            return redirect("doctor_home")
+        else:
+            return HttpResponse("ERROR")  # changed here
 
 
     elif usertype == 'user':
@@ -203,20 +222,25 @@ def signupSubmit(request):
 
         c2 = conn.cursor()
 
-        statement = "SELECT USER_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT USER_ID, FIRST_NAME, LAST_NAME from MEDI_SHEBA.USERS WHERE EMAIL=" + "\'" + email + "\'"
 
         c2.execute(statement)
 
         if c2:
             x = c2.fetchone()
             return_id = x[0]
-            return_name = x[1]
+            return_f_name = x[1]
+            return_l_name = x[2]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "user"
 
-        return redirect("user_home")
+            return redirect("user_home")
+        else:
+            return HttpResponse("ERROR")
 
     elif usertype == 'hospitalAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -232,20 +256,25 @@ def signupSubmit(request):
 
         c2 = conn.cursor()
 
-        statement = "SELECT HOSPITAL_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT HOSPITAL_ID, FIRST_NAME, LAST_NAME from MEDI_SHEBA.HOSPITAL WHERE EMAIL=" + "\'" + email + "\'"
 
         c2.execute(statement)
 
         if c2:
             x = c2.fetchone()
             return_id = x[0]
-            return_name = x[1]
+            return_f_name = x[1]
+            return_l_name = x[2]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "hospital_admin"
 
-        return redirect("hospital_admin_home")
+            return redirect("hospital_admin_home")
+        else:
+            return HttpResponse("ERROR")
 
     elif usertype == 'bloodbankAdmin':
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -262,47 +291,58 @@ def signupSubmit(request):
 
         c2 = conn.cursor()
 
-        statement = "SELECT BLOOD_BANK_ID, FIRST_NAME || ' ' || LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
+        statement = "SELECT BLOOD_BANK_ID, FIRST_NAME, LAST_NAME from MEDI_SHEBA.BLOOD_BANK WHERE EMAIL=" + "\'" + email + "\'"
 
         c2.execute(statement)
 
         if c2:
             x = c2.fetchone()
             return_id = x[0]
-            return_name = x[1]
+            return_f_name = x[1]
+            return_l_name = x[2]
 
             user_info['pk'] = return_id
-            user_info['name'] = return_name
+            user_info['f_name'] = return_f_name
+            user_info['l_name'] = return_l_name
             user_info['email'] = email
+            user_info['type'] = "blood_bank_admin"
 
-        return redirect("blood_bank_admin_home")
+            return redirect("blood_bank_admin_home")
+
+        else:
+            return HttpResponse("ERROR")
 
 
 # doctor
 
 def doctor_edit_profile(request):
-    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-    c = conn.cursor()
-    statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
-    c.execute(statement)
+    # authentication added here
+    if bool(user_info) and user_info['type'] == "doctor":
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
 
-    hospital_names = []
+        hospital_names = []
 
-    '''
-    print(user_info['pk'])
-    print(user_info['name'])
-    print(user_info['email'])
-    '''
+        '''
+        print(user_info['pk'])
+        print(user_info['name'])
+        print(user_info['email'])
+        '''
 
-    for i in c:
-        hospital_names.append(i[0])
+        for i in c:
+            hospital_names.append(i[0])
 
-    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
-    location_names.sort()
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
 
-    return render(request, 'homepage/DoctorProfileEditor.html',
-                  {'hospital_names': hospital_names, 'locations': location_names})
+        return render(request, 'homepage/DoctorProfileEditor.html',
+                      {'hospital_names': hospital_names, 'locations': location_names})
+
+    else:
+        return HttpResponse("NO ACCESS TO THIS PAGE")
 
 
 def submit_changed_profile_doctor(request):
@@ -404,7 +444,7 @@ def search_blood_banks(request):
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
 
-    bbankList=[]
+    bbankList = []
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
@@ -418,7 +458,7 @@ def search_blood_banks(request):
 
     index = 1
     for row in c:
-        bbankList.append(BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],row[8]))
+        bbankList.append(BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
         index = index + 1
     conn.close()
 
