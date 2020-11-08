@@ -357,7 +357,18 @@ def submit_changed_profile_doctor(request):
     specialization = request.POST['specialization']
     additional_details = request.POST['additional_details']
 
-    print(first_name)
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    if first_name is not "":
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+        print("FIRST_NAME EDITED FOR DOCTOR")
+
+    else:
+        print("First Name NOT CHANGED ")
     print(last_name)
     print(phone_number)
     print(location)
