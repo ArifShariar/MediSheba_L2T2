@@ -326,12 +326,6 @@ def doctor_edit_profile(request):
 
         hospital_names = []
 
-        '''
-        print(user_info['pk'])
-        print(user_info['name'])
-        print(user_info['email'])
-        '''
-
         for i in c:
             hospital_names.append(i[0])
 
@@ -359,27 +353,108 @@ def submit_changed_profile_doctor(request):
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-    c = conn.cursor()
 
-    if first_name is not "":
-        statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(user_info['pk'])
+    if first_name != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
         c.execute(statement)
         conn.commit()
-        print("FIRST_NAME EDITED FOR DOCTOR")
-
     else:
         print("First Name NOT CHANGED ")
-    print(last_name)
-    print(phone_number)
-    print(location)
-    print(email)
-    print(blood_type)
-    print(hospital_name)
-    print(fee)
-    print(specialization)
+
+    if last_name != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("LAST Name NOT CHANGED ")
+
+    if phone_number != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET PHONE = " + "\'" + phone_number + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("PHONE NOT CHANGED ")
+
+    if location != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET LOCATION = " + "\'" + location + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("LOCATION NOT CHANGED ")
+
+    if email != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET EMAIL = " + "\'" + email + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("EMAIL NOT CHANGED ")
+
+    if blood_type != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("BLOOD NOT CHANGED ")
+
+    if hospital_name != "":
+        c = conn.cursor()
+        statement_1 = "SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME = " + "\'" + hospital_name + "\'"
+        c.execute(statement_1)
+
+        hospital_id = 0
+        for r in c:
+            hospital_id = r[0]
+
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET HOSPITAL_ID = " + str(hospital_id) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("HOSPITAL NOT CHANGED ")
+
+    if fee != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE DOCTOR_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("FEES NOT CHANGED ")
+
+    if specialization != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.DOCTOR SET SPECIALIZATION = " + "\'" + specialization + "\'" \
+                    + " WHERE DOCTOR_ID = " + str(user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("SPECIALIZATION NOT CHANGED ")
     print(additional_details)
 
-    return HttpResponse("CHANGED PROFILE")
+    '''
+    UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
+    
+    UPDATE EMAIL, FIRST NAME, LAST NAME
+    
+    '''
+
+    '''
+    TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
+    '''
+    return redirect("doctor_home")
 
 
 def search_options(request):
