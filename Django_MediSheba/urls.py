@@ -27,11 +27,19 @@ urlpatterns = [
     path('doctor/view_records', MediSheba_views.view_records, name='view_records'),
     path('doctor/change_schedule', MediSheba_views.change_schedule, name='change_schedule'),
     path('doctor/logout', MediSheba_views.logout, name='log_out'),
-    path('doctor/submit_changed_profile_doctor', MediSheba_views.submit_changed_profile_doctor, name='submit_changed_profile_doctor'),
+    path('doctor/submit_changed_profile_doctor', MediSheba_views.submit_changed_profile_doctor,
+         name='submit_changed_profile_doctor'),
     path('doctor/search_options/search_doctors', MediSheba_views.search_doctors, name='search_doctors'),
     path('doctor/search_options/search_hospitals', MediSheba_views.search_hospitals, name='search_hospitals'),
     path('doctor/search_options/search_blood_banks', MediSheba_views.search_blood_banks, name='search_blood_banks'),
 
     path('users/see_doctors', MediSheba_views.see_doctors, name='see_doctors'),
+    path('users/user_search_options', MediSheba_views.user_search_options, name='user_search_options'),
+    path('users/user_edit_profile', MediSheba_views.user_edit_profile, name='user_edit_profile'),
+    path('users/user_doctor_appointment', MediSheba_views.user_doctor_appointment, name='user_doctor_appointment'),
+    path('users/user_blood_bank_appointment', MediSheba_views.user_blood_bank_appointment,
+         name='user_blood_bank_appointment'),
+    path('users/user_modify_appointment', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
+    path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment, name='user_hospital_appointment'),
 
 ]

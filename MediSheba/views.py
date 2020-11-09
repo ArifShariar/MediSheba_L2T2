@@ -26,7 +26,7 @@ def doctor_home(request):
 
 
 def user_home(request):
-    return render(request, "homepage/UserHome.html")
+    return render(request, "homepage/UserHome.html", {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 def hospital_admin_home(request):
@@ -549,3 +549,29 @@ def search_blood_banks(request):
     conn.close()
 
     return render(request, "query_pages/blood_bank_query.html", {'b_banks': bbankList, 'opt': location_names})
+
+
+# USER HOMEPAGE FUNCTIONS
+
+def user_search_options(request):
+    return HttpResponse("SEARCH HERE")
+
+
+def user_edit_profile(request):
+    return HttpResponse("EDIT PROFILE HERE")
+
+
+def user_doctor_appointment(request):
+    return HttpResponse("user doctor appointment")
+
+
+def user_blood_bank_appointment(request):
+    return HttpResponse("blood bank appointment")
+
+
+def user_modify_appointment(request):
+    return HttpResponse("user modify appointment")
+
+
+def user_hospital_appointment(request):
+    return HttpResponse("user hospital appointment")
