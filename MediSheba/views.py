@@ -449,11 +449,25 @@ def submit_changed_profile_doctor(request):
     
     UPDATE EMAIL, FIRST NAME, LAST NAME
     
+    
     '''
 
     '''
     TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
     '''
+    c = conn.cursor()
+    statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.DOCTOR  WHERE DOCTOR_ID=" + str(user_info['pk'])
+    c.execute(statement)
+    if c:
+        x = c.fetchone()
+        id = x[0]
+        f_name = x[1]
+        l_name = x[2]
+        email = x[3]
+        user_info['pk'] = id
+        user_info['f_name'] = f_name
+        user_info['l_name'] = l_name
+        user_info['email'] = email
     return redirect("doctor_home")
 
 
