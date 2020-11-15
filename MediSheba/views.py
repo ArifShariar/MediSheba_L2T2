@@ -456,7 +456,8 @@ def submit_changed_profile_doctor(request):
     TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
     '''
     c = conn.cursor()
-    statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.DOCTOR  WHERE DOCTOR_ID=" + str(user_info['pk'])
+    statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.DOCTOR  WHERE DOCTOR_ID=" + str(
+        user_info['pk'])
     c.execute(statement)
     if c:
         x = c.fetchone()
@@ -487,7 +488,7 @@ def blood_bank_appointment(request):
 
 
 def view_calender(request):
-    return HttpResponse("View Calender Here")
+    return render(request, 'schedule_editor/calendar.html')
 
 
 def view_records(request):
@@ -571,16 +572,13 @@ def user_search_options(request):
     return render(request, 'homepage/Search.html')
 
 
-
-
-
 def submit_changed_profile_user(request):
     first_name = request.POST['f_name']
     last_name = request.POST['l_name']
     phone_number = request.POST['phone']
     email = request.POST['email']
     blood_type = request.POST['blood_type']
-    bio= request.POST['additional_details']
+    bio = request.POST['additional_details']
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -613,8 +611,6 @@ def submit_changed_profile_user(request):
     else:
         print("PHONE NOT CHANGED ")
 
-
-
     if email != "":
         c = conn.cursor()
         statement = "UPDATE MEDI_SHEBA.USERS SET EMAIL = " + "\'" + email + "\'" + "WHERE USER_ID = " + str(
@@ -632,8 +628,6 @@ def submit_changed_profile_user(request):
         conn.commit()
     else:
         print("BLOOD NOT CHANGED ")
-
-
 
     '''
     UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
@@ -662,6 +656,7 @@ def submit_changed_profile_user(request):
         user_info['email'] = email
     return redirect("user_home")
 
+
 def user_edit_profile(request):
     # authentication added here
     if bool(user_info) and user_info['type'] == "user":
@@ -684,6 +679,7 @@ def user_edit_profile(request):
 
     else:
         return HttpResponse("NO ACCESS TO THIS PAGE")
+
 
 def user_doctor_appointment(request):
     return HttpResponse("user doctor appointment")

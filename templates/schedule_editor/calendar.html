@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,12 +8,15 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-    <link rel="stylesheet" href="calendar.css">
+    <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 </head>
 
 <!------ Include the above in your HEAD tag ---------->
 
 <body>
+<div>
+
+</div>
 
     <div class="wrapper">
         <div id="calendarContainer"></div>
@@ -398,6 +401,7 @@
       currentDay = calendar.date.getDate(); // used this in order to make anyday today depending on the current today
 
       // my best way of organizing data, maybe that can be the outcome of joining multiple tables in the database and then parsing them in such a manner, easier for the person to push use a date and the events of it
+          /// connect database here, formatting
       data = {
         years: [
           {
