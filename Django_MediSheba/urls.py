@@ -39,6 +39,8 @@ urlpatterns = [
     path('users/user_doctor_appointment', MediSheba_views.user_doctor_appointment, name='user_doctor_appointment'),
     path('users/user_blood_bank_appointment', MediSheba_views.user_blood_bank_appointment,
          name='user_blood_bank_appointment'),
+    path('users/submit_changed_profile_user', MediSheba_views.submit_changed_profile_user,
+         name='submit_changed_profile_user'),
     path('users/user_modify_appointment', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
     path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment, name='user_hospital_appointment'),
 

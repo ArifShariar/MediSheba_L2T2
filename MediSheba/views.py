@@ -568,12 +568,122 @@ def search_blood_banks(request):
 # USER HOMEPAGE FUNCTIONS
 
 def user_search_options(request):
-    return HttpResponse("SEARCH HERE")
+    return render(request, 'homepage/Search.html')
 
+
+
+
+
+def submit_changed_profile_user(request):
+    first_name = request.POST['f_name']
+    last_name = request.POST['l_name']
+    phone_number = request.POST['phone']
+    email = request.POST['email']
+    blood_type = request.POST['blood_type']
+    bio= request.POST['additional_details']
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+
+    print(user_info['pk'])
+    if first_name != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.USERS SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE USER_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("First Name NOT CHANGED ")
+
+    if last_name != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.USERS SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE USER_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("LAST Name NOT CHANGED ")
+
+    if phone_number != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.USERS SET PHONE = " + "\'" + phone_number + "\'" + "WHERE USER_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("PHONE NOT CHANGED ")
+
+
+
+    if email != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.USERS SET EMAIL = " + "\'" + email + "\'" + "WHERE USER_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("EMAIL NOT CHANGED ")
+
+    if blood_type != "":
+        c = conn.cursor()
+        statement = "UPDATE MEDI_SHEBA.USERS SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE USER_ID = " + str(
+            user_info['pk'])
+        c.execute(statement)
+        conn.commit()
+    else:
+        print("BLOOD NOT CHANGED ")
+
+
+
+    '''
+    UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
+
+    UPDATE EMAIL, FIRST NAME, LAST NAME
+
+
+    '''
+
+    '''
+    TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
+    '''
+    c = conn.cursor()
+    statement = "SELECT USER_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.USERS  WHERE USER_ID=" + str(
+        user_info['pk'])
+    c.execute(statement)
+    if c:
+        x = c.fetchone()
+        id = x[0]
+        f_name = x[1]
+        l_name = x[2]
+        email = x[3]
+        user_info['pk'] = id
+        user_info['f_name'] = f_name
+        user_info['l_name'] = l_name
+        user_info['email'] = email
+    return redirect("user_home")
 
 def user_edit_profile(request):
-    return HttpResponse("EDIT PROFILE HERE")
+    # authentication added here
+    if bool(user_info) and user_info['type'] == "user":
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
 
+        hospital_names = []
+
+        for i in c:
+            hospital_names.append(i[0])
+
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
+
+        return render(request, 'homepage/UserProfileEditor.html',
+                      {'hospital_names': hospital_names, 'locations': location_names})
+
+    else:
+        return HttpResponse("NO ACCESS TO THIS PAGE")
 
 def user_doctor_appointment(request):
     return HttpResponse("user doctor appointment")
