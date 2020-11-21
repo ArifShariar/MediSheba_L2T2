@@ -35,7 +35,7 @@ urlpatterns = [
 
 
     path('users/search_options/search_doctors', MediSheba_views.search_doctors_by_user, name='search_doctors_by_user'),
-
+    path('users/search_options/search_hospitals', MediSheba_views.search_hospitals_by_users, name='search_hospitals_by_users'),
 
     path('users/user_search_options', MediSheba_views.user_search_options, name='user_search_options'),
     path('users/user_edit_profile', MediSheba_views.user_edit_profile, name='user_edit_profile'),
@@ -54,5 +54,6 @@ urlpatterns = [
     path('bloodbank/bloodbank_collection',MediSheba_views.bloodbank_collection,name='blood_bank_collection'),
     path('bloodbank/bloodbank_calender',MediSheba_views.bloodbank_calender,name='blood_bank_calender'),
     path('bloodbank/bloodbank_history',MediSheba_views.bloodbank_history,name='blood_bank_history'),
+    path('bloodbank/search_options/search_hospitals', MediSheba_views.search_hospitals_by_bloodbank, name='search_hospitals_by_bloodbank'),
 
 ]
