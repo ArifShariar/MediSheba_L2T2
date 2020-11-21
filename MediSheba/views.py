@@ -7,7 +7,7 @@ from HelperClasses import json_extractor
 
 from .models import DoctorName
 from .models import BloodBankList
-
+from .models import HospitalName
 # login
 user_info = {}  # holds user data across pages
 
@@ -563,9 +563,40 @@ def see_doctors(request):
 
 
 # Hospital
+def search_hospitals_by_doctor(request):
+    return see_hospitals(request)
 
-def search_hospitals(request):
-    return HttpResponse("Available Hospitals:")
+def search_hospitals_by_users(request):
+    return see_hospitals(request)
+
+def search_hospitals_by_bloodbank(request):
+    return see_hospitals(request)
+
+def search_hospitals_by_hospitalAdmin(request):
+    return see_hospitals(request)
+
+def see_hospitals(request):
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+
+
+    hospitalList = []
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE,LOCATION "
+              "from MEDI_SHEBA.HOSPITAL")
+    index = 1
+    for row in c:
+        hospitalList.append(HospitalName(index, row[0], row[1],row[2]))  # HospitalName is defined in models.py
+        index = index + 1
+        '''print(row[2])'''
+    conn.close()
+
+    return render(request, "query_pages/hospital_query.html",
+                  {'hos': hospitalList, 'opt': location_names})
+
 
 
 # Blood_Bank

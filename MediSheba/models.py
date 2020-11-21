@@ -27,3 +27,11 @@ class BloodBankList:
         self.o_minus = o_minus
         self.ab_plus = ab_plus
         self.ab_minus = ab_minus
+
+class HospitalName:
+
+    def __init__(self,id,name,phone,location):
+        self.id=id
+        self.name=name
+        self.phone=phone
+        self.location=location
