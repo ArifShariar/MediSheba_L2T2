@@ -47,5 +47,10 @@ urlpatterns = [
     path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment,
          name='user_hospital_appointment'),
 
-
+    path('bloodbanks/search_options/search_doctors', MediSheba_views.search_doctors_by_bloodbank, name='search_doctors_by_bloodbank'),
+    path('bloodbank/bloodbank_search_options', MediSheba_views.bloodbank_search_options, name='bloodbank_search_options'),
+    path('bloodbank/bloodbank_edit_profile',MediSheba_views.bloodbank_admin_edit_profile,name='blood_bank_admin_edit_profile'),
+    path('bloodbank/bloodbank_collection',MediSheba_views.bloodbank_collection,name='blood_bank_collection'),
+    path('bloodbank/bloodbank_calender',MediSheba_views.bloodbank_calender,name='blood_bank_calender'),
+    path('bloodbank/bloodbank_history',MediSheba_views.bloodbank_history,name='blood_bank_history'),
 ]
