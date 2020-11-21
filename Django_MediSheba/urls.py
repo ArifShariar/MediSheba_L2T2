@@ -35,7 +35,7 @@ urlpatterns = [
 
     path('users/search_options/search_doctors', MediSheba_views.search_doctors_by_user, name='search_doctors_by_user'),
 
-    path('users/see_doctors', MediSheba_views.see_doctors, name='see_doctors'),
+
     path('users/user_search_options', MediSheba_views.user_search_options, name='user_search_options'),
     path('users/user_edit_profile', MediSheba_views.user_edit_profile, name='user_edit_profile'),
     path('users/user_doctor_appointment', MediSheba_views.user_doctor_appointment, name='user_doctor_appointment'),
@@ -44,6 +44,8 @@ urlpatterns = [
     path('users/submit_changed_profile_user', MediSheba_views.submit_changed_profile_user,
          name='submit_changed_profile_user'),
     path('users/user_modify_appointment', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
-    path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment, name='user_hospital_appointment'),
+    path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment,
+         name='user_hospital_appointment'),
+
 
 ]
