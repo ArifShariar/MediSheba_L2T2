@@ -472,11 +472,11 @@ def submit_changed_profile_doctor(request):
     return redirect("doctor_home")
 
 
-def search_options(request):
+def doctor_search_options(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    return render(request, 'homepage/Search.html')
+    return render(request, 'homepage/Search_for_doctor.html')
 
 
 def view_appointments(request):
@@ -504,9 +504,11 @@ def logout(request):
     return redirect("login")
 
 
-def search_doctors(request):
+def search_doctors_by_doctor(request):
     return see_doctors(request)
 
+def search_doctors_by_user(request):
+    return see_doctors(request)
 
 # USERS
 
@@ -569,7 +571,7 @@ def search_blood_banks(request):
 # USER HOMEPAGE FUNCTIONS
 
 def user_search_options(request):
-    return render(request, 'homepage/Search.html')
+    return render(request, 'homepage/Search_for_user.html')
 
 
 def submit_changed_profile_user(request):
