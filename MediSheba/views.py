@@ -777,5 +777,5 @@ def bloodbank_history(request):
     return HttpResponse("etate kaaj kora lagbe")
 
 
-def blood_bank_all_appointment(request):
+def bloodbank_all_appointments(request):
     return HttpResponse("blood banks appointment page")

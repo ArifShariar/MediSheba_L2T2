@@ -15,7 +15,7 @@ urlpatterns = [
     path('doctor', MediSheba_views.doctor_home, name='doctor_home'),
     path('user', MediSheba_views.user_home, name='user_home'),
     path('hospital_admin', MediSheba_views.hospital_admin_home, name='hospital_admin_home'),
-    path('blood_bank_admin', MediSheba_views.blood_bank_admin_home, name='blood_bank_admin_home'),
+    path('bloodbank', MediSheba_views.blood_bank_admin_home, name='blood_bank_admin_home'),
 
     path('signupSubmit', MediSheba_views.signupSubmit, name='submit'),
 
@@ -48,12 +48,13 @@ urlpatterns = [
     path('users/user_hospital_appointment', MediSheba_views.user_hospital_appointment,
          name='user_hospital_appointment'),
 
-    path('bloodbanks/search_options/search_doctors', MediSheba_views.search_doctors_by_bloodbank, name='search_doctors_by_bloodbank'),
+    path('bloodbank/bloodbank_search_options/search_doctors', MediSheba_views.search_doctors_by_bloodbank, name='search_doctors_by_bloodbank'),
+    path('bloodbank/bloodbank_search_options/search_hospitals', MediSheba_views.search_hospitals_by_bloodbank, name='search_hospitals_by_bloodbank'),
     path('bloodbank/bloodbank_search_options', MediSheba_views.bloodbank_search_options, name='bloodbank_search_options'),
     path('bloodbank/bloodbank_edit_profile',MediSheba_views.bloodbank_admin_edit_profile,name='blood_bank_admin_edit_profile'),
     path('bloodbank/bloodbank_collection',MediSheba_views.bloodbank_collection,name='blood_bank_collection'),
     path('bloodbank/bloodbank_calender',MediSheba_views.bloodbank_calender,name='blood_bank_calender'),
     path('bloodbank/bloodbank_history',MediSheba_views.bloodbank_history,name='blood_bank_history'),
-    path('bloodbank/search_options/search_hospitals', MediSheba_views.search_hospitals_by_bloodbank, name='search_hospitals_by_bloodbank'),
+    path('bloodbank/bloodbank_all_appointments', MediSheba_views.bloodbank_all_appointments, name='bloodbank_all_appointments'),
 
 ]
