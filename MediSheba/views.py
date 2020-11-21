@@ -507,11 +507,15 @@ def logout(request):
 def search_doctors_by_doctor(request):
     return see_doctors(request)
 
+
 def search_doctors_by_user(request):
     return see_doctors(request)
 
+
 def search_doctors_by_bloodbank(request):
     return see_doctors(request)
+
+
 # USERS
 
 def see_doctors(request):
@@ -574,6 +578,8 @@ def search_blood_banks(request):
 
 def user_search_options(request):
     return render(request, 'homepage/Search_for_user.html')
+
+
 def bloodbank_search_options(request):
     return render(request, 'homepage/Search_for_bloodbank.html')
 
@@ -701,11 +707,22 @@ def user_modify_appointment(request):
 
 def user_hospital_appointment(request):
     return HttpResponse("user hospital appointment")
+
+
 def bloodbank_admin_edit_profile(request):
     return HttpResponse("etate kaaj kora lagbe")
+
+
 def bloodbank_collection(request):
     return HttpResponse("etate kaaj kora lagbe")
+
+
 def bloodbank_calender(request):
     return HttpResponse("etate kaaj kora lagbe")
+
+
 def bloodbank_history(request):
     return HttpResponse("etate kaaj kora lagbe")
+
+def blood_bank_all_appointment(request):
+    return HttpResponse("blood banks appointment page")
