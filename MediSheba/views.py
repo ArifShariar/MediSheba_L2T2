@@ -8,6 +8,7 @@ from HelperClasses import json_extractor
 from .models import DoctorName
 from .models import BloodBankList
 from .models import HospitalName
+
 # login
 user_info = {}  # holds user data across pages
 
@@ -566,19 +567,22 @@ def see_doctors(request):
 def search_hospitals_by_doctor(request):
     return see_hospitals(request)
 
+
 def search_hospitals_by_users(request):
     return see_hospitals(request)
+
 
 def search_hospitals_by_bloodbank(request):
     return see_hospitals(request)
 
+
 def search_hospitals_by_hospitalAdmin(request):
     return see_hospitals(request)
+
 
 def see_hospitals(request):
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
-
 
     hospitalList = []
 
@@ -589,14 +593,13 @@ def see_hospitals(request):
               "from MEDI_SHEBA.HOSPITAL")
     index = 1
     for row in c:
-        hospitalList.append(HospitalName(index, row[0], row[1],row[2]))  # HospitalName is defined in models.py
+        hospitalList.append(HospitalName(index, row[0], row[1], row[2]))  # HospitalName is defined in models.py
         index = index + 1
         '''print(row[2])'''
     conn.close()
 
     return render(request, "query_pages/hospital_query.html",
                   {'hos': hospitalList, 'opt': location_names})
-
 
 
 # Blood_Bank
@@ -779,3 +782,30 @@ def bloodbank_history(request):
 
 def bloodbank_all_appointments(request):
     return HttpResponse("blood banks appointment page")
+
+
+# functions for hospital admin and management
+
+
+def hospital_search_options(request):
+    return HttpResponse("Search options here")
+
+
+def hospital_admin_edit_profile(request):
+    return HttpResponse("Edit profile here")
+
+
+def hospital_admin_view_appointments(request):
+    return HttpResponse("Hospital admin view appointments here")
+
+
+def hospital_admin_view_schedule(request):
+    return HttpResponse("Hospital admin view schedule")
+
+
+def hospital_admin_cabin_management(request):
+    return HttpResponse("Hospital admin cabin management")
+
+
+def hospital_admin_view_records(records):
+    return HttpResponse("Hospital admin view records")
