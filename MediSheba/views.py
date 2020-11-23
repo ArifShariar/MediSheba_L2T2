@@ -478,9 +478,6 @@ def submit_changed_profile_doctor(request):
 
 def doctor_search_options(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-        c = conn.cursor()
         return render(request, 'homepage/Search_for_doctor.html')
     else:
         return HttpResponse("NO ACCESS")
@@ -573,10 +570,6 @@ def search_hospitals_by_users(request):
 
 
 def search_hospitals_by_bloodbank(request):
-    return see_hospitals(request)
-
-
-def search_hospitals_by_hospitalAdmin(request):
     return see_hospitals(request)
 
 
@@ -788,7 +781,7 @@ def bloodbank_all_appointments(request):
 
 
 def hospital_search_options(request):
-    return HttpResponse("Search options here")
+    return render(request, 'homepage/search_for_hospitals.html')
 
 
 def hospital_admin_edit_profile(request):
@@ -807,5 +800,17 @@ def hospital_admin_cabin_management(request):
     return HttpResponse("Hospital admin cabin management")
 
 
-def hospital_admin_view_records(records):
+def hospital_admin_view_records(request):
     return HttpResponse("Hospital admin view records")
+
+
+def search_doctors_by_hospitals(request):
+    return see_doctors(request)
+
+
+def search_hospitals_by_hospitals(request):
+    return see_hospitals(request)
+
+
+def search_blood_banks_by_hospitals(request):
+    return search_blood_banks(request)
