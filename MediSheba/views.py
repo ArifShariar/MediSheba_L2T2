@@ -499,7 +499,7 @@ def doctor_blood_bank_appointment(request):
 
 def doctor_view_calender(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return render(request, 'schedule_editor/calendar.html')
+        return render(request, 'schedule_editor/calendar2.html')
     else:
         return HttpResponse("NO ACCESS")
 
