@@ -5,12 +5,13 @@ from django.db import models
 
 class DoctorName:
 
-    def __init__(self, id, name, phone, gender, specialization, hospital_name):
+    def __init__(self, id, name, phone, gender, specialization, location, hospital_name):
         self.id = id
         self.name = name
         self.phone = phone
         self.gender = gender
         self.specialization = specialization
+        self.location = location
         self.hospital_name = hospital_name
 
 
@@ -28,10 +29,11 @@ class BloodBankList:
         self.ab_plus = ab_plus
         self.ab_minus = ab_minus
 
+
 class HospitalName:
 
-    def __init__(self,id,name,phone,location):
-        self.id=id
-        self.name=name
-        self.phone=phone
-        self.location=location
+    def __init__(self, id, name, phone, location):
+        self.id = id
+        self.name = name
+        self.phone = phone
+        self.location = location

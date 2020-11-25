@@ -535,6 +535,68 @@ def search_doctors_by_bloodbank(request):
     return see_doctors(request)
 
 
+def filter_search_doctor(request):
+    specialization = request.POST.get('select_specialization', 'No Preferences')
+    gender_return = request.POST.get('select_gender', 'No Preferences')
+    area = request.POST.get('select_area', 'No Preferences')
+    gender = gender_return
+    if gender_return == "Male":
+        gender = "M"
+    elif gender_return == "Female":
+        gender = "F"
+    statement = ""
+    if specialization == "No Preferences" and gender == "No Preferences" and area == "No Preferences":
+        return redirect(search_doctors_by_doctor)
+
+    elif specialization == "No Preferences":
+        if gender == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
+        elif area == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
+        else:
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
+
+    elif gender == "No Preferences":
+        if specialization == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
+        elif area == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
+        else:
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
+    elif area == "No Preferences":
+        if specialization == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
+        elif gender == "No Preferences":
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
+        else:
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
+
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+    specialization_options = []
+    docList = []
+
+    # print(statement)
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute(statement)
+    index = 1
+    for row in c:
+        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))
+        index = index + 1
+    conn.close()
+    return render(request, 'query_pages/doctor_custom_query.html',
+                  {'doc': docList, 'opt': location_names, 'specialization': specialization_options})
+
+
+def custom_search_for_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return filter_search_doctor(request)
+    else:
+        return HttpResponse("No Access")
+
+
 # USERS
 
 def see_doctors(request):
@@ -548,11 +610,12 @@ def see_doctors(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, HOSPITAL_ID "
+    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID "
               "from MEDI_SHEBA.DOCTOR")
     index = 1
     for row in c:
-        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4]))  # DoctorName is defined in models.py
+        docList.append(
+            DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))  # DoctorName is defined in models.py
         index = index + 1
     conn.close()
 
