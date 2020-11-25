@@ -534,7 +534,14 @@ def filter_search_doctor(request):
         gender = "F"
     statement = ""
     if specialization == "No Preferences" and gender == "No Preferences" and area == "No Preferences":
-        return redirect(search_doctors_by_doctor)
+        if user_info['type'] == "doctor":
+            return redirect(search_doctors_by_doctor)
+        elif user_info['type'] == "user":
+            return redirect(search_doctors_by_user)
+        elif user_info['type'] == "hospital_admin":
+            return redirect(search_doctors_by_hospitals)
+        elif user_info['type'] == "blood_bank_admin":
+            return redirect(search_doctors_by_bloodbank)
 
     elif specialization == "No Preferences":
         if gender == "No Preferences":
@@ -577,7 +584,7 @@ def filter_search_doctor(request):
     for row in c:
         specialization_options.append(row[0])
     conn.close()
-    return render(request, 'query_pages/doctor_custom_query.html',
+    return render(request, 'query_pages/query_page_for_doctors/doctor_custom_query.html',
                   {'doc': docList, 'opt': location_names, 'specialization': specialization_options})
 
 
@@ -586,6 +593,27 @@ def custom_search_for_doctor(request):
         return filter_search_doctor(request)
     else:
         return HttpResponse("No Access")
+
+
+def custom_search_for_doctor_by_user(request):
+    if bool(user_info) and user_info['type'] == "user":
+        return filter_search_doctor(request)
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def custom_search_for_doctor_by_hospital_admin(request):
+    if bool(user_info) and user_info['type'] == "hospital_admin":
+        return filter_search_doctor(request)
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def custom_search_for_doctor_by_blood_bank_admin(request):
+    if bool(user_info) and user_info['type'] == "blood_bank_admin":
+        return filter_search_doctor(request)
+    else:
+        return HttpResponse("NO ACCESS")
 
 
 # USERS
@@ -626,7 +654,7 @@ def see_doctors(request):
 
     conn.close()
 
-    return render(request, "query_pages/doctor_query.html",
+    return render(request, "query_pages/query_page_for_doctors/doctor_query.html",
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
 
