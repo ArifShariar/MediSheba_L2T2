@@ -523,18 +523,6 @@ def logout(request):
     return redirect("login")
 
 
-def search_doctors_by_doctor(request):
-    return see_doctors(request)
-
-
-def search_doctors_by_user(request):
-    return see_doctors(request)
-
-
-def search_doctors_by_bloodbank(request):
-    return see_doctors(request)
-
-
 def filter_search_doctor(request):
     specialization = request.POST.get('select_specialization', 'No Preferences')
     gender_return = request.POST.get('select_gender', 'No Preferences')
@@ -585,6 +573,9 @@ def filter_search_doctor(request):
     for row in c:
         docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))
         index = index + 1
+    c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
+    for row in c:
+        specialization_options.append(row[0])
     conn.close()
     return render(request, 'query_pages/doctor_custom_query.html',
                   {'doc': docList, 'opt': location_names, 'specialization': specialization_options})
@@ -598,6 +589,17 @@ def custom_search_for_doctor(request):
 
 
 # USERS
+def search_doctors_by_doctor(request):
+    return see_doctors(request)
+
+
+def search_doctors_by_user(request):
+    return see_doctors(request)
+
+
+def search_doctors_by_bloodbank(request):
+    return see_doctors(request)
+
 
 def see_doctors(request):
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
@@ -617,6 +619,11 @@ def see_doctors(request):
         docList.append(
             DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))  # DoctorName is defined in models.py
         index = index + 1
+
+    c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
+    for row in c:
+        specialization.append(row[0])
+
     conn.close()
 
     return render(request, "query_pages/doctor_query.html",
