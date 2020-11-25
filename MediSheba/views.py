@@ -658,6 +658,12 @@ def see_doctors(request):
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
 
+def see_specific_doctor_details(request):
+    doctor_name = request.POST['doctor_name']
+    print(doctor_name)
+    return HttpResponse("SEE SPECIFIC REQUEST")
+
+
 # Hospital
 def search_hospitals_by_doctor(request):
     return see_hospitals(request)

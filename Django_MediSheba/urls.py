@@ -35,6 +35,7 @@ urlpatterns = [
          name='search_doctors_by_doctor'),
     path('doctor/search_options/search_doctors/custom_search_for_doctor', MediSheba_views.custom_search_for_doctor,
          name='custom_search_for_doctor'),
+    path('doctor/search_options/search_doctors/see_specific_doctor_details', MediSheba_views.see_specific_doctor_details, name="see_specific_doctor_details"),
 
     path('doctor/search_options/search_hospitals/', MediSheba_views.search_hospitals_by_doctor,
          name='search_hospitals_by_doctor'),
@@ -97,5 +98,6 @@ urlpatterns = [
          name='search_blood_banks_by_hospitals'),
 
     # URLS FOR CUSTOM SEARCH
+
 
 ]

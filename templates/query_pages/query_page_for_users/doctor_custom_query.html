@@ -91,7 +91,12 @@
             <td>{{ d.specialization }}</td>
             <td>{{ d.location }}</td>
             <td>{{ d.hospital_name }}</td>
-            <td><button type="button" class="btn btn-danger wrn-btn">See Details</button></td>
+           <td>
+                <form action="see_specific_doctor_details" method="post">{% csrf_token %}
+                    <button type="submit" class="btn btn-danger wrn-btn">See Details</button>
+                    <input type="hidden" id="{{ d.name }}" name="doctor_name" value="{{ d.name }}">
+                </form>
+            </td>
             </tr>
         {% endfor %}
     </table>
