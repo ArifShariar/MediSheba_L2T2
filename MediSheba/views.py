@@ -582,7 +582,7 @@ def see_hospitals(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE,LOCATION "
+    c.execute("SELECT HOSPITAL_NAME,PHONE,LOCATION "
               "from MEDI_SHEBA.HOSPITAL")
     index = 1
     for row in c:

@@ -31,6 +31,21 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                    <select class="form-control search-slt" id="select_area">
+                        <option selected disabled>Select Blood Group</option>
+
+                        <option>A+</option>
+                        <option>A-</option>
+                        <option>B+</option>
+                        <option>B-</option>
+                        <option>O+</option>
+                        <option>O-</option>
+                        <option>AB+</option>
+                        <option>AB-</option>
+
+                    </select>
+                </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                     <button type="button" class="btn btn-danger wrn-btn">Search</button>
@@ -59,6 +74,7 @@
             <th scope="col">O-</th>
             <th scope="col">AB+</th>
             <th scope="col">AB-</th>
+            <th scope="col">Book</th>
         </tr>
         </thead>
 
@@ -74,6 +90,7 @@
             <td>{{ d.o_minus }}</td>
             <td>{{ d.ab_plus }}</td>
             <td>{{ d.ab_minus }}</td>
+            <td><button type="button" class="btn btn-danger wrn-btn">Book</button></td>
             </tr>
         {% endfor %}
     </table>
