@@ -639,8 +639,9 @@ def see_doctors(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID "
-              "from MEDI_SHEBA.DOCTOR")
+    c.execute(
+        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID "
+        "from MEDI_SHEBA.DOCTOR")
     index = 1
     for row in c:
         docList.append(
@@ -692,10 +693,18 @@ def see_specific_doctor_details(request):
                    'hospital_name': hospital_id, 'fees': fees, 'specialization': specialization})
 
 
+def submit_appointment(request):
+    HttpResponse("Appointment sent to doctor")
+
+
 # USERS
 
 
 # Hospital
+
+# TODO: pantha write code here
+
+
 def search_hospitals_by_doctor(request):
     return see_hospitals(request)
 

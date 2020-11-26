@@ -6,17 +6,20 @@ from django.db import models
 
 class DoctorName:
 
-    def __init__(self, id, name, phone, gender, specialization, location, hospital_name, doctor_id):
-        hospital_full_name = hospital_name
-        '''
-                if hospital_name != "NONE":
+    def __init__(self, id, name, phone, gender, specialization, location, hospital_id, doctor_id):
+        hospital_full_name = ""
+
+        if hospital_id != -1:
             dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
             conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
             c = conn.cursor()
-            c.execute("SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_name))
+            c.execute("SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
             for row in c:
                 hospital_full_name = row[0]
-        '''
+        else:
+            hospital_full_name = "NONE"
+
+        print(hospital_full_name)
 
         self.id = id
         self.name = name

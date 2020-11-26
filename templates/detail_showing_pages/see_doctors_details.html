@@ -53,17 +53,9 @@
                     </div>
                     <br>
                     <form action="submit_appointment" method="post">
+                        {% csrf_token %}
                     <div class="col-md-12">
                         <label class="labels">Get An Appointment</label><br>
-                        <label class="labels">Select Time</label>
-                        <select id="appointment_time" name="appointment_time" class="form-control">
-                            <option selected disabled>Select Time</option>
-                            <option>No specific time</option>
-                            <option>3.00 pm</option>
-                            <option>4.00 pm</option>
-                            <option>5.00 pm</option>
-                            <option>6.00 pm</option>
-                        </select>
                     </div>
                     <div class="col-md-12"><label class="labels">Select Day</label>
                         <select id="appointment_day" name = "appointment_day" class="form-control">
