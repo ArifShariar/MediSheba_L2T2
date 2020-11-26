@@ -35,7 +35,7 @@ def hospital_admin_home(request):
 
 
 def blood_bank_admin_home(request):
-    return render(request, 'homepage/Blood_Bank_Home.html',  {'name': user_info['f_name'] + ' ' + user_info['l_name']})
+    return render(request, 'homepage/Blood_Bank_Home.html', {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 # log in
@@ -721,9 +721,8 @@ def custom_search_for_hospital_by_doctor(request):
     else:
         return HttpResponse("No Access")
 
+
 def filter_search_hospital(request):
-    #specialization = request.POST.get('select_specialization', 'No Preferences')
-    #gender_return = request.POST.get('select_gender', 'No Preferences')
     area = request.POST.get('select_area', 'No Preferences')
 
     statement = ""
@@ -731,23 +730,19 @@ def filter_search_hospital(request):
         if user_info['type'] == "doctor":
             return redirect(search_hospitals_by_doctor)
         elif user_info['type'] == "user":
-            return redirect(search_hospitals_by_user)
+            return redirect(search_hospitals_by_users)
         elif user_info['type'] == "hospital_admin":
             return redirect(search_hospitals_by_hospitals)
         elif user_info['type'] == "blood_bank_admin":
             return redirect(search_hospitals_by_bloodbank)
 
     else:
-       statement = "SELECT HOSPITAL_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
-
-
+        statement = "SELECT HOSPITAL_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
-    #specialization_options = []
     hosList = []
 
-    print(statement)
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
@@ -756,9 +751,7 @@ def filter_search_hospital(request):
     for row in c:
         hosList.append(HospitalName(index, row[0], row[1], row[2]))
         index = index + 1
-    #c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
-    #for row in c:
-        #specialization_options.append(row[0])
+
     conn.close()
     return render(request, 'query_pages/query_page_for_doctors/hospital_custom_query.html',
                   {'hos': hosList, 'opt': location_names})
@@ -1009,6 +1002,7 @@ def hospital_admin_edit_profile(request):
 
     else:
         return HttpResponse("NO ACCESS TO THIS PAGE")
+
 
 def submit_changed_profile_hospital(request):
     if bool(user_info) and user_info['type'] == 'hospital_admin':
