@@ -333,7 +333,7 @@ def doctor_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/../templates/profile_editor/DoctorProfileEditor.html',
+        return render(request, 'profile_editor/DoctorProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
@@ -889,7 +889,7 @@ def user_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/../templates/profile_editor/UserProfileEditor.html',
+        return render(request, 'profile_editor/UserProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
