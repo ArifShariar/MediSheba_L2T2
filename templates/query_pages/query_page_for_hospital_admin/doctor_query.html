@@ -94,7 +94,7 @@
             <td>
                 <form action="see_specific_doctor_details" method="post">{% csrf_token %}
                     <button type="submit" class="btn btn-danger wrn-btn">See Details</button>
-                    <input type="hidden" id="{{ d.name }}" name="doctor_name" value="{{ d.name }}">
+                    <input type="hidden" id="{{ d.doctor_id }}" name="doctor_id" value="{{ d.doctor_id }}">
                 </form>
             </td>
             </tr>

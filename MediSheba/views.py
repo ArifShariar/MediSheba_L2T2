@@ -545,26 +545,26 @@ def filter_search_doctor(request):
 
     elif specialization == "No Preferences":
         if gender == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
         elif area == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
 
     elif gender == "No Preferences":
         if specialization == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
         elif area == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
     elif area == "No Preferences":
         if specialization == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
         elif gender == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
@@ -578,7 +578,7 @@ def filter_search_doctor(request):
     c.execute(statement)
     index = 1
     for row in c:
-        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))
+        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5], row[5]))
         index = index + 1
     c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
     for row in c:
@@ -639,12 +639,13 @@ def see_doctors(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID "
+    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID "
               "from MEDI_SHEBA.DOCTOR")
     index = 1
     for row in c:
         docList.append(
-            DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5]))  # DoctorName is defined in models.py
+            DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5],
+                       row[6]))  # DoctorName is defined in models.py
         index = index + 1
 
     c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
@@ -658,9 +659,37 @@ def see_doctors(request):
 
 
 def see_specific_doctor_details(request):
-    doctor_name = request.POST['doctor_name']
-    print(doctor_name)
-    return render(request, "detail_showing_pages/see_doctors_details.html")
+    doctor_id = request.POST['doctor_id']
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    statement = "SELECT FIRST_NAME, LAST_NAME, PHONE, LOCATION, EMAIL, HOSPITAL_ID, FEES, SPECIALIZATION FROM MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID = " + str(
+        doctor_id)
+    c.execute(statement)
+
+    first_name = ""
+    last_name = ""
+    phone = ""
+    location = ""
+    email = ""
+    hospital_id = ""
+    fees = ""
+    specialization = ""
+    for row in c:
+        first_name = row[0]
+        last_name = row[1]
+        phone = row[2]
+        location = row[3]
+        email = row[4]
+        hospital_id = row[5]
+        fees = row[6]
+        specialization = row[7]
+
+    return render(request, "detail_showing_pages/see_doctors_details.html",
+                  {'name': first_name + " " + last_name, 'first_name': first_name,
+                   'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
+                   'hospital_name': hospital_id, 'fees': fees, 'specialization': specialization})
 
 
 # USERS
