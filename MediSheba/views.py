@@ -31,11 +31,11 @@ def user_home(request):
 
 
 def hospital_admin_home(request):
-    return render(request, 'homepage/HospitalAdminHome.html')
+    return render(request, 'homepage/HospitalAdminHome.html', {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 def blood_bank_admin_home(request):
-    return render(request, 'homepage/Blood_Bank_Home.html')
+    return render(request, 'homepage/Blood_Bank_Home.html',  {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 # log in
@@ -333,7 +333,7 @@ def doctor_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/../templates/profile_editor/DoctorProfileEditor.html',
+        return render(request, 'profile_editor/DoctorProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
@@ -545,26 +545,26 @@ def filter_search_doctor(request):
 
     elif specialization == "No Preferences":
         if gender == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
         elif area == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
 
     elif gender == "No Preferences":
         if specialization == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
         elif area == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
     elif area == "No Preferences":
         if specialization == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
         elif gender == "No Preferences":
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, HOSPITAL_ID, DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
@@ -665,7 +665,7 @@ def see_specific_doctor_details(request):
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
 
-    statement = "SELECT FIRST_NAME, LAST_NAME, PHONE, LOCATION, EMAIL, HOSPITAL_ID, FEES, SPECIALIZATION FROM MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID = " + str(
+    statement = "SELECT FIRST_NAME, LAST_NAME, PHONE, LOCATION, EMAIL, NVL(HOSPITAL_ID,-1), FEES, SPECIALIZATION FROM MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID = " + str(
         doctor_id)
     c.execute(statement)
 
@@ -686,11 +686,22 @@ def see_specific_doctor_details(request):
         hospital_id = row[5]
         fees = row[6]
         specialization = row[7]
+    hospital_full_name = ""
+
+    if hospital_id != -1:
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        c.execute("SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
+        for row in c:
+            hospital_full_name = row[0]
+    else:
+        hospital_full_name = "NONE"
 
     return render(request, "detail_showing_pages/see_doctors_details.html",
                   {'name': first_name + " " + last_name, 'first_name': first_name,
                    'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
-                   'hospital_name': hospital_id, 'fees': fees, 'specialization': specialization})
+                   'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization})
 
 
 def submit_appointment(request):
@@ -926,7 +937,7 @@ def user_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/../templates/profile_editor/UserProfileEditor.html',
+        return render(request, 'profile_editor/UserProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
