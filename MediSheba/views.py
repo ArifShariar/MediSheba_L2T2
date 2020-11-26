@@ -31,11 +31,11 @@ def user_home(request):
 
 
 def hospital_admin_home(request):
-    return render(request, 'homepage/HospitalAdminHome.html')
+    return render(request, 'homepage/HospitalAdminHome.html', {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 def blood_bank_admin_home(request):
-    return render(request, 'homepage/Blood_Bank_Home.html')
+    return render(request, 'homepage/Blood_Bank_Home.html',  {'name': user_info['f_name'] + ' ' + user_info['l_name']})
 
 
 # log in
