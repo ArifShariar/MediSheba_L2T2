@@ -716,7 +716,7 @@ def submit_appointment(request):
 # TODO: pantha write code here
 
 def custom_search_for_hospital_by_doctor(request):
-    if bool(user_info) and user_info['type'] == 'hospital_admin':
+    if bool(user_info) and user_info['type'] == 'doctor':
         return filter_search_hospital(request)
     else:
         return HttpResponse("No Access")
@@ -738,16 +738,16 @@ def filter_search_hospital(request):
             return redirect(search_hospitals_by_bloodbank)
 
     else:
-       statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
+       statement = "SELECT HOSPITAL_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
 
 
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
-    specialization_options = []
+    #specialization_options = []
     hosList = []
 
-    # print(statement)
+    print(statement)
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
@@ -756,12 +756,12 @@ def filter_search_hospital(request):
     for row in c:
         hosList.append(HospitalName(index, row[0], row[1], row[2]))
         index = index + 1
-    c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
+    #c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
     #for row in c:
         #specialization_options.append(row[0])
     conn.close()
     return render(request, 'query_pages/query_page_for_doctors/hospital_custom_query.html',
-                  {'hos': docList, 'opt': location_names})
+                  {'hos': hosList, 'opt': location_names})
 
 
 def search_hospitals_by_doctor(request):
@@ -1028,7 +1028,7 @@ def submit_changed_profile_hospital(request):
 
         if first_name != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.HOSPITAL SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
@@ -1037,7 +1037,7 @@ def submit_changed_profile_hospital(request):
 
         if last_name != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.HOSPITAL SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
@@ -1046,7 +1046,7 @@ def submit_changed_profile_hospital(request):
 
         if phone_number != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET PHONE = " + "\'" + phone_number + "\'" + "WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.HOSPITAL SET PHONE = " + "\'" + phone_number + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
@@ -1064,7 +1064,7 @@ def submit_changed_profile_hospital(request):
 
         if email != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET EMAIL = " + "\'" + email + "\'" + "WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.HOSPITAL SET EMAIL = " + "\'" + email + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
@@ -1073,14 +1073,14 @@ def submit_changed_profile_hospital(request):
 
         if blood_type != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
         else:
             print("BLOOD NOT CHANGED ")
 
-        '''if hospital_name != "":
+        if hospital_name != "":
             c = conn.cursor()
             statement_1 = "SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME = " + "\'" + hospital_name + "\'"
             c.execute(statement_1)
@@ -1090,16 +1090,16 @@ def submit_changed_profile_hospital(request):
                 hospital_id = r[0]
 
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET HOSPITAL_ID = " + str(hospital_id) + " WHERE DOCTOR_ID = " \
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET HOSPITAL_ID = " + str(hospital_id) + " WHERE HOSPITAL_ID = " \
                         + str(user_info['pk'])
             c.execute(statement)
             conn.commit()
         else:
             print("HOSPITAL NOT CHANGED ")
-'''
+
         if fee != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE DOCTOR_ID = " + str(
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
             c.execute(statement)
             conn.commit()
@@ -1109,7 +1109,7 @@ def submit_changed_profile_hospital(request):
         if specialization != "":
             c = conn.cursor()
             statement = "UPDATE MEDI_SHEBA.DOCTOR SET SPECIALIZATION = " + "\'" + specialization + "\'" \
-                        + " WHERE DOCTOR_ID = " + str(user_info['pk'])
+                        + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
             c.execute(statement)
             conn.commit()
         else:
@@ -1128,7 +1128,7 @@ def submit_changed_profile_hospital(request):
         TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
         '''
         c = conn.cursor()
-        statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.HOSPITAL  WHERE HOSPITAL_ID=" + str(
+        statement = "SELECT HOSPITAL_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.HOSPITAL  WHERE HOSPITAL_ID=" + str(
             user_info['pk'])
         c.execute(statement)
         if c:

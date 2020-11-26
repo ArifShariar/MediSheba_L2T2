@@ -20,8 +20,10 @@
     </div>
 </div>
 <section class="search-sec bottom-space-1">
+    <form action="custom_search_for_hospital_by_doctor" method="post" novalidate="novalidate">
+            {% csrf_token %}
     <div class="container">
-        <form action="custom_search_for_hospital_by_doctor" method="post" novalidate="novalidate">
+            <form action="#" method="post" novalidate="novalidate">
             <div class="row">
 
 
@@ -38,8 +40,10 @@
                     <button type="button" class="btn btn-danger wrn-btn">Search</button>
                 </div>
             </div>
+            </form>
+        </div>
         </form>
-    </div>
+
 </section>
 
 <section class="search_result bottom-space-1 center">
