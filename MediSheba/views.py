@@ -333,7 +333,7 @@ def doctor_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/DoctorProfileEditor.html',
+        return render(request, 'homepage/../templates/profile_editor/DoctorProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
@@ -616,7 +616,6 @@ def custom_search_for_doctor_by_blood_bank_admin(request):
         return HttpResponse("NO ACCESS")
 
 
-# USERS
 def search_doctors_by_doctor(request):
     return see_doctors(request)
 
@@ -661,7 +660,10 @@ def see_doctors(request):
 def see_specific_doctor_details(request):
     doctor_name = request.POST['doctor_name']
     print(doctor_name)
-    return HttpResponse("SEE SPECIFIC REQUEST")
+    return render(request, "detail_showing_pages/see_doctors_details.html")
+
+
+# USERS
 
 
 # Hospital
@@ -838,7 +840,7 @@ def user_edit_profile(request):
         location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
         location_names.sort()
 
-        return render(request, 'homepage/UserProfileEditor.html',
+        return render(request, 'homepage/../templates/profile_editor/UserProfileEditor.html',
                       {'hospital_names': hospital_names, 'locations': location_names})
 
     else:
