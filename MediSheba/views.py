@@ -704,6 +704,54 @@ def submit_appointment(request):
 
 # TODO: pantha write code here
 
+def custom_search_for_hospital_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'hospital_admin':
+        return filter_search_hospital(request)
+    else:
+        return HttpResponse("No Access")
+
+def filter_search_hospital(request):
+    #specialization = request.POST.get('select_specialization', 'No Preferences')
+    #gender_return = request.POST.get('select_gender', 'No Preferences')
+    area = request.POST.get('select_area', 'No Preferences')
+
+    statement = ""
+    if area == "No Preferences":
+        if user_info['type'] == "doctor":
+            return redirect(search_hospitals_by_doctor)
+        elif user_info['type'] == "user":
+            return redirect(search_hospitals_by_user)
+        elif user_info['type'] == "hospital_admin":
+            return redirect(search_hospitals_by_hospitals)
+        elif user_info['type'] == "blood_bank_admin":
+            return redirect(search_hospitals_by_bloodbank)
+
+    else:
+       statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
+
+
+
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+    specialization_options = []
+    hosList = []
+
+    # print(statement)
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute(statement)
+    index = 1
+    for row in c:
+        hosList.append(HospitalName(index, row[0], row[1], row[2]))
+        index = index + 1
+    c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
+    #for row in c:
+        #specialization_options.append(row[0])
+    conn.close()
+    return render(request, 'query_pages/query_page_for_doctors/hospital_custom_query.html',
+                  {'hos': docList, 'opt': location_names})
+
 
 def search_hospitals_by_doctor(request):
     return see_hospitals(request)
@@ -735,7 +783,7 @@ def see_hospitals(request):
         '''print(row[2])'''
     conn.close()
 
-    return render(request, "query_pages/hospital_query.html",
+    return render(request, "query_pages/query_page_for_doctors/hospital_query.html",
                   {'hos': hospitalList, 'opt': location_names})
 
 
@@ -929,7 +977,162 @@ def hospital_search_options(request):
 
 
 def hospital_admin_edit_profile(request):
-    return HttpResponse("Edit profile here")
+    # authentication added here
+    if bool(user_info) and user_info['type'] == "hospital_admin":
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
+
+        hospital_names = []
+
+        for i in c:
+            hospital_names.append(i[0])
+
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
+
+        return render(request, 'profile_editor/HospitalProfileEditor.html',
+                      {'hospital_names': hospital_names, 'locations': location_names})
+
+    else:
+        return HttpResponse("NO ACCESS TO THIS PAGE")
+
+def submit_changed_profile_hospital(request):
+    if bool(user_info) and user_info['type'] == 'hospital_admin':
+        first_name = request.POST['f_name']
+        last_name = request.POST['l_name']
+        phone_number = request.POST['phone']
+        location = request.POST['address']
+        email = request.POST['email']
+        blood_type = request.POST['blood_type']
+        hospital_name = request.POST['hospital_name']
+        fee = request.POST['fee']
+        specialization = request.POST['specialization']
+        additional_details = request.POST['additional_details']
+
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+
+        if first_name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if last_name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("LAST Name NOT CHANGED ")
+
+        if phone_number != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET PHONE = " + "\'" + phone_number + "\'" + "WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("PHONE NOT CHANGED ")
+
+        if location != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.HOSPITAL SET LOCATION = " + "\'" + location + "\'" + "WHERE HOSPITAL_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("LOCATION NOT CHANGED ")
+
+        if email != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET EMAIL = " + "\'" + email + "\'" + "WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("EMAIL NOT CHANGED ")
+
+        if blood_type != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("BLOOD NOT CHANGED ")
+
+        '''if hospital_name != "":
+            c = conn.cursor()
+            statement_1 = "SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME = " + "\'" + hospital_name + "\'"
+            c.execute(statement_1)
+
+            hospital_id = 0
+            for r in c:
+                hospital_id = r[0]
+
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET HOSPITAL_ID = " + str(hospital_id) + " WHERE DOCTOR_ID = " \
+                        + str(user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("HOSPITAL NOT CHANGED ")
+'''
+        if fee != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE DOCTOR_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("FEES NOT CHANGED ")
+
+        if specialization != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET SPECIALIZATION = " + "\'" + specialization + "\'" \
+                        + " WHERE DOCTOR_ID = " + str(user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("SPECIALIZATION NOT CHANGED ")
+        print(additional_details)
+
+        '''
+        UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
+
+        UPDATE EMAIL, FIRST NAME, LAST NAME
+
+
+        '''
+
+        '''
+        TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
+        '''
+        c = conn.cursor()
+        statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.HOSPITAL  WHERE HOSPITAL_ID=" + str(
+            user_info['pk'])
+        c.execute(statement)
+        if c:
+            x = c.fetchone()
+            id = x[0]
+            f_name = x[1]
+            l_name = x[2]
+            email = x[3]
+            user_info['pk'] = id
+            user_info['f_name'] = f_name
+            user_info['l_name'] = l_name
+            user_info['email'] = email
+        return redirect("hospital_admin_home")
+    else:
+        return HttpResponse("Access not granted")
 
 
 def hospital_admin_view_appointments(request):
