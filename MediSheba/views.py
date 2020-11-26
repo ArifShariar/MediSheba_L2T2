@@ -578,7 +578,7 @@ def filter_search_doctor(request):
     c.execute(statement)
     index = 1
     for row in c:
-        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5], row[5]))
+        docList.append(DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6]))
         index = index + 1
     c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
     for row in c:
