@@ -19,8 +19,6 @@ class DoctorName:
         else:
             hospital_full_name = "NONE"
 
-        print(hospital_full_name)
-
         self.id = id
         self.name = name
         self.phone = phone
@@ -57,10 +55,20 @@ class HospitalName:
 
 class doctor_infos:
     def __init__(self,first_name, last_name, phone, email, hospital_id, fees, specialization):
+        hospital_full_name = ""
+        if hospital_id != -1:
+            dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+            conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+            c = conn.cursor()
+            c.execute("SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
+            for row in c:
+                hospital_full_name = row[0]
+        else:
+            hospital_full_name = "NONE"
         self.first_name = first_name
         self.last_name = last_name
         self.phone = phone
         self.email = email
-        self.hospital_id = hospital_id
+        self.hospital_name = hospital_full_name
         self.fees = fees
         self.specialization = specialization
