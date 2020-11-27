@@ -752,21 +752,19 @@ def see_specific_hospital_details(request):
     c = conn.cursor()
     print(hospital_id)
 
-    statement = "SELECT HOSPITAL_NAME, PHONE, LOCATION, EMAIL FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = + hospital_id"
-    print(hospital_id)
-    c.execute(statement)
+    c.execute("SELECT HOSPITAL_NAME, PHONE, LOCATION, EMAIL FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
 
     hospital_name = ""
-    #ast_name = ""
+    # ast_name = ""
     phone = ""
     location = ""
     email = ""
     hospital_id = ""
-    #fees = ""
-    #specialization = ""
+    # fees = ""
+    # specialization = ""
     for row in c:
         hospital_name = row[0]
-        #last_name = row[1]
+        # last_name = row[1]
         phone = row[1]
         location = row[2]
         email = row[3]
@@ -774,8 +772,8 @@ def see_specific_hospital_details(request):
 
     return render(request, "detail_showing_pages/see_hospital_details.html",
                   {'name': hospital_name,
-                  'phone': phone, 'location': location, 'email': email
-                  })
+                   'phone': phone, 'location': location, 'email': email
+                   })
 
 
 def custom_search_for_hospital_by_doctor(request):
@@ -784,17 +782,20 @@ def custom_search_for_hospital_by_doctor(request):
     else:
         return HttpResponse("No Access")
 
+
 def custom_search_for_hospital_by_bloodbank(request):
     if bool(user_info) and user_info['type'] == 'blood_bank_admin':
         return filter_search_hospital(request)
     else:
         return HttpResponse("No Access")
 
+
 def custom_search_for_hospital_by_hospital_admin(request):
     if bool(user_info) and user_info['type'] == 'hospital_admin':
         return filter_search_hospital(request)
     else:
         return HttpResponse("No Access")
+
 
 def custom_search_for_hospital_by_user(request):
     if bool(user_info) and user_info['type'] == 'user':
@@ -818,7 +819,7 @@ def filter_search_hospital(request):
             return redirect(search_hospitals_by_bloodbank)
 
     else:
-        statement = "SELECT HOSPITAL_NAME,PHONE, LOCATION FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
+        statement = "SELECT HOSPITAL_NAME,PHONE, LOCATION, HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
@@ -830,7 +831,7 @@ def filter_search_hospital(request):
     c.execute(statement)
     index = 1
     for row in c:
-        hospitalList.append(HospitalName(index, row[0], row[1], row[2]))
+        hospitalList.append(HospitalName(index, row[0], row[1], row[2], row[3]))
         index = index + 1
 
     conn.close()
@@ -869,11 +870,10 @@ def see_hospitals(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT HOSPITAL_NAME,PHONE,LOCATION "
-              "from MEDI_SHEBA.HOSPITAL")
+    c.execute("SELECT HOSPITAL_NAME,PHONE,LOCATION , HOSPITAL_ID from MEDI_SHEBA.HOSPITAL")
     index = 1
     for row in c:
-        hospitalList.append(HospitalName(index, row[0], row[1], row[2]))  # HospitalName is defined in models.py
+        hospitalList.append(HospitalName(index, row[0], row[1], row[2], row[3]))  # HospitalName is defined in models.py
         index = index + 1
         '''print(row[2])'''
     conn.close()
