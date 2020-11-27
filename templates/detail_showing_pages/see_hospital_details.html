@@ -42,14 +42,8 @@
             <div class="col-md-4">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center experience"><span><h4>Appointments</h4></span></div><br>
-                    <div class="col-md-12">
-                        <label class="labels">Specialization</label>
-                        <h4>{{ specialization }}</h4>
-                    </div>
                     <br>
-
-
-                    <div class="col-md-12">
+                <div class="col-md-12">
                         <label class="labels">Get An Appointment</label><br>
                     </div>
                     <div class="col-md-12"><label class="labels">Select Day</label>
@@ -64,13 +58,13 @@
                     <div class="mt-5 text-center">
                         <button class="btn btn-primary profile-button" type="submit">book cabin</button>
                     </div>
-                    <form action="see_doctors_of_specific_hospital" method="post">
-                        {% csrf_token %}
-                     <div class="mt-5 text-center">
-                        <button class="btn btn-primary profile-button" type="submit">View doctors</button>
-                    </div>
 
-                    </form>
+                     <div class="mt-5 text-center">
+                         <form action="see_doctors_of_specific_hospital" method="post">{% csrf_token %}
+                                <button type="submit" class="btn btn-danger wrn-btn">See Doctor List</button>
+                                <input type="hidden" id="{{ hospital_id_for_doctor }}" name="hospital_id_for_doctor" value="{{ hospital_id_for_doctor }}">
+                         </form>
+                    </div>
                 </div>
             </div>
         </div>

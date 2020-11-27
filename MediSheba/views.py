@@ -717,7 +717,7 @@ def submit_appointment(request):
 def see_doctors_of_specific_hospital(request):
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
-    hospital_id=request.POST['hospital_id']
+    hospital_id = request.POST['hospital_id_for_doctor']
     specialization = []
 
     docList = []
@@ -725,9 +725,7 @@ def see_doctors_of_specific_hospital(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute(
-        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID "
-        "from MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID=(SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME IS LIKE "/" hospital_name" /" )")
+    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(hospital_id))
     index = 1
     for row in c:
         docList.append(
@@ -747,32 +745,29 @@ def see_doctors_of_specific_hospital(request):
 
 def see_specific_hospital_details(request):
     hospital_id = request.POST['hospital_id']
+    hospital_id_for_doctor = hospital_id
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    print(hospital_id)
 
-    c.execute("SELECT HOSPITAL_NAME, PHONE, LOCATION, EMAIL FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
+    c.execute(
+        "SELECT HOSPITAL_NAME, PHONE, LOCATION, EMAIL FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(hospital_id))
 
     hospital_name = ""
-    # ast_name = ""
     phone = ""
     location = ""
     email = ""
     hospital_id = ""
-    # fees = ""
-    # specialization = ""
+
     for row in c:
         hospital_name = row[0]
-        # last_name = row[1]
         phone = row[1]
         location = row[2]
         email = row[3]
-    hospital_full_name = ""
 
     return render(request, "detail_showing_pages/see_hospital_details.html",
                   {'name': hospital_name,
-                   'phone': phone, 'location': location, 'email': email
+                   'phone': phone, 'location': location, 'email': email, 'hospital_id_for_doctor': hospital_id_for_doctor
                    })
 
 
