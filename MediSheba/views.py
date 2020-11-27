@@ -482,6 +482,8 @@ def doctor_search_options(request):
     else:
         return HttpResponse("NO ACCESS")
 
+def doctor_search_cabin(request):
+    return HttpResponse("View Cabins")
 
 def doctor_view_appointments(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -506,7 +508,7 @@ def doctor_view_calender(request):
 
 def doctor_view_records(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("view records")
+        return render(request, 'homepage/records_for_doctor_table.html')
     else:
         return HttpResponse(" NO ACCESS")
 
@@ -1033,6 +1035,9 @@ def user_edit_profile(request):
         return HttpResponse("NO ACCESS TO THIS PAGE")
 
 
+def user_search_cabin(request):
+    return HttpResponse("View Cabins")
+
 def user_doctor_appointment(request):
     return HttpResponse("user doctor appointment")
 
@@ -1242,6 +1247,9 @@ def hospital_admin_view_appointments(request):
 
 def hospital_admin_view_schedule(request):
     return HttpResponse("Hospital admin view schedule")
+
+def hospital_admin_available_cabin(request):
+    return HttpResponse("View Cabins")
 
 
 def hospital_admin_cabin_management(request):

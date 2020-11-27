@@ -66,7 +66,8 @@ create table "BLOOD_BANK"
     "PASSWORD" VARCHAR2(255) not null ,
     "GENDER" VARCHAR2(1) not null ,
     "EMAIL" VARCHAR2(255) not null ,
-    "PHONE" VARCHAR2(255)
+    "PHONE" VARCHAR2(255),
+    LOCATION VARCHAR2(255)
 );
 
 create table "DOCTOR_USER_HISTORY"
