@@ -21,7 +21,7 @@
 </div>
 <section class="search-sec bottom-space-1">
     <div class="container">
-        <form action="custom_search_for_hospital_by_doctor" method="post" novalidate="novalidate">
+        <form action="custom_search_for_hospital_by_bloodbank" method="post" novalidate="novalidate">
         {% csrf_token %}
             <div class="row">
 
@@ -65,7 +65,7 @@
             <td>{{ d.name }}</td>
             <td>{{ d.phone }}</td>
             <td>{{ d.location }}</td>
-                 <td>
+                <td>
                 <form action="see_specific_hospital_details" method="post">{% csrf_token %}
                     <button type="submit" class="btn btn-danger wrn-btn">See Details</button>
                     <input type="hidden" id="{{ d.hospital_id }}" name="hospital_id" value="{{ d.hospital_id }}">

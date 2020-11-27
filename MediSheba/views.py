@@ -715,8 +715,59 @@ def submit_appointment(request):
 
 # TODO: pantha write code here
 
+def see_specific_hospital_details(request):
+    hospital_id = request.POST['hospital_id']
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    print(hospital_id)
+
+    statement = "SELECT HOSPITAL_NAME, PHONE, LOCATION, EMAIL FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = + hospital_id"
+    print(hospital_id)
+    c.execute(statement)
+
+    hospital_name = ""
+    #ast_name = ""
+    phone = ""
+    location = ""
+    email = ""
+    hospital_id = ""
+    #fees = ""
+    #specialization = ""
+    for row in c:
+        hospital_name = row[0]
+        #last_name = row[1]
+        phone = row[1]
+        location = row[2]
+        email = row[3]
+    hospital_full_name = ""
+
+    return render(request, "detail_showing_pages/see_hospital_details.html",
+                  {'name': hospital_name,
+                  'phone': phone, 'location': location, 'email': email
+                  })
+
+
 def custom_search_for_hospital_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
+        return filter_search_hospital(request)
+    else:
+        return HttpResponse("No Access")
+
+def custom_search_for_hospital_by_bloodbank(request):
+    if bool(user_info) and user_info['type'] == 'blood_bank_admin':
+        return filter_search_hospital(request)
+    else:
+        return HttpResponse("No Access")
+
+def custom_search_for_hospital_by_hospital_admin(request):
+    if bool(user_info) and user_info['type'] == 'hospital_admin':
+        return filter_search_hospital(request)
+    else:
+        return HttpResponse("No Access")
+
+def custom_search_for_hospital_by_user(request):
+    if bool(user_info) and user_info['type'] == 'user':
         return filter_search_hospital(request)
     else:
         return HttpResponse("No Access")
@@ -741,7 +792,7 @@ def filter_search_hospital(request):
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
-    hosList = []
+    hospitalList = []
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -749,12 +800,22 @@ def filter_search_hospital(request):
     c.execute(statement)
     index = 1
     for row in c:
-        hosList.append(HospitalName(index, row[0], row[1], row[2]))
+        hospitalList.append(HospitalName(index, row[0], row[1], row[2]))
         index = index + 1
 
     conn.close()
-    return render(request, 'query_pages/query_page_for_doctors/hospital_custom_query.html',
-                  {'hos': hosList, 'opt': location_names})
+    if user_info['type'] == "doctor":
+        return render(request, "query_pages/query_page_for_doctors/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "user":
+        return render(request, "query_pages/query_page_for_users/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "hospital_admin":
+        return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "blood_bank_admin":
+        return render(request, "query_pages/query_page_for_blood_bank_admin/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
 
 
 def search_hospitals_by_doctor(request):
@@ -787,8 +848,18 @@ def see_hospitals(request):
         '''print(row[2])'''
     conn.close()
 
-    return render(request, "query_pages/query_page_for_doctors/hospital_query.html",
-                  {'hos': hospitalList, 'opt': location_names})
+    if user_info['type'] == "doctor":
+        return render(request, "query_pages/query_page_for_doctors/hospital_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "user":
+        return render(request, "query_pages/query_page_for_users/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "hospital_admin":
+        return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
+    elif user_info['type'] == "blood_bank_admin":
+        return render(request, "query_pages/query_page_for_blood_bank_admin/hospital_query.html",
+                      {'hos': hospitalList, 'opt': location_names})
 
 
 # Blood_Bank

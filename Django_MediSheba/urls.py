@@ -45,7 +45,8 @@ urlpatterns = [
          name='custom_search_for_hospital_by_doctor'),
     path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks, name='search_blood_banks'),
     path('doctor/search_options/search_doctors/submit_appointment', MediSheba_views.submit_appointment, name='submit_appointment'),
-
+    path('doctor/search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
+         name='see_specific_hospital_details'),
 
 
     # URL FOR USERS
@@ -67,6 +68,10 @@ urlpatterns = [
     path('users/user_modify_appointment/', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
     path('users/user_hospital_appointment/', MediSheba_views.user_hospital_appointment,
          name='user_hospital_appointment'),
+    path('users/search_options/search_hospitals/custom_search_for_hospital_by_user', MediSheba_views.custom_search_for_hospital_by_user,
+         name='custom_search_for_hospital_by_user'),
+    path('users/search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
+         name='see_specific_hospital_details'),
 
     # URL FOR BLOOD BANK ADMIN
     path('bloodbank/bloodbank_search_options/search_doctors/', MediSheba_views.search_doctors_by_bloodbank,
@@ -86,6 +91,10 @@ urlpatterns = [
     path('bloodbank/bloodbank_history/', MediSheba_views.bloodbank_history, name='blood_bank_history'),
     path('bloodbank/bloodbank_all_appointments/', MediSheba_views.bloodbank_all_appointments,
          name='bloodbank_all_appointments'),
+    path('bloodbank/bloodbank_search_options/search_hospitals/custom_search_for_hospital_by_bloodbank', MediSheba_views.custom_search_for_hospital_by_bloodbank,
+         name='custom_search_for_hospital_by_bloodbank'),
+    path('bloodbank/bloodbank_search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
+         name='see_specific_hospital_details'),
 
     # URL FOR HOSPITAL ADMIN
     path('hospital_admin/hospital_search_options/', MediSheba_views.hospital_search_options,
@@ -112,6 +121,10 @@ urlpatterns = [
          name='search_blood_banks_by_hospitals'),
     path('hospital_admin/hospital_admin_edit_profile/submit_changed_profile_hospital', MediSheba_views.submit_changed_profile_hospital,
          name='submit_changed_profile_hospital'),
+    path('hospital_admin/hospital_search_options/search_hospitals/custom_search_for_hospital_by_hospital_admin', MediSheba_views.custom_search_for_hospital_by_hospital_admin,
+         name='custom_search_for_hospital_by_hospital_admin'),
+    path('hospital_admin/hospital_search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
+         name='see_specific_hospital_details'),
     # URLS FOR CUSTOM SEARCH
 
 ]
