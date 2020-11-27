@@ -714,6 +714,36 @@ def submit_appointment(request):
 # Hospital
 
 # TODO: pantha write code here
+def see_doctors_of_specific_hospital(request):
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+    hospital_id=request.POST['hospital_id']
+    specialization = []
+
+    docList = []
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute(
+        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID "
+        "from MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID=(SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME IS LIKE "/" hospital_name" /" )")
+    index = 1
+    for row in c:
+        docList.append(
+            DoctorName(index, row[0], row[1], row[2], row[3], row[4], row[5],
+                       row[6]))  # DoctorName is defined in models.py
+        index = index + 1
+
+    c.execute("SELECT DISTINCT SPECIALIZATION FROM MEDI_SHEBA.DOCTOR")
+    for row in c:
+        specialization.append(row[0])
+
+    conn.close()
+
+    return render(request, "query_pages/query_page_for_doctors/doctor_query.html",
+                  {'doc': docList, 'opt': location_names, 'specialization': specialization})
+
 
 def see_specific_hospital_details(request):
     hospital_id = request.POST['hospital_id']

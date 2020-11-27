@@ -47,8 +47,8 @@
                         <h4>{{ specialization }}</h4>
                     </div>
                     <br>
-                    <form action="submit_appointment" method="post">
-                        {% csrf_token %}
+
+
                     <div class="col-md-12">
                         <label class="labels">Get An Appointment</label><br>
                     </div>
@@ -64,9 +64,12 @@
                     <div class="mt-5 text-center">
                         <button class="btn btn-primary profile-button" type="submit">book cabin</button>
                     </div>
+                    <form action="see_doctors_of_specific_hospital" method="post">
+                        {% csrf_token %}
                      <div class="mt-5 text-center">
                         <button class="btn btn-primary profile-button" type="submit">View doctors</button>
                     </div>
+
                     </form>
                 </div>
             </div>
