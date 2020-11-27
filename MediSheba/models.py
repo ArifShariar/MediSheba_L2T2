@@ -46,11 +46,12 @@ class BloodBankList:
 
 class HospitalName:
 
-    def __init__(self, id, name, phone, location):
+    def __init__(self, id, name, phone, location, hospital_id):
         self.id = id
         self.name = name
         self.phone = phone
         self.location = location
+        self.hospital_id = hospital_id
 
 
 class doctor_infos:
