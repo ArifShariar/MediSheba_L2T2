@@ -482,8 +482,10 @@ def doctor_search_options(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def doctor_search_cabin(request):
     return HttpResponse("View Cabins")
+
 
 def doctor_view_appointments(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -727,7 +729,9 @@ def see_doctors_of_specific_hospital(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(hospital_id))
+    c.execute(
+        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(
+            hospital_id))
     index = 1
     for row in c:
         docList.append(
@@ -769,7 +773,8 @@ def see_specific_hospital_details(request):
 
     return render(request, "detail_showing_pages/see_hospital_details.html",
                   {'name': hospital_name,
-                   'phone': phone, 'location': location, 'email': email, 'hospital_id_for_doctor': hospital_id_for_doctor
+                   'phone': phone, 'location': location, 'email': email,
+                   'hospital_id_for_doctor': hospital_id_for_doctor
                    })
 
 
@@ -1038,6 +1043,7 @@ def user_edit_profile(request):
 def user_search_cabin(request):
     return HttpResponse("View Cabins")
 
+
 def user_doctor_appointment(request):
     return HttpResponse("user doctor appointment")
 
@@ -1247,6 +1253,7 @@ def hospital_admin_view_appointments(request):
 
 def hospital_admin_view_schedule(request):
     return HttpResponse("Hospital admin view schedule")
+
 
 def hospital_admin_available_cabin(request):
     return HttpResponse("View Cabins")
