@@ -8,6 +8,8 @@ from HelperClasses import json_extractor
 from .models import DoctorName
 from .models import BloodBankList
 from .models import HospitalName
+from .models import HospitalCabinName
+from .models import CabinName
 
 # login
 user_info = {}  # holds user data across pages
@@ -482,8 +484,6 @@ def doctor_search_options(request):
     else:
         return HttpResponse("NO ACCESS")
 
-def doctor_search_cabin(request):
-    return HttpResponse("View Cabins")
 
 def doctor_view_appointments(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -660,6 +660,73 @@ def see_doctors(request):
     return render(request, "query_pages/query_page_for_doctors/doctor_query.html",
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
+'''
+
+  cabin starts
+  
+'''
+
+def doctor_search_cabin(request):
+    return see_hospital_cabins(request)
+
+
+def custom_search_for_cabin(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return filter_search_cabin(request)
+    else:
+        return HttpResponse("No Access")
+
+
+def filter_search_cabin(request):
+    return HttpResponse("No Access")
+
+
+def see_hospital_cabins(request):
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+
+    hospitalcabinList = []
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute("SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID from MEDI_SHEBA.HOSPITAL")
+    index = 1
+    for row in c:
+        hospitalcabinList.append(HospitalCabinName(index, row[0], row[1], row[2], row[3]))
+        index = index + 1
+
+    conn.close()
+    return render(request, "query_pages/query_page_for_doctors/cabin_query.html",
+                      {'cab': hospitalcabinList, 'opt': location_names})
+
+
+
+def see_specific_hospital_cabin_details(request):
+
+    hospital_id = request.POST['hospital_id']
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    cabinList = []
+    c.execute(
+        "SELECT PRICE, CATEGORY, IS_AVAILABLE, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(hospital_id))
+
+    index = 1
+    for row in c:
+        cabinList.append(CabinName(index, row[0], row[1], row[2], row[3]))
+        index = index + 1
+
+    conn.close()
+    return render(request, "detail_showing_pages/hospital_cabin_details.html",
+                      {'cab': cabinList})
+
+
+'''
+  cabin ends
+  
+'''
 
 def see_specific_doctor_details(request):
     doctor_id = request.POST['doctor_id']
@@ -1250,10 +1317,6 @@ def hospital_admin_view_schedule(request):
 
 def hospital_admin_available_cabin(request):
     return HttpResponse("View Cabins")
-
-
-def hospital_admin_cabin_management(request):
-    return HttpResponse("Hospital admin cabin management")
 
 
 def hospital_admin_view_records(request):
