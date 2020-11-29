@@ -1057,7 +1057,19 @@ def user_search_cabin(request):
 
 
 def user_doctor_appointment(request):
-    return HttpResponse("user doctor appointment")
+    return render(request, 'appointment_history_pages/user_history/doctor_appointment_options.html')
+
+
+def past_appointment_of_doctor_by_user(request):
+    return HttpResponse("Past appointment")
+
+
+def upcoming_appointment_of_doctor_by_user(request):
+    return HttpResponse("Upcoming appointment")
+
+
+def pending_appointment_of_doctor_by_user(request):
+    return HttpResponse("Pending appointment")
 
 
 def user_blood_bank_appointment(request):

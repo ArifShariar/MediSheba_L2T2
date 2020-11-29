@@ -69,6 +69,10 @@ urlpatterns = [
     path('users/user_edit_profile/submit_changed_profile_user', MediSheba_views.submit_changed_profile_user,
          name='submit_changed_profile_user'),
     path('users/user_doctor_appointment/', MediSheba_views.user_doctor_appointment, name='user_doctor_appointment'),
+    path('users/user_doctor_appointment/past_appointment_of_doctor_by_user', MediSheba_views.past_appointment_of_doctor_by_user, name='past_appointment_of_doctor_by_user'),
+    path('users/user_doctor_appointment/upcoming_appointment_of_doctor_by_user', MediSheba_views.upcoming_appointment_of_doctor_by_user, name='upcoming_appointment_of_doctor_by_user'),
+    path('users/user_doctor_appointment/pending_appointment_of_doctor_by_user', MediSheba_views.pending_appointment_of_doctor_by_user, name='pending_appointment_of_doctor_by_user'),
+
     path('users/user_blood_bank_appointment/', MediSheba_views.user_blood_bank_appointment,
          name='user_blood_bank_appointment'),
 
