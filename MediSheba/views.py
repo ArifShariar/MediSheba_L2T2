@@ -515,6 +515,18 @@ def doctor_view_records(request):
         return HttpResponse(" NO ACCESS")
 
 
+def doctor_user_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_user_history.html')
+
+
+def doctor_hospital_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_hospital_history.html')
+
+
+def doctor_blood_bank_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_blood_bank_history.html')
+
+
 def doctor_change_schedule(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return render(request, 'schedule_editor/AddSchedule.html')

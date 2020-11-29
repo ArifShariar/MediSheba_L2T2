@@ -30,6 +30,9 @@ urlpatterns = [
          name='doctor_blood_bank_appointment'),
     path('doctor/view_calender/', MediSheba_views.doctor_view_calender, name='doctor_view_calender'),
     path('doctor/view_records/', MediSheba_views.doctor_view_records, name='doctor_view_records'),
+    path('doctor/view_records/doctor_user_history_from_doctor', MediSheba_views.doctor_user_history_from_doctor, name='doctor_user_history_from_doctor'),
+    path('doctor/view_records/doctor_hospital_history_from_doctor', MediSheba_views.doctor_hospital_history_from_doctor, name='doctor_hospital_history_from_doctor'),
+    path('doctor/view_records/doctor_blood_bank_history_from_doctor', MediSheba_views.doctor_blood_bank_history_from_doctor, name='doctor_blood_bank_history_from_doctor'),
     path('doctor/change_schedule/', MediSheba_views.doctor_change_schedule, name='doctor_change_schedule'),
     path('doctor/logout', MediSheba_views.logout, name='log_out'),
 
