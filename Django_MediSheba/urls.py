@@ -82,14 +82,21 @@ urlpatterns = [
     path('users/user_blood_bank_appointment/', MediSheba_views.user_blood_bank_appointment,
          name='user_blood_bank_appointment'),
 
-    path('users/user_modify_appointment/', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
     path('users/user_hospital_appointment/', MediSheba_views.user_hospital_appointment,
          name='user_hospital_appointment'),
+    path('users/user_hospital_appointment/past_appointment_of_hospital_by_user', MediSheba_views.past_appointment_of_hospital_by_user,
+         name='past_appointment_of_hospital_by_user'),
+    path('users/user_hospital_appointment/upcoming_appointment_of_hospital_by_user', MediSheba_views.upcoming_appointment_of_hospital_by_user,
+         name='upcoming_appointment_of_hospital_by_user'),
+    path('users/user_hospital_appointment/pending_appointment_of_hospital_by_user', MediSheba_views.pending_appointment_of_hospital_by_user,
+         name='pending_appointment_of_hospital_by_user'),
+
+
     path('users/search_options/search_hospitals/custom_search_for_hospital_by_user', MediSheba_views.custom_search_for_hospital_by_user,
          name='custom_search_for_hospital_by_user'),
     path('users/search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
-
+    path('users/user_modify_appointment/', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
     # URL FOR BLOOD BANK ADMIN
     path('bloodbank/bloodbank_search_options/search_doctors/', MediSheba_views.search_doctors_by_bloodbank,
          name='search_doctors_by_bloodbank'),
