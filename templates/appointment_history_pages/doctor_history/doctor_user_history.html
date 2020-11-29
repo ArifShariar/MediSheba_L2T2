@@ -9,16 +9,17 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/blood_bank_query.css' %}">
-    <title>Search BloodBanks</title>
+    <title>User History</title>
 </head>
 <body style="background-color: #dde3d3">
 <div class="container">
     <div class="row pt-1 pb-1">
         <div class="col-lg-12">
-            <h4 class="text-center"> Search for Blood Banks</h4>
+            <h4 class="text-center">Patient History</h4>
         </div>
     </div>
 </div>
+<!---
 <section class="search-sec bottom-space-1">
     <div class="container">
         <form action="#" method="post" novalidate="novalidate">
@@ -54,30 +55,29 @@
         </form>
     </div>
 </section>
+--->
 
+<!---
 <section class="search_result bottom-space-1 center">
     <div>
         <h3>Search Result</h3>
     </div>
 </section>
+
+-->
 <section class="table-sec bottom-space">
     <table class="table table-hover table-dark" border="1">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">A+</th>
-            <th scope="col">A-</th>
-            <th scope="col">B+</th>
-            <th scope="col">B-</th>
-            <th scope="col">O+</th>
-            <th scope="col">O-</th>
-            <th scope="col">AB+</th>
-            <th scope="col">AB-</th>
-            <th scope="col">Book</th>
+            <th scope="col">Patient Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Problem</th>
+            <th scope="col">Prescription</th>
+            <th scope="col">Payment</th>
         </tr>
         </thead>
-
+<!---
         {% for d in b_banks %}
             <tr>
             <td>{{ d.id }}</td>
@@ -93,6 +93,8 @@
             <td><button type="button" class="btn btn-danger wrn-btn">Book</button></td>
             </tr>
         {% endfor %}
+
+      -->
     </table>
 </section>
 
