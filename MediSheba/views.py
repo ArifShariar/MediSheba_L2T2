@@ -1255,8 +1255,25 @@ def hospital_admin_view_schedule(request):
     return HttpResponse("Hospital admin view schedule")
 
 
-def hospital_admin_available_cabin(request):
-    return HttpResponse("View Cabins")
+# TODO: CABIN MANAGEMENT BY HOSPITAL ADMIN
+def hospital_admin_cabin_management(request):
+    return render(request, 'cabin/cabin_front_page.html')
+
+
+def add_cabin_to_hospital(request):
+    return render(request, 'cabin/cabin_add.html')
+
+
+def check_cabin_history(request):
+    return render(request, 'cabin/cabin_history.html')
+
+
+def check_occupied_cabin(request):
+    return render(request, 'cabin/cabin_occupied.html')
+
+
+def check_cabin_pending_appointments(request):
+    return render(request, 'cabin/cabin_pending_appointments.html')
 
 
 def hospital_admin_view_records(request):
