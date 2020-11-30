@@ -46,12 +46,13 @@ urlpatterns = [
          name='search_hospitals_by_doctor'),
     path('doctor/search_options/search_hospitals/custom_search_for_hospital_by_doctor', MediSheba_views.custom_search_for_hospital_by_doctor,
          name='custom_search_for_hospital_by_doctor'),
-    path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_doctor, name='search_blood_banks_by_doctor'),
+
     path('doctor/search_options/search_doctors/submit_appointment', MediSheba_views.submit_appointment, name='submit_appointment'),
     path('doctor/search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
     path('doctor/search_options/search_hospitals/see_doctors_of_specific_hospital', MediSheba_views.see_doctors_of_specific_hospital,
          name='see_doctors_of_specific_hospital'),
+    path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_doctor, name='search_blood_banks_by_doctor'),
     path('doctor/search_options/search_blood_banks/custom_search_for_bloodbank_by_doctor', MediSheba_views.custom_search_for_bloodbank_by_doctor, name='custom_search_for_bloodbank_by_doctor'),
 
     path('doctor/search_cabin/', MediSheba_views.doctor_search_cabin, name='doctor_search_cabin'),

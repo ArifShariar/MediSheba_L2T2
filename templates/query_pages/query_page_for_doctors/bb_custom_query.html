@@ -9,7 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/blood_bank_query.css' %}">
-    <title>Search Doctor</title>
+    <title>Search Blood Banks</title>
 </head>
 <body style="background-color: #dde3d3">
 <div class="container">
@@ -21,21 +21,23 @@
 </div>
 <section class="search-sec bottom-space-1">
     <form action="custom_search_for_bloodbank_by_doctor" method="post" novalidate="novalidate">
+    {% csrf_token %}
     <div class="container">
         <form action="#" method="post" novalidate="novalidate">
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select class="form-control search-slt" id="select_area">
+                    <select class="form-control search-slt" id="select_area" name="select_area">
                         <option selected disabled>Select Area</option>
+                        <option>No Preferences</option>
                         {% for i in opt %}
                         <option>{{ i }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select class="form-control search-slt" id="blood_group">
+                    <select class="form-control search-slt" id="blood_group" name="blood_group">
                         <option selected disabled>Select Blood Group</option>
-
+                        <option>No Preferences</option>
                         <option>A+</option>
                         <option>A-</option>
                         <option>B+</option>
@@ -49,7 +51,7 @@
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <button type="button" class="btn btn-danger wrn-btn">Search</button>
+                    <button type="submit" class="btn btn-danger wrn-btn">Search</button>
                 </div>
             </div>
         </form>
@@ -94,7 +96,7 @@
             <td>{{ d.ab_plus }}</td>
             <td>{{ d.ab_minus }}</td>
                 <td>{{ d.location }}</td>
-            <td><button type="button" class="btn btn-danger wrn-btn">Book</button></td>
+            <td><button type="submit" class="btn btn-danger wrn-btn">Book</button></td>
             </tr>
         {% endfor %}
     </table>

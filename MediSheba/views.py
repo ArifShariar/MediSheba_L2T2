@@ -975,30 +975,6 @@ def see_hospitals(request):
 
 # Blood_Bank
 
-def see_blood_banks(request):
-    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
-    location_names.sort()
-
-    bbankList = []
-    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-    c = conn.cursor()
-    '''
-    c.execute("SELECT NAME,'A+','A-','B+','B-','O+','O-','AB+','AB-'"
-              "from MEDI_SHEBA.BLOOD_BANK")
-    '''
-
-    statement = "SELECT NAME, \"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\" ,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK"
-    c.execute(statement)
-
-    index = 1
-    for row in c:
-        bbankList.append(BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],row[9],row[10]))
-        index = index + 1
-    conn.close()
-
-    return render(request, "query_pages/query_page_for_doctors/bb_query.html", {'b_banks': bbankList, 'opt': location_names})
-
 
 # USER HOMEPAGE FUNCTIONS
 
@@ -1374,19 +1350,52 @@ def search_doctors_by_hospitals(request):
 def search_hospitals_by_hospitals(request):
     return see_hospitals(request)
 
+
 # TODO:bloodbank custom search
+
+def see_blood_banks(request):
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+
+    bbankList = []
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    '''
+    c.execute("SELECT NAME,'A+','A-','B+','B-','O+','O-','AB+','AB-'"
+              "from MEDI_SHEBA.BLOOD_BANK")
+    '''
+
+    statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK"
+    c.execute(statement)
+
+    index = 1
+    for row in c:
+        bbankList.append(
+            BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
+                          row[10]))
+        index = index + 1
+    conn.close()
+
+    return render(request, "query_pages/query_page_for_doctors/bb_query.html",
+                  {'b_banks': bbankList, 'opt': location_names})
+
 
 def search_blood_banks_by_hospital_admin(request):
     return see_blood_banks(request)
 
+
 def search_blood_banks_by_doctor(request):
     return see_blood_banks(request)
+
 
 def search_blood_banks_by_user(request):
     return see_blood_banks(request)
 
+
 def search_blood_banks_by_bloodbank(request):
     return see_blood_banks(request)
+
 
 def custom_search_for_bloodbank_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -1394,53 +1403,79 @@ def custom_search_for_bloodbank_by_doctor(request):
     else:
         return HttpResponse("No Access")
 
+
 def filter_search_bloodbank(request):
     area = request.POST.get('select_area', 'No Preferences')
-    blood_group = request.POST.get('blood_group','No Preferences')
+    blood_group = request.POST.get('blood_group', 'No Preferences')
+
+    blood_type_db = ""
+    if blood_group == "A+":
+        blood_type_db = "A_POS"
+    elif blood_group == "A-":
+        blood_type_db = "A_NEG"
+    elif blood_group == "B+":
+        blood_type_db = "B_POS"
+    elif blood_group == "B-":
+        blood_type_db = "B_NEG"
+    elif blood_group == "O+":
+        blood_type_db = "O_POS"
+    elif blood_group == "O-":
+        blood_type_db = "O_NEG"
+    elif blood_group == "AB+":
+        blood_type_db = "AB_POS"
+    elif blood_group == "AB-":
+        blood_type_db = "AB_NEG"
 
     statement = ""
-    if area == "No Preferences" and blood_group=="No Preferences":
+    if area == "No Preferences" and blood_group == "No Preferences":
         if user_info['type'] == "doctor":
             return redirect(search_blood_banks_by_doctor)
         elif user_info['type'] == "user":
-            return redirect(search_hospitals_by_users)
+            return redirect(search_blood_banks_by_user)
         elif user_info['type'] == "hospital_admin":
-            return redirect(search_hospitals_by_hospitals)
+            return redirect(search_blood_banks_by_hospital_admin)
         elif user_info['type'] == "blood_bank_admin":
-            return redirect(search_hospitals_by_bloodbank)
+            return redirect(search_blood_banks_by_bloodbank)
 
     else:
         if blood_group == "No Preferences":
-            statement="SELECT NAME, \"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\",BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK WHERE LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK WHERE LOCATION = " + "\'" + area + "\'"
 
         elif area == "No Preferences":
-            statement = "SELECT NAME, \"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\",BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK ORDER BY  " + blood_group + " DESC NULLS LAST"
+
+            statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK ORDER BY  " + blood_type_db + " DESC NULLS LAST"
+
         else:
-            statement = "SELECT NAME, \"A+\", \"A-\", \"B+\", \"B-\", \"O+\", \"O-\", \"AB+\", \"AB-\",BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK ORDER BY  " + blood_group + " WHERE LOCATION = " + "\'" + area + "\'"
+            statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK WHERE LOCATION = " + area + " ORDER BY  " + blood_type_db + " DESC NULLS LAST"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
     bbList = []
-    print(blood_group)
+    # print(blood_group)
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
     c.execute(statement)
     index = 1
     for row in c:
-        bbList.append(BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],row[10],row[10]))
+        bbList.append(
+            BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[10],
+                          row[10]))
         index = index + 1
 
     conn.close()
+
+    statement = ""
     if user_info['type'] == "doctor":
         return render(request, "query_pages/query_page_for_doctors/bb_custom_query.html",
                       {'b_banks': bbList, 'opt': location_names})
     elif user_info['type'] == "user":
-        return render(request, "query_pages/query_page_for_users/hospital_custom_query.html",
-                      {'hos': hospitalList, 'opt': location_names})
+        return HttpResponse("b bank custom search user")
+        # return render(request, "query_pages/query_page_for_users/hospital_custom_query.html", {'hos': hospitalList, 'opt': location_names})
+
     elif user_info['type'] == "hospital_admin":
-        return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",
-                      {'hos': hospitalList, 'opt': location_names})
+        return HttpResponse("b bank custom search hospital admin")
+        # return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",{'hos': hospitalList, 'opt': location_names})
     elif user_info['type'] == "blood_bank_admin":
-        return render(request, "query_pages/query_page_for_blood_bank_admin/hospital_custom_query.html",
-                      {'hos': hospitalList, 'opt': location_names})
+        return HttpResponse("b bank custom search b bank admin")
+        # return render(request, "query_pages/query_page_for_blood_bank_admin/hospital_custom_query.html",{'hos': hospitalList, 'opt': location_names})
