@@ -118,6 +118,8 @@ urlpatterns = [
          name='search_cabin_by_user'),
     path('users/search_cabin_by_user/custom_search_for_cabin_by_user',
          MediSheba_views.custom_search_for_cabin_by_user, name='custom_search_for_cabin_by_user'),
+    path('users/search_cabin_by_user/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
+         name='see_specific_hospital_cabin_details'),
 
     # URL FOR BLOOD BANK ADMIN
     path('bloodbank/bloodbank_search_options/search_doctors/', MediSheba_views.search_doctors_by_bloodbank,
