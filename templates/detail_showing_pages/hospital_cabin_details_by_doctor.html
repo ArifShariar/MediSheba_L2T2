@@ -12,38 +12,10 @@
     <title>Search Cabin</title>
 </head>
 <body style="background-color: #dde3d3">
-<div class="container">
-    <div class="row pt-1 pb-1">
-        <div class="col-lg-12">
-            <h4 class="text-center"> Search for Cabins</h4>
-        </div>
-    </div>
-</div>
-<section class="search-sec bottom-space-1">
-<form action="custom_search_for_cabin" method="post">
-{% csrf_token %}
-    <div class="container">
-        <form action="#" method="post" novalidate="novalidate">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select class="form-control search-slt" id="select_specialization" name="select_specialization">
-                        <option selected disabled>Sort by Price</option>
-                        <option>asc</option>
-                        <option>desc</option>
-                    </select>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <button type="submit" class="btn btn-danger wrn-btn">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</form>
-</section>
 
 <section class="search_result bottom-space-1 center">
     <div>
-        <h3>Search Result</h3>
+        <h3>Search Result for Cabins</h3>
     </div>
 </section>
 <section class="table-sec bottom-space">
@@ -64,12 +36,17 @@
             <td>{{ d.price }}</td>
             <td>{{ d.category }}</td>
              <td>{{ d.is_available }}</td>
-            <td>
-                <form action="book_cabin" method="post">{% csrf_token %}
+
+                {% if d.is_available == "Y" %}
+                <td>
+                <form action="book_cabin_by_doctor" method="post">{% csrf_token %}
                     <button type="submit" class="btn btn-danger wrn-btn">Book</button>
                     <input type="hidden" id="{{ d.cabin_id }}" name="cabin_id" value="{{ d.cabin_id }}">
                 </form>
-            </td>
+                </td>
+                {% else  %}
+                <td>Can't Book</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
