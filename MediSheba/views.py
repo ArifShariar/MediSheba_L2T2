@@ -1322,11 +1322,8 @@ def see_blood_banks(request):
     elif user_info['type'] == 'user':
         return render(request, "query_pages/query_page_for_users/bb_query.html",
                       {'b_banks': bbankList, 'opt': location_names})
-    elif user_info['type'] == "hospital_admin":
-        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html",
-                      {'b_banks': bbankList, 'opt': location_names})
-    elif user_info['type'] == "blood_bank_admin":
-        return render(request, "query_pages/query_page_for_blood_bank_admin/bb_custom_query.html",
+    elif user_info['type'] == 'blood_bank_admin':
+        return render(request, "query_pages/query_page_for_blood_bank_admin/bb_query.html",
                       {'b_banks': bbankList, 'opt': location_names})
 
 
@@ -1360,11 +1357,11 @@ def custom_search_for_bloodbank_by_user(request):
         return HttpResponse("No Access")
 
 
-def custom_search_for_bloodbank_by_hospital_admin(request):
-    if bool(user_info) and user_info['type'] == 'hospital_admin':
+def custom_search_for_bloodbank_by_blood_bank_admin(request):
+    if bool(user_info) and user_info['type'] == 'blood_bank_admin':
         return filter_search_bloodbank(request)
     else:
-        return HttpResponse("No Access")
+        return HttpResponse("NO ACCESS")
 
 
 def filter_search_bloodbank(request):
@@ -1435,9 +1432,11 @@ def filter_search_bloodbank(request):
     elif user_info['type'] == "user":
         return render(request, "query_pages/query_page_for_users/bb_custom_query.html",
                       {'b_banks': bbList, 'opt': location_names})
+
     elif user_info['type'] == "hospital_admin":
-        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html",
-                      {'b_banks': bbList, 'opt': location_names})
+        return HttpResponse("b bank custom search hospital admin")
+        # return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",{'hos': hospitalList, 'opt': location_names})
+
     elif user_info['type'] == "blood_bank_admin":
         return render(request, "query_pages/query_page_for_blood_bank_admin/bb_custom_query.html",
                       {'b_banks': bbList, 'opt': location_names})

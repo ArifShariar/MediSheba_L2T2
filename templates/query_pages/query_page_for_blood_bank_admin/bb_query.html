@@ -20,10 +20,10 @@
     </div>
 </div>
 <section class="search-sec bottom-space-1">
-    <form action="custom_search_for_bloodbank_by_blood_bank_admin" method="post" novalidate="novalidate">
+    <form action="custom_search_for_bloodbank_by_blood_bank_admin" method="post">
     {% csrf_token %}
     <div class="container">
-        <form action="#" method="post" novalidate="novalidate">
+
             <div class="row">
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                     <select class="form-control search-slt" id="select_area" name="select_area">
@@ -46,15 +46,12 @@
                         <option>O-</option>
                         <option>AB+</option>
                         <option>AB-</option>
-
                     </select>
                 </div>
-
                 <div class="col-lg-3 col-md-3 col-sm-12 p-0">
                     <button type="submit" class="btn btn-danger wrn-btn">Search</button>
                 </div>
             </div>
-        </form>
     </div>
     </form>
 </section>
@@ -78,7 +75,7 @@
             <th scope="col">O-</th>
             <th scope="col">AB+</th>
             <th scope="col">AB-</th>
-             <th scope="col">Location</th>
+            <th scope="col">Location</th>
             <th scope="col">Book</th>
         </tr>
         </thead>

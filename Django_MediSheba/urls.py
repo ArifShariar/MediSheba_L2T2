@@ -151,6 +151,10 @@ urlpatterns = [
     path('bloodbank/bloodbank_search_options/search_hospitals/see_specific_hospital_details',
          MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
+    path('bloodbank/bloodbank_search_options/search_blood_banks_by_bloodbank', MediSheba_views.search_blood_banks_by_bloodbank,
+         name='search_blood_banks_by_bloodbank'),
+    path('bloodbank/bloodbank_search_options/custom_search_for_bloodbank_by_blood_bank_admin', MediSheba_views.custom_search_for_bloodbank_by_blood_bank_admin,
+         name='custom_search_for_bloodbank_by_blood_bank_admin'),
 
     # URL FOR HOSPITAL ADMIN
     path('hospital_admin/hospital_search_options/', MediSheba_views.hospital_search_options,
