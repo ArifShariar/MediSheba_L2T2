@@ -579,6 +579,8 @@ def filter_search_doctor(request):
             statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
         else:
             statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
+    else:
+        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND LOCATION = " + "\'" + area + "\'"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
