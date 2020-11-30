@@ -31,9 +31,11 @@ class DoctorName:
 
 class BloodBankList:
 
-    def __init__(self, id, name, a_plus, a_minus, b_plus, b_minus, o_plus, o_minus, ab_plus, ab_minus):
+    def __init__(self, id, name,a_plus, a_minus, b_plus, b_minus, o_plus, o_minus, ab_plus, ab_minus,blood_bank_id,location):
         self.id = id
+        self.blood_bank_id=blood_bank_id
         self.name = name
+        self.location=location
         self.a_plus = a_plus
         self.a_minus = a_minus
         self.b_plus = b_plus

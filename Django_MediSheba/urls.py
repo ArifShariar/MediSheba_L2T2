@@ -44,13 +44,13 @@ urlpatterns = [
          name='search_hospitals_by_doctor'),
     path('doctor/search_options/search_hospitals/custom_search_for_hospital_by_doctor', MediSheba_views.custom_search_for_hospital_by_doctor,
          name='custom_search_for_hospital_by_doctor'),
-    path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks, name='search_blood_banks'),
+    path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_doctor, name='search_blood_banks_by_doctor'),
     path('doctor/search_options/search_doctors/submit_appointment', MediSheba_views.submit_appointment, name='submit_appointment'),
     path('doctor/search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
     path('doctor/search_options/search_hospitals/see_doctors_of_specific_hospital', MediSheba_views.see_doctors_of_specific_hospital,
          name='see_doctors_of_specific_hospital'),
-
+    path('doctor/search_options/search_blood_banks/custom_search_for_bloodbank_by_doctor', MediSheba_views.custom_search_for_bloodbank_by_doctor, name='custom_search_for_bloodbank_by_doctor'),
 
     # URL FOR USERS
     path('users/search_options/', MediSheba_views.user_search_options, name='user_search_options'),
@@ -123,7 +123,7 @@ urlpatterns = [
          name='custom_search_for_doctor_by_hospital_admin'),
     path('hospital_admin/hospital_search_options/search_hospitals/', MediSheba_views.search_hospitals_by_hospitals,
          name='search_hospitals_by_hospitals'),
-    path('hospital_admin/hospital_search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_hospitals,
+    path('hospital_admin/hospital_search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_hospital_admin,
          name='search_blood_banks_by_hospitals'),
     path('hospital_admin/hospital_admin_edit_profile/submit_changed_profile_hospital', MediSheba_views.submit_changed_profile_hospital,
          name='submit_changed_profile_hospital'),
