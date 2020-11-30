@@ -19,44 +19,59 @@
     <div class="main">
         <div class="row">
             <div class="col-md-4">
-                <a href="{% url 'past_appointment_of_hospital_by_user' %}">
+                <a href="{% url 'add_cabin_to_hospital' %}">
                 <div class="one">
                     <div class="px-2 pb-3">
 
-                        <div><img src="{% static 'images/tick-mark.png' %}" width="150" /></div>
+                        <div><img src="{% static 'images/add_hospital_cabin.png' %}" width="150" /></div>
 
                         <div>
-                            <h4 class="project">Past Appointments</h4>
-                            <p class="quote2"><div style="text-align: center;">Show list past appointments</div></p>
+                            <h4 class="project">Add Cabins</h4>
+                            <p class="quote2"><div style="text-align: center;">Add cabins to your hospital</div></p>
                         </div>
                     </div>
                 </div>
                  </a>
             </div>
             <div class="col-md-4">
-                <a href="{% url 'upcoming_appointment_of_hospital_by_user' %}">
+                <a href="{% url 'check_cabin_history' %}">
                 <div class="one">
                     <div class="px-2 pb-3">
 
-                        <div><img src="{% static 'images/deadline.png' %}" width="200" /></div>
+                        <div><img src="{% static 'images/history-clock-button.png' %}" width="150" /></div>
                         <div>
-                            <h4 class="project">Upcoming Appointments</h4>
-                            <p class="quote2"><div style="text-align: center;">Show list upcoming appointments</div></p>
+                            <h4 class="project">Cabin History</h4>
+                            <p class="quote2"><div style="text-align: center;">Check Cabin History</div></p>
                         </div>
                     </div>
                 </div>
                  </a>
             </div>
             <div class="col-md-4">
-                <a href="{% url 'pending_appointment_of_hospital_by_user' %}">
+                <a href="{% url 'check_occupied_cabin' %}">
                 <div class="one">
                     <div class="px-2 pb-3">
 
-                        <div><img src="{%static 'images/pending.png' %}" width="200" /></div>
+                        <div><img src="{%static 'images/occupied_bed.png' %}" width="200" /></div>
+
+                        <div>
+                            <h4 class="project">Occupied Cabin</h4>
+                            <p class="quote2"><div style="text-align: center;">Find Occupied Cabins</div></p>
+                        </div>
+                    </div>
+                </div>
+                 </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'check_cabin_pending_appointments' %}">
+                <div class="one">
+                    <div class="px-2 pb-3">
+
+                        <div><img src="{%static 'images/pending.png' %}" width="150" /></div>
 
                         <div>
                             <h4 class="project">Pending Appointments</h4>
-                            <p class="quote2"><div style="text-align: center;">Show list of pending appointments</div></p>
+                            <p class="quote2"><div style="text-align: center;">Find Pending Appointments</div></p>
                         </div>
                     </div>
                 </div>
