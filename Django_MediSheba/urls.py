@@ -55,14 +55,6 @@ urlpatterns = [
     path('doctor/search_options/search_blood_banks/', MediSheba_views.search_blood_banks_by_doctor, name='search_blood_banks_by_doctor'),
     path('doctor/search_options/search_blood_banks/custom_search_for_bloodbank_by_doctor', MediSheba_views.custom_search_for_bloodbank_by_doctor, name='custom_search_for_bloodbank_by_doctor'),
 
-    path('doctor/search_cabin/', MediSheba_views.doctor_search_cabin, name='doctor_search_cabin'),
-    path('doctor/custom_search_for_cabin', MediSheba_views.custom_search_for_cabin,
-         name='custom_search_for_cabin'),
-    path('doctor/search_cabin/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
-         name='see_specific_hospital_cabin_details'),
-    path('user/search_cabin/', MediSheba_views.user_search_cabin, name='user_search_cabin'),
-
-
     # URL FOR USERS
     path('users/search_options/', MediSheba_views.user_search_options, name='user_search_options'),
     path('users/search_options/search_doctors/', MediSheba_views.search_doctors_by_user, name='search_doctors_by_user'),
@@ -151,5 +143,22 @@ urlpatterns = [
     path('hospital_admin/hospital_search_options/search_hospitals/see_specific_hospital_details', MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
     # URLS FOR CUSTOM SEARCH
+
+
+    # urls for cabin
+    #by doctor
+    path('doctor/search_cabin/', MediSheba_views.search_cabin_by_doctor, name='search_cabin_by_doctor'),
+    path('doctor/search_cabin/custom_search_for_cabin_by_doctor', MediSheba_views.custom_search_for_cabin_by_doctor,
+         name='custom_search_for_cabin_by_doctor'),
+    path('doctor/search_cabin/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
+         name='see_specific_hospital_cabin_details'),
+    path('doctor/search_cabin/book_cabin_by_doctor',MediSheba_views.book_cabin_by_doctor, name='book_cabin_by_doctor'),
+    #by user
+    path('user/search_cabin/', MediSheba_views.search_cabin_by_user, name='search_cabin_by_user'),
+    path('user/search_cabin/custom_search_for_cabin_by_user', MediSheba_views.custom_search_for_cabin_by_user,
+         name='custom_search_for_cabin_by_user'),
+    path('user/search_cabin/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
+         name='see_specific_hospital_cabin_details'),
+    path('user/search_cabin/book_cabin_by_user',MediSheba_views.book_cabin_by_user, name='book_cabin_by_user')
 
 ]
