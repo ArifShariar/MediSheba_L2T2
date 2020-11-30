@@ -1393,9 +1393,12 @@ def see_blood_banks(request):
                           row[10]))
         index = index + 1
     conn.close()
-
-    return render(request, "query_pages/query_page_for_doctors/bb_query.html",
-                  {'b_banks': bbankList, 'opt': location_names})
+    if user_info['type'] == 'doctor':
+        return render(request, "query_pages/query_page_for_doctors/bb_query.html",
+                      {'b_banks': bbankList, 'opt': location_names})
+    elif user_info['type'] == 'user':
+        return render(request, "query_pages/query_page_for_users/bb_query.html",
+                      {'b_banks': bbankList, 'opt': location_names})
 
 
 def search_blood_banks_by_hospital_admin(request):
@@ -1416,6 +1419,13 @@ def search_blood_banks_by_bloodbank(request):
 
 def custom_search_for_bloodbank_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
+        return filter_search_bloodbank(request)
+    else:
+        return HttpResponse("No Access")
+
+
+def custom_search_for_bloodbank_by_user(request):
+    if bool(user_info) and user_info['type'] == 'user':
         return filter_search_bloodbank(request)
     else:
         return HttpResponse("No Access")
@@ -1463,7 +1473,7 @@ def filter_search_bloodbank(request):
             statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK ORDER BY  " + blood_type_db + " DESC NULLS LAST"
 
         else:
-            statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK WHERE LOCATION = " + area + " ORDER BY  " + blood_type_db + " DESC NULLS LAST"
+            statement = "SELECT NAME, A_POS, A_NEG, B_POS, B_NEG, O_POS, O_NEG, AB_POS, AB_NEG,BLOOD_BANK_ID,LOCATION FROM MEDI_SHEBA.BLOOD_BANK WHERE LOCATION = " + "\'" + area + "\'" + " ORDER BY  " + blood_type_db + " DESC NULLS LAST"
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
@@ -1487,8 +1497,8 @@ def filter_search_bloodbank(request):
         return render(request, "query_pages/query_page_for_doctors/bb_custom_query.html",
                       {'b_banks': bbList, 'opt': location_names})
     elif user_info['type'] == "user":
-        return HttpResponse("b bank custom search user")
-        # return render(request, "query_pages/query_page_for_users/hospital_custom_query.html", {'hos': hospitalList, 'opt': location_names})
+        return render(request, "query_pages/query_page_for_users/bb_custom_query.html",
+                      {'b_banks': bbList, 'opt': location_names})
 
     elif user_info['type'] == "hospital_admin":
         return HttpResponse("b bank custom search hospital admin")
