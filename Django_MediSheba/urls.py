@@ -140,6 +140,8 @@ urlpatterns = [
          name='bloodbank_search_options'),
     path('bloodbank/bloodbank_edit_profile/', MediSheba_views.bloodbank_admin_edit_profile,
          name='blood_bank_admin_edit_profile'),
+    path('bloodbank/bloodbank_edit_profile/submit_changed_profile_bloodbank', MediSheba_views.submit_changed_profile_bloodbank,
+         name='submit_changed_profile_bloodbank'),
     path('bloodbank/bloodbank_collection/', MediSheba_views.bloodbank_collection, name='blood_bank_collection'),
     path('bloodbank/bloodbank_calender/', MediSheba_views.bloodbank_calender, name='blood_bank_calender'),
     path('bloodbank/bloodbank_history/', MediSheba_views.bloodbank_history, name='blood_bank_history'),

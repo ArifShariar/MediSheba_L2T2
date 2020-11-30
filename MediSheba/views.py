@@ -1069,8 +1069,171 @@ def user_modify_appointment(request):
 
 # BLOOD BANK ADMIN
 def bloodbank_admin_edit_profile(request):
-    return HttpResponse("etate kaaj kora lagbe")
+    # authentication added here
+    if bool(user_info) and user_info['type'] == "blood_bank_admin":
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
 
+        hospital_names = []
+
+        for i in c:
+            hospital_names.append(i[0])
+
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
+
+        return render(request, 'profile_editor/BloodBankAdminProfileEditor.html',
+                      {'hospital_names': hospital_names, 'locations': location_names})
+
+    else:
+        return HttpResponse("NO ACCESS TO THIS PAGE")
+
+def submit_changed_profile_bloodbank(request):
+    if bool(user_info) and user_info['type'] == 'blood_bank_admin':
+        first_name = request.POST['f_name']
+        last_name = request.POST['l_name']
+        phone_number = request.POST['phone']
+        location = request.POST['address']
+        email = request.POST['email']
+        blood_type = request.POST['blood_type']
+        name = request.POST['name']
+        fee = request.POST['fee']
+        specialization = request.POST['specialization']
+        additional_details = request.POST['additional_details']
+
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+
+        if first_name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if last_name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET LAST_NAME = " + "\'" + last_name + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("LAST Name NOT CHANGED ")
+
+        if phone_number != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET PHONE = " + "\'" + phone_number + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("PHONE NOT CHANGED ")
+
+        if location != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET LOCATION = " + "\'" + location + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("LOCATION NOT CHANGED ")
+
+        if email != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET EMAIL = " + "\'" + email + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("EMAIL NOT CHANGED ")
+
+        if name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET NAME = " + "\'" + name + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+
+        else:
+            print("EMAIL NOT CHANGED ")
+
+        '''if blood_type != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE HOSPITAL_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("BLOOD NOT CHANGED ")
+
+        if name != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET NAME = " + "\'" + name + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+
+            hospital_id = 0
+            for r in c:
+                hospital_id = r[0]
+
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET HOSPITAL_ID = " + str(hospital_id) + " WHERE HOSPITAL_ID = " \
+                        + str(user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("HOSPITAL NOT CHANGED ")
+
+        if fee != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE HOSPITAL_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("FEES NOT CHANGED ")
+
+        if specialization != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.DOCTOR SET SPECIALIZATION = " + "\'" + specialization + "\'" \
+                        + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("SPECIALIZATION NOT CHANGED ")
+        print(additional_details)'''
+
+        '''
+        UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
+        UPDATE EMAIL, FIRST NAME, LAST NAME
+        '''
+
+        '''
+        TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
+        '''
+        c = conn.cursor()
+        statement = "SELECT BLOOD_BANK_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.BLOOD_BANK  WHERE BLOOD_BANK_ID=" + str(
+            user_info['pk'])
+        c.execute(statement)
+        if c:
+            x = c.fetchone()
+            id = x[0]
+            f_name = x[1]
+            l_name = x[2]
+            email = x[3]
+            user_info['pk'] = id
+            user_info['f_name'] = f_name
+            user_info['l_name'] = l_name
+            user_info['email'] = email
+        return redirect("hospital_admin_home")
+    else:
+        return HttpResponse("Access not granted")
 
 def bloodbank_collection(request):
     return HttpResponse("etate kaaj kora lagbe")
