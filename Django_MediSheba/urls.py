@@ -197,6 +197,9 @@ urlpatterns = [
     path('hospital_admin/hospital_search_options/search_hospitals/see_specific_hospital_details',
          MediSheba_views.see_specific_hospital_details,
          name='see_specific_hospital_details'),
+    path('hospital_admin/hospital_search_options/search_blood_banks/custom_search_for_bloodbank_by_hospital_admin', MediSheba_views.custom_search_for_bloodbank_by_hospital_admin,
+         name='custom_search_for_bloodbank_by_hospital_admin'),
+
     # URLS FOR CUSTOM SEARCH
 
 ]
