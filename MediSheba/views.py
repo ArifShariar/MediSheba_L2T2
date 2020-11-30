@@ -512,6 +512,7 @@ def doctor_view_records(request):
     else:
         return HttpResponse(" NO ACCESS")
 
+
 def doctor_user_history_from_doctor(request):
     return render(request, 'appointment_history_pages/doctor_history/doctor_user_history.html')
 
@@ -672,7 +673,6 @@ def see_doctors(request):
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
 
-
 def see_specific_doctor_details(request):
     doctor_id = request.POST['doctor_id']
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -739,7 +739,9 @@ def see_doctors_of_specific_hospital(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(hospital_id))
+    c.execute(
+        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(
+            hospital_id))
     index = 1
     for row in c:
         docList.append(
@@ -781,7 +783,8 @@ def see_specific_hospital_details(request):
 
     return render(request, "detail_showing_pages/see_hospital_details.html",
                   {'name': hospital_name,
-                   'phone': phone, 'location': location, 'email': email, 'hospital_id_for_doctor': hospital_id_for_doctor
+                   'phone': phone, 'location': location, 'email': email,
+                   'hospital_id_for_doctor': hospital_id_for_doctor
                    })
 
 
@@ -1428,7 +1431,6 @@ def filter_search_bloodbank(request):
         # return render(request, "query_pages/query_page_for_blood_bank_admin/hospital_custom_query.html",{'hos': hospitalList, 'opt': location_names})
 
 
-
 '''
 
   cabin starts
@@ -1439,6 +1441,7 @@ def filter_search_bloodbank(request):
   cabin search for doctors
 '''
 
+
 def search_cabin_by_doctor(request):
     return see_hospital_cabins(request)
 
@@ -1448,32 +1451,33 @@ def custom_search_for_cabin_by_doctor(request):
 
 
 def filter_search_cabin(request):
-   area = request.POST.get('select_area', 'No Preferences')
-   statement = ""
-   if area == "No Preferences":
-       statement = "SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL"
-   else:
-       statement = "SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
+    area = request.POST.get('select_area', 'No Preferences')
+    statement = ""
+    if area == "No Preferences":
+        statement = "SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL"
+    else:
+        statement = "SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE LOCATION = " + "\'" + area + "\'"
 
-   location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
-   location_names.sort()
-   hospitalcabinList = []
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+    hospitalcabinList = []
 
-   dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-   conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-   c = conn.cursor()
-   c.execute(statement)
-   index = 1
-   for row in c:
-    hospitalcabinList.append(HospitalCabinName(index, row[0], row[1], row[2], row[3]))
-   index = index + 1
-   conn.close()
-   if user_info['type'] == 'doctor':
-       return render(request, "query_pages/query_page_for_doctors/cabin_custom_query_by_doctor.html",
-                 {'cab': hospitalcabinList, 'opt': location_names})
-   else:
-       return render(request, "query_pages/query_page_for_users/cabin_custom_query_by_user.html",
-                     {'cab': hospitalcabinList, 'opt': location_names})
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute(statement)
+    index = 1
+    for row in c:
+        hospitalcabinList.append(HospitalCabinName(index, row[0], row[1], row[2], row[3]))
+    index = index + 1
+    conn.close()
+    if user_info['type'] == 'doctor':
+        return render(request, "query_pages/query_page_for_doctors/cabin_custom_query_by_doctor.html",
+                      {'cab': hospitalcabinList, 'opt': location_names})
+    else:
+        return render(request, "query_pages/query_page_for_users/cabin_custom_query_by_user.html",
+                      {'cab': hospitalcabinList, 'opt': location_names})
+
 
 def see_hospital_cabins(request):
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
@@ -1493,7 +1497,7 @@ def see_hospital_cabins(request):
     conn.close()
     if user_info['type'] == 'doctor':
         return render(request, "query_pages/query_page_for_doctors/cabin_query_by_doctor.html",
-                  {'cab': hospitalcabinList, 'opt': location_names})
+                      {'cab': hospitalcabinList, 'opt': location_names})
     else:
         return render(request, "query_pages/query_page_for_users/cabin_query_by_user.html",
                       {'cab': hospitalcabinList, 'opt': location_names})
@@ -1517,10 +1521,11 @@ def see_specific_hospital_cabin_details(request):
     conn.close()
     if user_info['type'] == 'doctor':
         return render(request, "detail_showing_pages/hospital_cabin_details_by_doctor.html",
-                  {'cab': cabinList})
-    else :
+                      {'cab': cabinList})
+    else:
         return render(request, "detail_showing_pages/hospital_cabin_details_by_user.html",
                       {'cab': cabinList})
+
 
 def book_cabin_by_doctor(request):
     return HttpResponse("LOL")
@@ -1530,14 +1535,18 @@ def book_cabin_by_doctor(request):
   cabin search for users
 '''
 
+
 def search_cabin_by_user(request):
     return see_hospital_cabins(request)
+
 
 def custom_search_for_cabin_by_user(request):
     return filter_search_cabin(request)
 
+
 def book_cabin_by_user(request):
     return HttpResponse("LOL")
+
 
 '''
   cabin ends
