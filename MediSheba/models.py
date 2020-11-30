@@ -29,6 +29,25 @@ class DoctorName:
         self.doctor_id = doctor_id
 
 
+class HospitalCabinName:
+
+    def __init__(self, id, name, location, available_cabin, hospital_id):
+        self.id = id
+        self.name = name
+        self.location = location
+        self.available_cabin = available_cabin
+        self.hospital_id = hospital_id
+
+class CabinName:
+
+    def __init__(self, id, price, category, is_available, hospital_id):
+        self.id = id
+        self.price = price
+        self.category = category
+        self.is_available = is_available
+        self.hospital_id = hospital_id
+
+
 class BloodBankList:
 
     def __init__(self, id, name,a_plus, a_minus, b_plus, b_minus, o_plus, o_minus, ab_plus, ab_minus,blood_bank_id,location):

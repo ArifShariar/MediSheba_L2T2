@@ -6,6 +6,7 @@ create table "HOSPITAL"
     "HOSPITAL_NAME" VARCHAR2(255) not null,
     "LOCATION"      VARCHAR2(255),
     "CAPACITY"      NUMBER(10),
+    "Available_Cabin" NUMBER(10),
     "FIRST_NAME" VARCHAR2(255) not null ,
     "LAST_NAME" VARCHAR2(255) not null ,
     "PASSWORD" VARCHAR2(255) not null,
@@ -88,7 +89,14 @@ create table "CABIN"
         constraint CABIN_PK
             primary key,
     "PRICE"    NUMBER(10),
-    "CATEGORY" VARCHAR2(255)
+    "CATEGORY" VARCHAR2(255),
+    "IS_AVAILABLE" VARCHAR2(1),
+    "USER_ID"   NUMBER(10) 
+        constraint CAB_USER_ID_FK
+            references USERS,
+    "ENTRY_DATE" DATE,
+    "EXIT_DATE" DATE,
+    "HOSPITAL_ID"   NUMBER(10) CONSTRAINT D_HOSPITAL_ID_FK REFERENCES HOSPITAL
 );
 create table "DOCTOR_BBANK_HISTORY"
 (

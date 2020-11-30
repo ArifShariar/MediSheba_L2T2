@@ -8,6 +8,8 @@ from HelperClasses import json_extractor
 from .models import DoctorName
 from .models import BloodBankList
 from .models import HospitalName
+from .models import HospitalCabinName
+from .models import CabinName
 
 # login
 user_info = {}  # holds user data across pages
@@ -482,8 +484,6 @@ def doctor_search_options(request):
     else:
         return HttpResponse("NO ACCESS")
 
-def doctor_search_cabin(request):
-    return HttpResponse("View Cabins")
 
 def doctor_view_appointments(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -511,6 +511,18 @@ def doctor_view_records(request):
         return render(request, 'homepage/records_for_doctor_table.html')
     else:
         return HttpResponse(" NO ACCESS")
+
+
+def doctor_user_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_user_history.html')
+
+
+def doctor_hospital_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_hospital_history.html')
+
+
+def doctor_blood_bank_history_from_doctor(request):
+    return render(request, 'appointment_history_pages/doctor_history/doctor_blood_bank_history.html')
 
 
 def doctor_change_schedule(request):
@@ -661,6 +673,75 @@ def see_doctors(request):
                   {'doc': docList, 'opt': location_names, 'specialization': specialization})
 
 
+'''
+
+  cabin starts
+  
+'''
+
+
+def doctor_search_cabin(request):
+    return see_hospital_cabins(request)
+
+
+def custom_search_for_cabin(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return filter_search_cabin(request)
+    else:
+        return HttpResponse("No Access")
+
+
+def filter_search_cabin(request):
+    return HttpResponse("No Access")
+
+
+def see_hospital_cabins(request):
+    location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+    location_names.sort()
+
+    hospitalcabinList = []
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c.execute("SELECT HOSPITAL_NAME, LOCATION ,AVAILABLE_CABIN , HOSPITAL_ID from MEDI_SHEBA.HOSPITAL")
+    index = 1
+    for row in c:
+        hospitalcabinList.append(HospitalCabinName(index, row[0], row[1], row[2], row[3]))
+        index = index + 1
+
+    conn.close()
+    return render(request, "query_pages/query_page_for_doctors/cabin_query.html",
+                  {'cab': hospitalcabinList, 'opt': location_names})
+
+
+def see_specific_hospital_cabin_details(request):
+    hospital_id = request.POST['hospital_id']
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    cabinList = []
+    c.execute(
+        "SELECT PRICE, CATEGORY, IS_AVAILABLE, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(
+            hospital_id))
+
+    index = 1
+    for row in c:
+        cabinList.append(CabinName(index, row[0], row[1], row[2], row[3]))
+        index = index + 1
+
+    conn.close()
+    return render(request, "detail_showing_pages/hospital_cabin_details.html",
+                  {'cab': cabinList})
+
+
+'''
+  cabin ends
+  
+'''
+
+
 def see_specific_doctor_details(request):
     doctor_id = request.POST['doctor_id']
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
@@ -727,7 +808,9 @@ def see_doctors_of_specific_hospital(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute("SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(hospital_id))
+    c.execute(
+        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE HOSPITAL_ID = " + str(
+            hospital_id))
     index = 1
     for row in c:
         docList.append(
@@ -769,7 +852,8 @@ def see_specific_hospital_details(request):
 
     return render(request, "detail_showing_pages/see_hospital_details.html",
                   {'name': hospital_name,
-                   'phone': phone, 'location': location, 'email': email, 'hospital_id_for_doctor': hospital_id_for_doctor
+                   'phone': phone, 'location': location, 'email': email,
+                   'hospital_id_for_doctor': hospital_id_for_doctor
                    })
 
 
@@ -1038,22 +1122,48 @@ def user_edit_profile(request):
 def user_search_cabin(request):
     return HttpResponse("View Cabins")
 
+
 def user_doctor_appointment(request):
-    return HttpResponse("user doctor appointment")
+    return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_options.html')
+
+
+def past_appointment_of_doctor_by_user(request):
+    return HttpResponse("Past appointment")
+
+
+def upcoming_appointment_of_doctor_by_user(request):
+    return HttpResponse("Upcoming appointment")
+
+
+def pending_appointment_of_doctor_by_user(request):
+    return HttpResponse("Pending appointment")
 
 
 def user_blood_bank_appointment(request):
-    return HttpResponse("blood bank appointment")
+    return render(request, 'appointment_history_pages/user_history/blood_bank/bloodbank_appointment_options.html')
+
+
+def user_hospital_appointment(request):
+    return render(request, 'appointment_history_pages/user_history/hospital/hospital_appointment_options.html')
+
+
+def past_appointment_of_hospital_by_user(request):
+    return HttpResponse("Past hospital appointment")
+
+
+def upcoming_appointment_of_hospital_by_user(request):
+    return HttpResponse("upcoming hospital appointment")
+
+
+def pending_appointment_of_hospital_by_user(request):
+    return HttpResponse("pending hospital appointment")
 
 
 def user_modify_appointment(request):
     return HttpResponse("user modify appointment")
 
 
-def user_hospital_appointment(request):
-    return HttpResponse("user hospital appointment")
-
-
+# BLOOD BANK ADMIN
 def bloodbank_admin_edit_profile(request):
     return HttpResponse("etate kaaj kora lagbe")
 
@@ -1248,12 +1358,9 @@ def hospital_admin_view_appointments(request):
 def hospital_admin_view_schedule(request):
     return HttpResponse("Hospital admin view schedule")
 
+
 def hospital_admin_available_cabin(request):
     return HttpResponse("View Cabins")
-
-
-def hospital_admin_cabin_management(request):
-    return HttpResponse("Hospital admin cabin management")
 
 
 def hospital_admin_view_records(request):
