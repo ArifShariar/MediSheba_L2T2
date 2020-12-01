@@ -1460,6 +1460,17 @@ def add_cabin_to_hospital_form_submission(request):
                 price) + "," + "\'" + category + "\'," + str(user_info['pk']) + "," + "\'" + cabin_features + "\')"
             c.execute(statement)
             conn.commit()
+
+            prev_cabin_count = 0
+            statement2 = "SELECT NVL(AVAILABLE_CABIN,0) FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            c.execute(statement2)
+            for row in c:
+                prev_cabin_count = row[0]
+            prev_cabin_count = prev_cabin_count + 1
+
+            statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            c.execute(statement3)
+            conn.commit()
             return render(request, 'cabin/cabin_add_confirmation.html')
     return HttpResponse("NO ACCESS")
 
