@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cabin Added</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/cabin_add.css' %}">
+</head>
+<body>
+
+<div class="holder" >
+    <h1>Thank You For Booking!</h1>
+    <img class="marginauto" src="{% static 'images/checkmark.png' %}">
+    <a href="{% url 'go_to_doctor_home' %}">Go To Home</a>
+</div>
+</body>
+
+</html>

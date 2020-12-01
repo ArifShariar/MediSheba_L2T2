@@ -1897,7 +1897,11 @@ def book_cabin_by_doctor(request):
                    })
 
 def submit_book_cabin_by_doctor(request):
-    return HttpResponse("Request for Booking ")
+    return render(request, "cabin/cabin_booking_confirmation_by_doctor.html")
+
+def go_to_doctor_home(request):
+    return redirect("doctor_home")
+
 
 '''
   cabin search for users
@@ -1913,8 +1917,39 @@ def custom_search_for_cabin_by_user(request):
 
 
 def book_cabin_by_user(request):
-    return HttpResponse("LOL")
+    cabin_id = request.POST['cabin_id']
+    cabin_id_for_user = cabin_id
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
 
+    c.execute(
+        "SELECT H.HOSPITAL_NAME, C.CATEGORY, C.PRICE, C.CABIN_ID FROM MEDI_SHEBA.CABIN C join MEDI_SHEBA.HOSPITAL H On C.HOSPITAL_ID=H.HOSPITAL_ID WHERE C.CABIN_ID = " + str(
+            cabin_id))
+
+    hospital_name = ""
+    category = ""
+    price = ""
+    cabin_id_for_user = ""
+
+    for row in c:
+        hospital_name = row[0]
+        category = row[1]
+        price = row[2]
+        cabin_id_for_user = row[3]
+
+    return render(request, "cabin/cabin_booking_by_user.html",
+                  {'name': hospital_name,
+                   'category': category, 'price': price,
+                   'cabin_id_for_user': cabin_id_for_user
+                   })
+
+
+def submit_book_cabin_by_user(request):
+    return render(request, "cabin/cabin_booking_confirmation_by_user.html")
+
+def go_to_user_home(request):
+    return redirect("user_home")
 
 '''
   cabin ends
