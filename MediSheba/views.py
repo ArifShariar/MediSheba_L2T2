@@ -648,9 +648,12 @@ def see_doctors(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    c.execute(
-        "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID "
-        "from MEDI_SHEBA.DOCTOR")
+    statement = ""
+    if user_info['type'] == 'doctor':
+        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID from MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID != " + str(user_info['pk'])
+    else:
+        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID from MEDI_SHEBA.DOCTOR"
+    c.execute(statement)
     index = 1
     for row in c:
         docList.append(
@@ -1062,7 +1065,7 @@ def user_modify_appointment(request):
 
 # BLOOD BANK ADMIN
 def submit_changed_blood_group_collection(request):
-    #print("ass")
+    # print("ass")
     if bool(user_info) and user_info['type'] == 'blood_bank_admin':
         a_pos = request.POST['a_pos']
         a_neg = request.POST['a_neg']
@@ -1072,9 +1075,9 @@ def submit_changed_blood_group_collection(request):
         ab_neg = request.POST['ab_neg']
         o_pos = request.POST['o_pos']
         o_neg = request.POST['o_neg']
-        #print(a_pos)
-        #print(o_neg)
-        #print("asd")
+        # print(a_pos)
+        # print(o_neg)
+        # print("asd")
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         if a_pos != "":
@@ -1152,6 +1155,7 @@ def submit_changed_blood_group_collection(request):
     else:
         return HttpResponse("Access not granted")
 
+
 def blood_bank_admin_edit_blood_group(request):
     # authentication added here
     if bool(user_info) and user_info['type'] == "blood_bank_admin":
@@ -1174,6 +1178,7 @@ def blood_bank_admin_edit_blood_group(request):
 
     else:
         return HttpResponse("NO ACCESS TO THIS PAGE")
+
 
 def bloodbank_admin_edit_profile(request):
     # authentication added here
@@ -1569,13 +1574,15 @@ def add_cabin_to_hospital_form_submission(request):
             conn.commit()
 
             prev_cabin_count = 0
-            statement2 = "SELECT NVL(AVAILABLE_CABIN,0) FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            statement2 = "SELECT NVL(AVAILABLE_CABIN,0) FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(
+                user_info['pk'])
             c.execute(statement2)
             for row in c:
                 prev_cabin_count = row[0]
             prev_cabin_count = prev_cabin_count + 1
 
-            statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(
+                prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
             c.execute(statement3)
             conn.commit()
             return render(request, 'cabin/cabin_add_confirmation.html')
@@ -1896,11 +1903,13 @@ def book_cabin_by_doctor(request):
                    'cabin_id_for_doctor': cabin_id_for_doctor
                    })
 
+
 def submit_book_cabin_by_doctor(request):
     return render(request, "cabin/cabin_booking_confirmation_by_doctor.html")
 
 def go_to_doctor_home(request):
     return redirect("doctor_home")
+
 
 
 '''
