@@ -492,13 +492,6 @@ def doctor_view_appointments(request):
         return HttpResponse("NO ACCESS")
 
 
-def doctor_blood_bank_appointment(request):
-    if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("Blood Bank Appointment Here")
-    else:
-        return HttpResponse("NO ACCESS")
-
-
 def doctor_view_calender(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return render(request, 'schedule_editor/calendar2.html')
@@ -1859,7 +1852,7 @@ def see_specific_hospital_cabin_details(request):
 
     cabinList = []
     c.execute(
-        "SELECT PRICE, CATEGORY, IS_AVAILABLE, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(
+        "SELECT PRICE, CATEGORY, IS_AVAILABLE,CABIN_ID, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(
             hospital_id))
 
     index = 1
@@ -1876,8 +1869,35 @@ def see_specific_hospital_cabin_details(request):
 
 
 def book_cabin_by_doctor(request):
-    return HttpResponse("LOL")
+    cabin_id = request.POST['cabin_id']
+    cabin_id_for_doctor = cabin_id
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
 
+    c.execute(
+        "SELECT H.HOSPITAL_NAME, C.CATEGORY, C.PRICE, C.CABIN_ID FROM MEDI_SHEBA.CABIN C join MEDI_SHEBA.HOSPITAL H On C.HOSPITAL_ID=H.HOSPITAL_ID WHERE C.CABIN_ID = " + str(
+            cabin_id))
+
+    hospital_name = ""
+    category = ""
+    price = ""
+    cabin_id_for_doctor = ""
+
+    for row in c:
+        hospital_name = row[0]
+        category = row[1]
+        price = row[2]
+        cabin_id_for_doctor = row[3]
+
+    return render(request, "cabin/cabin_booking_by_doctor.html",
+                  {'name': hospital_name,
+                   'category': category, 'price': price,
+                   'cabin_id_for_doctor': cabin_id_for_doctor
+                   })
+
+def submit_book_cabin_by_doctor(request):
+    return HttpResponse("Request for Booking ")
 
 '''
   cabin search for users

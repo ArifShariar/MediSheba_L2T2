@@ -40,12 +40,12 @@ class HospitalCabinName:
 
 class CabinName:
 
-    def __init__(self, id, price, category, is_available, hospital_id):
+    def __init__(self, id, price, category, is_available, cabin_id):
         self.id = id
         self.price = price
         self.category = category
         self.is_available = is_available
-        self.hospital_id = hospital_id
+        self.cabin_id = cabin_id
 
 
 class BloodBankList:
