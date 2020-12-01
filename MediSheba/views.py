@@ -1205,6 +1205,7 @@ def bloodbank_admin_edit_profile(request):
     else:
         return HttpResponse("NO ACCESS TO THIS PAGE")
 
+
 def submit_changed_profile_bloodbank(request):
     if bool(user_info) and user_info['type'] == 'blood_bank_admin':
         first_name = request.POST['f_name']
@@ -1348,6 +1349,7 @@ def submit_changed_profile_bloodbank(request):
         return redirect("hospital_admin_home")
     else:
         return HttpResponse("Access not granted")
+
 
 def bloodbank_collection(request):
     return HttpResponse("etate kaaj kora lagbe")
@@ -1543,7 +1545,52 @@ def hospital_admin_cabin_management(request):
 
 
 def add_cabin_to_hospital(request):
-    return render(request, 'cabin/cabin_add.html')
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(user_info['pk'])
+    c.execute(statement)
+    hospital_name = ""
+    for row in c:
+        hospital_name = row[0]
+
+    return render(request, 'cabin/cabin_add.html', {'hospital_name': hospital_name})
+
+
+def add_cabin_to_hospital_form_submission(request):
+    if bool(user_info) and user_info['type'] == 'hospital_admin':
+        price = request.POST.get('price', 'Not Specified')
+        category = request.POST.get('category', 'Not Specified')
+        cabin_features = request.POST.get('cabin_features', 'Not Specified')
+
+        if price == "Not Specified" or category == "Not Specified" or cabin_features == "Not Specified":
+            return redirect("add_cabin_to_hospital")
+
+        else:
+            dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+            conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+            c = conn.cursor()
+            statement = "INSERT INTO MEDI_SHEBA.CABIN(PRICE, CATEGORY, HOSPITAL_ID,CABIN_FEATURES) VALUES (" + str(
+                price) + "," + "\'" + category + "\'," + str(user_info['pk']) + "," + "\'" + cabin_features + "\')"
+            c.execute(statement)
+            conn.commit()
+
+            prev_cabin_count = 0
+            statement2 = "SELECT NVL(AVAILABLE_CABIN,0) FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            c.execute(statement2)
+            for row in c:
+                prev_cabin_count = row[0]
+            prev_cabin_count = prev_cabin_count + 1
+
+            statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            c.execute(statement3)
+            conn.commit()
+            return render(request, 'cabin/cabin_add_confirmation.html')
+    return HttpResponse("NO ACCESS")
+
+
+def go_to_hospital_admin_home(request):
+    return redirect("hospital_admin_home")
 
 
 def check_cabin_history(request):
@@ -1605,7 +1652,9 @@ def see_blood_banks(request):
         return render(request, "query_pages/query_page_for_blood_bank_admin/bb_query.html",
                       {'b_banks': bbankList, 'opt': location_names})
     elif user_info['type'] == "hospital_admin":
-        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html", {'b_banks': bbankList, 'opt': location_names})
+        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html",
+                      {'b_banks': bbankList, 'opt': location_names})
+
 
 def search_blood_banks_by_hospital_admin(request):
     return see_blood_banks(request)
@@ -1643,11 +1692,13 @@ def custom_search_for_bloodbank_by_blood_bank_admin(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def custom_search_for_bloodbank_by_hospital_admin(request):
     if bool(user_info) and user_info['type'] == 'hospital_admin':
         return filter_search_bloodbank(request)
     else:
         return HttpResponse("No Access")
+
 
 def filter_search_bloodbank(request):
     area = request.POST.get('select_area', 'No Preferences')
@@ -1719,7 +1770,8 @@ def filter_search_bloodbank(request):
                       {'b_banks': bbList, 'opt': location_names})
 
     elif user_info['type'] == "hospital_admin":
-        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html", {'b_banks': bbList, 'opt': location_names})
+        return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html",
+                      {'b_banks': bbList, 'opt': location_names})
         # return render(request, "query_pages/query_page_for_hospital_admin/hospital_custom_query.html",{'hos': hospitalList, 'opt': location_names})
 
     elif user_info['type'] == "blood_bank_admin":
