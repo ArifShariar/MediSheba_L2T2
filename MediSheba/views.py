@@ -1460,9 +1460,12 @@ def add_cabin_to_hospital_form_submission(request):
                 price) + "," + "\'" + category + "\'," + str(user_info['pk']) + "," + "\'" + cabin_features + "\')"
             c.execute(statement)
             conn.commit()
-            return redirect("hospital_admin_home")
+            return render(request, 'cabin/cabin_add_confirmation.html')
     return HttpResponse("NO ACCESS")
 
+
+def go_to_hospital_admin_home(request):
+    return redirect("hospital_admin_home")
 
 
 def check_cabin_history(request):

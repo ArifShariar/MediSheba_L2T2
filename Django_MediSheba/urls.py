@@ -174,6 +174,8 @@ urlpatterns = [
          name='add_cabin_to_hospital'),
     path('hospital_admin/hospital_admin_cabin_management/add_cabin_to_hospital_form_submission', MediSheba_views.add_cabin_to_hospital_form_submission,
          name='add_cabin_to_hospital_form_submission'),
+    path('hospital_admin/hospital_admin_cabin_management/go_to_hospital_admin_home', MediSheba_views.go_to_hospital_admin_home,
+         name='go_to_hospital_admin_home'),
     path('hospital_admin/hospital_admin_cabin_management/check_cabin_history', MediSheba_views.check_cabin_history,
          name='check_cabin_history'),
     path('hospital_admin/hospital_admin_cabin_management/check_occupied_cabin', MediSheba_views.check_occupied_cabin,
