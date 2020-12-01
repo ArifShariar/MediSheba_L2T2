@@ -1068,6 +1068,120 @@ def user_modify_appointment(request):
 
 
 # BLOOD BANK ADMIN
+def submit_changed_blood_group_collection(request):
+    #print("ass")
+    if bool(user_info) and user_info['type'] == 'blood_bank_admin':
+        a_pos = request.POST['a_pos']
+        a_neg = request.POST['a_neg']
+        b_pos = request.POST['b_pos']
+        b_neg = request.POST['b_neg']
+        ab_pos = request.POST['ab_pos']
+        ab_neg = request.POST['ab_neg']
+        o_pos = request.POST['o_pos']
+        o_neg = request.POST['o_neg']
+        #print(a_pos)
+        #print(o_neg)
+        #print("asd")
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        if a_pos != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET A_POS = " + "\'" + a_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if a_neg != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET A_NEG = " + "\'" + a_neg + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if b_pos != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET B_POS = " + "\'" + b_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if b_neg != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET B_NEG = " + "\'" + b_neg + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if ab_pos != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_POS = " + "\'" + ab_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if ab_neg != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_NEG = " + "\'" + ab_neg + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if o_pos != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET O_POS = " + "\'" + o_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+
+        if o_neg != "":
+            c = conn.cursor()
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET O_NEG = " + "\'" + o_neg + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                user_info['pk'])
+            c.execute(statement)
+            conn.commit()
+        else:
+            print("First Name NOT CHANGED ")
+        return redirect("blood_bank_admin_home")
+    else:
+        return HttpResponse("Access not granted")
+
+def blood_bank_admin_edit_blood_group(request):
+    # authentication added here
+    if bool(user_info) and user_info['type'] == "blood_bank_admin":
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT HOSPITAL_NAME FROM MEDI_SHEBA.HOSPITAL"
+        c.execute(statement)
+
+        hospital_names = []
+
+        for i in c:
+            hospital_names.append(i[0])
+
+        location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
+        location_names.sort()
+
+        return render(request, 'profile_editor/BloodBankAdminEditBG.html',
+                      {'hospital_names': hospital_names, 'locations': location_names})
+
+    else:
+        return HttpResponse("NO ACCESS TO THIS PAGE")
+
 def bloodbank_admin_edit_profile(request):
     # authentication added here
     if bool(user_info) and user_info['type'] == "blood_bank_admin":
