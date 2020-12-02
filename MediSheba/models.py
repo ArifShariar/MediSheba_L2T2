@@ -40,11 +40,10 @@ class HospitalCabinName:
 
 class CabinName:
 
-    def __init__(self, id, price, category, is_available, cabin_id):
+    def __init__(self, id, price, category,  cabin_id):
         self.id = id
         self.price = price
         self.category = category
-        self.is_available = is_available
         self.cabin_id = cabin_id
 
 

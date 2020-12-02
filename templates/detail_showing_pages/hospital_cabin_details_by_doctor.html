@@ -25,7 +25,6 @@
             <th scope="col">#</th>
             <th scope="col">Price</th>
             <th scope="col">Category</th>
-            <th scope="col">Availability</th>
             <th scope="col">Book</th>
         </tr>
         </thead>
@@ -35,18 +34,12 @@
             <td>{{ d.id }}</td>
             <td>{{ d.price }}</td>
             <td>{{ d.category }}</td>
-             <td>{{ d.is_available }}</td>
-
-                {% if d.is_available == "Y" %}
                 <td>
                 <form action="book_cabin_by_doctor" method="post">{% csrf_token %}
                     <button type="submit" class="btn btn-danger wrn-btn">Book</button>
                     <input type="hidden" id="{{ d.cabin_id }}" name="cabin_id" value="{{ d.cabin_id }}">
                 </form>
                 </td>
-                {% else  %}
-                <td>Can't Book</td>
-                {% endif %}
             </tr>
         {% endfor %}
     </table>

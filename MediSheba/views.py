@@ -1859,12 +1859,12 @@ def see_specific_hospital_cabin_details(request):
 
     cabinList = []
     c.execute(
-        "SELECT PRICE, CATEGORY, IS_AVAILABLE,CABIN_ID, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(
+        "SELECT PRICE, CATEGORY,CABIN_ID, HOSPITAL_ID FROM MEDI_SHEBA.CABIN WHERE HOSPITAL_ID = " + str(
             hospital_id))
 
     index = 1
     for row in c:
-        cabinList.append(CabinName(index, row[0], row[1], row[2], row[3]))
+        cabinList.append(CabinName(index, row[0], row[1], row[2]))
         index = index + 1
     conn.close()
     if user_info['type'] == 'doctor':
