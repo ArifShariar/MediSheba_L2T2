@@ -1344,7 +1344,7 @@ def submit_changed_profile_bloodbank(request):
             user_info['f_name'] = f_name
             user_info['l_name'] = l_name
             user_info['email'] = email
-        return redirect("hospital_admin_home")
+        return redirect("blood_bank_admin_home")
     else:
         return HttpResponse("Access not granted")
 
