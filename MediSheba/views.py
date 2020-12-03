@@ -2038,31 +2038,78 @@ def doctor_schedule(request):
     c = conn.cursor()
 
     statement=""
-    statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES( " + str(
-            user_info['pk']) + ")"
+
     c.execute(statement)
     if weekday=="Saturday":
-        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(SAT_START,SAT_END,SAT_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement="UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                        + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday=="Sunday":
-        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(SUN_START,SUN_END,SUN_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday == "Monday":
-        statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(MON_START,MON_END,MON_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday == "Tuesday":
-        statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(TUES_START,TUES_END,TUES_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday=="Wednesday":
-        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(WED_START,WED_END,WED_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday=="Thursday":
-        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(THU_START,THU_END,THU_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     elif weekday=="Friday":
-        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(FRI_START,FRI_END,FRI_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
-            user_info['pk'])
-
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
+        c.execute(statement)
     c.execute(statement)
 
     return render(request, "schedule_editor/appointment_details.html")
