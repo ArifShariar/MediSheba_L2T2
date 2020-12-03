@@ -69,6 +69,7 @@ urlpatterns = [
     path('doctor/search_cabin/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
          name='see_specific_hospital_cabin_details'),
     path('doctor/search_cabin/book_cabin_by_doctor',MediSheba_views.book_cabin_by_doctor,name='book_cabin_by_doctor'),
+    path('doctor/search_cabin/check_cabin_availability_by_doctor',MediSheba_views.check_cabin_availability_by_doctor,name='check_cabin_availability_by_doctor'),
     path('doctor/search_cabin/submit_book_cabin_by_doctor',MediSheba_views.submit_book_cabin_by_doctor,name='submit_book_cabin_by_doctor'),
     path('doctor/search_cabin/go_to_doctor_home',MediSheba_views.go_to_doctor_home,name='go_to_doctor_home'),
 
@@ -128,6 +129,7 @@ urlpatterns = [
     path('users/search_cabin_by_user/see_specific_hospital_cabin_details', MediSheba_views.see_specific_hospital_cabin_details,
          name='see_specific_hospital_cabin_details'),
     path('users/search_cabin_by_user/book_cabin_by_user',MediSheba_views.book_cabin_by_user,name='book_cabin_by_user'),
+    path('users/search_cabin_by_user/check_cabin_availability_by_user',MediSheba_views.check_cabin_availability_by_user,name='check_cabin_availability_by_user'),
     path('users/search_cabin_by_user/submit_book_cabin_by_user',MediSheba_views.submit_book_cabin_by_user,name='submit_book_cabin_by_user'),
     path('users/search_cabin_by_user/go_to_user_home',MediSheba_views.go_to_user_home,name='go_to_user_home'),
 

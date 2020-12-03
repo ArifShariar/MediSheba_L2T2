@@ -1961,6 +1961,10 @@ def book_cabin_by_doctor(request):
                    })
 
 
+def check_cabin_availability_by_doctor(request):
+    return HttpResponse("Incomplete")
+
+
 def submit_book_cabin_by_doctor(request):
     return render(request, "cabin/cabin_booking_confirmation_by_doctor.html")
 
@@ -2009,6 +2013,10 @@ def book_cabin_by_user(request):
                    'category': category, 'price': price,
                    'cabin_id_for_user': cabin_id_for_user
                    })
+
+
+def check_cabin_availability_by_user(request):
+    return HttpResponse("Incomplete")
 
 
 def submit_book_cabin_by_user(request):

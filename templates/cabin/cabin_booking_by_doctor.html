@@ -47,13 +47,13 @@
                       <div class="coc-block-row">
                            <label class="coc-block-label" for="entrydate">Entry Date</label>
                       <div class="coc-block">
-                      <input class="coc-input" type="date" name="entrydate" id="entrydate">
+                      <input class="coc-input" type="date"  name="entrydate" id="entrydate">
                 </div>
                 <div class="coc-form">
                       <div class="coc-block-row">
                            <label class="coc-block-label" for="exitdate">Exit Date</label>
                       <div class="coc-block">
-                      <input class="coc-input" type="date" name="exitdate" id="exitdate">
+                      <input class="coc-input" type="date"  name="exitdate" id="exitdate">
                 </div><br>
                      <button type="button" onclick="myFunction()">Cost</button>
                           <p id="example"></p>
@@ -96,25 +96,95 @@
                                 alert("Start date cannot be less than current date");
                                 return false;
                             }
+                            else if(fdt1 == "Invalid Date"){
+                                alert("Enter entry date");
+                                return false;
+                            }
+                            else if(tdt1 == "Invalid Date"){
+                                alert("Enter  exit date");
+                                return false;
+                            }
                             else {
                                var diffDays = Math.round(Math.abs((tdt1 - fdt1)/(oneDay)));
+                               if(diffDays==0){
+                                   alert("Entry & Exit time can't be same");
+                                   return false;
+                               }
+                               else {
+                                   document.getElementById("example").innerHTML = diffDays *{{ price }};
+                                   return true;
+                               }
+                            }
+                        }
+                     }
+                     ///
+                    function validation() {
+                         var fromdate = new Date(document.getElementById("entrydate").value);
+                         var dd = fromdate.getDate();
+                         var mm = fromdate.getMonth()+1; //January is 0!
+                         var yyyy = fromdate.getFullYear();
+                         if(dd < 10)  {dd = '0'+ dd;}
+                         if(mm < 10)  {mm = '0' + mm;}
+                         var fromdate1 = mm+'/'+dd+'/'+yyyy;
 
-                               document.getElementById("example").innerHTML = diffDays*{{ price }};
-                               return true;
+                         var today = new Date();
+                         var ddt = today.getDate();
+                         var mmt = today.getMonth()+1; //January is 0!
+                         var yyyyt = today.getFullYear();
+                         if(ddt < 10)  {ddt = '0'+ ddt;}
+                         if(mmt < 10)  {mmt = '0' + mmt;}
+                         var today1 = mmt+'/'+ddt+'/'+yyyyt;
+
+                         var todate = new Date(document.getElementById("exitdate").value);
+                         var dd1 = todate.getDate();
+                         var mm1 = todate.getMonth()+1; //January is 0!
+                         var yyyy1 = todate.getFullYear();
+                        if(dd1 < 10) {dd1 = '0'+ dd1;}
+                        if(mm1 < 10) {mm1 = '0' + mm1;}
+                        var todate1 = mm1 + '/' + dd1 + '/' + yyyy1;
+
+                        var oneDay = 24*60*60*1000;
+                        if((fromdate1 != "") && (todate1 != "")){
+                            var fdt1 =  new Date(fromdate1);
+                            var tdt1 =  new Date(todate1);
+                            var todt1 = new Date(today1);
+                            if(fdt1 > tdt1) {
+                                alert("Start date cannot be greater than end date");
+                                return false;
+                            }
+                            else if(fdt1<todt1){
+                                alert("Start date cannot be less than current date");
+                                return false;
+                            }
+                            else if(fdt1 == "Invalid Date"){
+                                alert("Enter entry date");
+                                return false;
+                            }
+                            else if(tdt1 == "Invalid Date"){
+                                alert("Enter  exit date");
+                                return false;
+                            }
+                            else {
+                               var diffDays = Math.round(Math.abs((tdt1 - fdt1)/(oneDay)));
+                               if(diffDays==0){
+                                   alert("Entry & Exit time can't be same");
+                                   return false;
+                               }
+                               else {
+                                   return true;
+                               }
                             }
                         }
                      }
                 </script>
-             <div class="mt-5 text-center">
-                         <form action="submit_book_cabin_by_doctor" method="post">{% csrf_token %}
-                                <button type="submit" class="btn btn-danger wrn-btn">Book</button>
-                         </form>
-                    </div>
+             <div class="mt-5 text">
+                 <form action="check_cabin_availability_by_doctor" method="post" onsubmit="return validation()">{% csrf_token %}
+                                <button type="submit" class="btn btn-danger wrn-btn">CHECK AVAILABILITY</button>
+                 </form>
+             </div>
             </div>
         </div>
     </div>
     </div>
     </div>
 </body>
-
-</html>
