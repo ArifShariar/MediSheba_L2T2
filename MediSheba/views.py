@@ -188,6 +188,7 @@ def signupSubmit(request):
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
         c2 = conn.cursor()
+        c3 = conn.cursor()
 
         statement = "INSERT INTO MEDI_SHEBA.DOCTOR(FIRST_NAME, LAST_NAME, EMAIL, PHONE,PASSWORD, GENDER) VALUES (" + "\'" + firstname + \
                     "\', " + "\'" + lastname + "\'," + "\'" + email + "\', " + "\'" + phone + "\', " + "\'" + password + "\', " + "\'" + gender + "\'" + ")"
@@ -208,6 +209,10 @@ def signupSubmit(request):
             user_info['l_name'] = return_l_name
             user_info['email'] = email
             user_info['type'] = "doctor"
+
+            statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES (" + user_info['pk'] + ")"
+            c3.execute(statement)
+            conn.commit()
 
             return redirect("doctor_home")
         else:
@@ -650,7 +655,8 @@ def see_doctors(request):
     c = conn.cursor()
     statement = ""
     if user_info['type'] == 'doctor':
-        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID from MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID != " + str(user_info['pk'])
+        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID from MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID != " + str(
+            user_info['pk'])
     else:
         statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID from MEDI_SHEBA.DOCTOR"
     c.execute(statement)
@@ -1907,9 +1913,9 @@ def book_cabin_by_doctor(request):
 def submit_book_cabin_by_doctor(request):
     return render(request, "cabin/cabin_booking_confirmation_by_doctor.html")
 
+
 def go_to_doctor_home(request):
     return redirect("doctor_home")
-
 
 
 '''
@@ -1957,8 +1963,10 @@ def book_cabin_by_user(request):
 def submit_book_cabin_by_user(request):
     return render(request, "cabin/cabin_booking_confirmation_by_user.html")
 
+
 def go_to_user_home(request):
     return redirect("user_home")
+
 
 '''
   cabin ends
