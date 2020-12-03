@@ -1964,3 +1964,46 @@ def go_to_user_home(request):
   cabin ends
 
 '''
+# TODO:Doctor user appointment
+
+def doctor_schedule(request):
+    start_hour=request.POST['start_hour']
+    start_minute=request.POST['start_minute']
+    end_hour=request.POST['end_hour']
+    end_minute=request.POST['end_minute']
+    weekday=request.POST['weekday']
+    max_app=request.POST['max_app']
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    statement=""
+    statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES( " + str(
+            user_info['pk']) + ")"
+    c.execute(statement)
+    if weekday=="Saturday":
+        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(SAT_START,SAT_END,SAT_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday=="Sunday":
+        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(SUN_START,SUN_END,SUN_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday == "Monday":
+        statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(MON_START,MON_END,MON_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday == "Tuesday":
+        statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(TUES_START,TUES_END,TUES_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday=="Wednesday":
+        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(WED_START,WED_END,WED_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday=="Thursday":
+        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(THU_START,THU_END,THU_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+    elif weekday=="Friday":
+        statement="INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(FRI_START,FRI_END,FRI_MAX) VALUES( " + str(start_hour) + "," + str(end_hour) + "," + str(max_app) + ") WHERE DOCTOR_ID=" + str(
+            user_info['pk'])
+
+    c.execute(statement)
+
+    return render(request, "schedule_editor/appointment_details.html")
