@@ -74,6 +74,8 @@ urlpatterns = [
     # URL FOR USERS
     path('users/search_options/', MediSheba_views.user_search_options, name='user_search_options'),
     path('users/search_options/search_doctors/', MediSheba_views.search_doctors_by_user, name='search_doctors_by_user'),
+    path('users/search_options/search_doctors/submit_appointment_for_doctor_by_user', MediSheba_views.submit_appointment_for_doctor_by_user,
+         name='submit_appointment_for_doctor_by_user'),
     path('users/search_options/search_doctors/custom_search_for_doctor',
          MediSheba_views.custom_search_for_doctor_by_user, name='customer_search_for_doctor_by_user'),
     path('users/search_options/search_doctors/see_specific_doctor_details', MediSheba_views.see_specific_doctor_details,

@@ -4,6 +4,7 @@ import cx_Oracle
 
 import HelperClasses.encryptPass as decoder_encoder
 from HelperClasses import json_extractor
+from HelperClasses import day_name
 
 from .models import DoctorName
 from .models import BloodBankList
@@ -716,14 +717,64 @@ def see_specific_doctor_details(request):
     else:
         hospital_full_name = "NONE"
 
+    if user_info['type'] == 'user':
+        return render(request, "detail_showing_pages/see_doctor_details_by_user/see_doctors_details.html",
+                      {'name': first_name + " " + last_name, 'first_name': first_name,
+                       'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
+                       'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization,
+                       'doctor_id': doctor_id})
     return render(request, "detail_showing_pages/see_doctors_details.html",
                   {'name': first_name + " " + last_name, 'first_name': first_name,
                    'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
                    'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization})
 
 
+def submit_appointment_for_doctor_by_user(request):
+    doctor_id = request.POST.get("doctor_id", "none")
+    selected_date = request.POST.get("appointment_date", "none")
+
+    if selected_date == "none":
+        return redirect("see_specific_doctor_details")
+
+    print(doctor_id)
+    print(selected_date)
+    day = day_name.FindDayName(selected_date).find_day_name()
+    print(day)
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT DOCTOR_ID, TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd'), OCCUPIED, MAX_CAPACITY FROM MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT WHERE TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd') = " + "\'" + selected_date + "\'" + " AND  DOCTOR_ID = " + str(
+        doctor_id)
+    c.execute(statement)
+    date_list = []
+
+    occupied_slot = 0
+    max_slot = 0
+    for row in c:
+        date_list.append(row[0])
+        date_list.append(row[1])
+        date_list.append(row[2])
+        date_list.append(row[3])
+        occupied_slot = row[2]
+        max_slot = row[3]
+
+    if bool(date_list):  # got some data from query, that means that the date already exists, now check for availability
+        if occupied_slot == max_slot:
+            print("No available slot on " + selected_date)
+            print("Suggest a new date")
+            print("If selected, add that date")
+        else:
+            print("Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
+    else:
+        print(" date NOT FOUND in database")
+        print(" ADD THIS DATE ")
+
+    return HttpResponse("Appointment sent to doctor by user")
+
+
 def submit_appointment(request):
-    HttpResponse("Appointment sent to doctor")
+    return HttpResponse("Appointment sent to doctor")
 
 
 # USERS

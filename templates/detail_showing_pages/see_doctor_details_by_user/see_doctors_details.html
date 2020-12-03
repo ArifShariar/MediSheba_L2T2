@@ -52,7 +52,7 @@
                         <h4>{{ specialization }}</h4>
                     </div>
                     <br>
-                    <form action="submit_appointment_for_doctor" method="post">
+                    <form name = "submit_appointment_for_doctor_by_user" action="submit_appointment_for_doctor_by_user" method="post" onsubmit="return validate()">
                         {% csrf_token %}
                         <div class="col-md-12">
                             <label class="labels"><h4>Get An Appointment</h4></label><br>
@@ -62,12 +62,13 @@
                                    <label class="coc-block-label" for="entrydate">SELECT A DATE</label>
                               </div>
                               <div class="coc-block">
-                                   <input class="form-control" type="date" name="appointment_date" id="appointment_date">
+                                   <input class="form-control" type="date" name="appointment_date" id="appointment_date" value="Not Specified">
                               </div>
 
                          </div>
                         <div class="mt-5 text-center">
                             <button class="btn btn-primary profile-button" type="submit">Submit</button>
+                            <input type="hidden" id="{{ doctor_id }}" name="doctor_id" value="{{ doctor_id }}">
                         </div>
                     </form>
                 </div>
@@ -78,6 +79,16 @@
     </div>
 </body>
 <script>
+    function validate(){
+        var date = document.forms["submit_appointment_for_doctor_by_user"]["appointment_date"].value;
+        if (date === ""){
+            alert("SELECT A DATE");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
     function format_date(date){
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
