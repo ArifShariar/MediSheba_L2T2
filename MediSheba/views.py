@@ -2050,77 +2050,96 @@ def doctor_schedule(request):
 
     statement = ""
 
-    c.execute(statement)
     if weekday == "Saturday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Sunday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Monday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET MON_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Tuesday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Wednesday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Thursday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
     elif weekday == "Friday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
+        conn.commit()
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
-    c.execute(statement)
+        conn.commit()
 
     return render(request, "schedule_editor/appointment_details.html")
