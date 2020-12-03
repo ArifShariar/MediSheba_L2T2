@@ -211,7 +211,7 @@ def signupSubmit(request):
             user_info['email'] = email
             user_info['type'] = "doctor"
 
-            statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES (" + user_info['pk'] + ")"
+            statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES (" + str(user_info['pk']) + ")"
             c3.execute(statement)
             conn.commit()
 
@@ -765,7 +765,8 @@ def submit_appointment_for_doctor_by_user(request):
             print("Suggest a new date")
             print("If selected, add that date")
         else:
-            print("Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
+            print(
+                "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
     else:
         print(" date NOT FOUND in database")
         print(" ADD THIS DATE ")
@@ -2031,26 +2032,28 @@ def go_to_user_home(request):
   cabin ends
 
 '''
+
+
 # TODO:Doctor user appointment
 
 def doctor_schedule(request):
-    start_hour=request.POST['start_hour']
-    start_minute=request.POST['start_minute']
-    end_hour=request.POST['end_hour']
-    end_minute=request.POST['end_minute']
-    weekday=request.POST['weekday']
-    max_app=request.POST['max_app']
+    start_hour = request.POST['start_hour']
+    start_minute = request.POST['start_minute']
+    end_hour = request.POST['end_hour']
+    end_minute = request.POST['end_minute']
+    weekday = request.POST['weekday']
+    max_app = request.POST['max_app']
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
 
-    statement=""
+    statement = ""
 
     c.execute(statement)
-    if weekday=="Saturday":
-        statement="UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
-                        + str(user_info['pk'])
+    if weekday == "Saturday":
+        statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
+                    + str(user_info['pk'])
         c.execute(statement)
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_END = " + str(end_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
@@ -2058,7 +2061,7 @@ def doctor_schedule(request):
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SAT_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
-    elif weekday=="Sunday":
+    elif weekday == "Sunday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET SUN_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
@@ -2088,7 +2091,7 @@ def doctor_schedule(request):
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET TUES_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
-    elif weekday=="Wednesday":
+    elif weekday == "Wednesday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
@@ -2098,7 +2101,7 @@ def doctor_schedule(request):
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET WED_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
-    elif weekday=="Thursday":
+    elif weekday == "Thursday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
@@ -2108,7 +2111,7 @@ def doctor_schedule(request):
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET THU_MAX = " + str(max_app) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
-    elif weekday=="Friday":
+    elif weekday == "Friday":
         statement = "UPDATE MEDI_SHEBA.DOCTOR_SCHEDULE SET FRI_START = " + str(start_hour) + " WHERE DOCTOR_ID = " \
                     + str(user_info['pk'])
         c.execute(statement)
