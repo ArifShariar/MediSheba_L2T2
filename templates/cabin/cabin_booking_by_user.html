@@ -58,7 +58,24 @@
                      <button type="button" onclick="myFunction()">Cost</button>
                           <p id="example"></p>
                 <script>
-                     function myFunction() {
+                    function format_date(date){
+                        var d = new Date(date),
+                            month = '' + (d.getMonth() + 1),
+                            day = ''+d.getDate(),
+                            year = d.getFullYear();
+                        if(month.length<2){
+                            month = '0' + month;
+                        }
+                        if(day.length<2){
+                            day = '0' + day;
+                        }
+                        return [year,month,day].join('-')
+                    }
+
+                    var x = format_date(new Date())
+                    document.getElementById("entrydate").min = x;
+                    document.getElementById("exitdate").min = x;
+                    function myFunction() {
                          var fromdate = new Date(document.getElementById("entrydate").value);
                          var dd = fromdate.getDate();
                          var mm = fromdate.getMonth()+1; //January is 0!
@@ -116,7 +133,7 @@
                                }
                             }
                         }
-                     }
+                    }
                       ///
                     function validation() {
                          var fromdate = new Date(document.getElementById("entrydate").value);
@@ -177,16 +194,16 @@
                         }
                      }
                 </script>
-             <div class="mt-5 text">
-                         <form action="check_cabin_availability_by_user" method="post" onsubmit="return validation()">{% csrf_token %}
-                                <button type="submit" class="btn btn-danger wrn-btn">CHECK AVAILABILITY</button>
-                         </form>
-             </div>
-             <div class="mt-5 text-center">
-                         <form action="submit_book_cabin_by_user" method="post">{% csrf_token %}
-                                <button type="submit" class="btn btn-danger wrn-btn">Book</button>
-                         </form>
-                    </div>
+                 <div class="mt-5 text">
+                             <form action="check_cabin_availability_by_user" method="post" onsubmit="return validation()">{% csrf_token %}
+                                    <button type="submit" class="btn btn-danger wrn-btn">CHECK AVAILABILITY</button>
+                             </form>
+                 </div>
+                 <div class="mt-5 text-center">
+                             <form action="submit_book_cabin_by_user" method="post">{% csrf_token %}
+                                    <button type="submit" class="btn btn-danger wrn-btn">Book</button>
+                             </form>
+                 </div>
             </div>
         </div>
     </div>
