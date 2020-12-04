@@ -2142,4 +2142,12 @@ def doctor_schedule(request):
         c.execute(statement)
         conn.commit()
 
-    return render(request, "schedule_editor/appointment_details.html")
+    return render(request, "schedule_editor/add_schedule_confirmation.html")
+
+
+def redirect_to_schedule_doctor_schedule(request):
+    return redirect("doctor_change_schedule")
+
+
+def redirect_to_home_doctor_schedule(request):
+    return redirect("doctor_home")
