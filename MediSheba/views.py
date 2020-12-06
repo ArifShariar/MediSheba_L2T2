@@ -490,9 +490,104 @@ def doctor_search_options(request):
         return HttpResponse("NO ACCESS")
 
 
-def doctor_view_appointments(request):
+def view_user_appointments_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("Appointments Here")
+        return render(request, 'appointment_history_pages/doctor_history/doctor_user_history.html')
+    else:
+        return HttpResponse("NO ACCESS")
+
+def past_appointment_of_user_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("past not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def upcoming_appointment_of_user_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("upcoming not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def pending_appointment_of_user_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("pending not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def view_doctor_appointments_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return render(request, 'appointment_history_pages/doctor_history/doctor_doctor_history.html')
+    else:
+        return HttpResponse("NO ACCESS")
+
+def past_appointment_of_doctor_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("past not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def upcoming_appointment_of_doctor_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("upcoming not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def pending_appointment_of_doctor_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("pending not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def view_hospital_appointments_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return render(request, 'appointment_history_pages/doctor_history/doctor_hospital_history.html')
+    else:
+        return HttpResponse("NO ACCESS")
+
+def past_appointment_of_hospital_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("past not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def upcoming_appointment_of_hospital_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("upcoming not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def pending_appointment_of_hospital_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("pending not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def view_bloodbank_appointments_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return render(request, 'appointment_history_pages/doctor_history/doctor_blood_bank_history.html')
+    else:
+        return HttpResponse("NO ACCESS")
+
+def past_appointment_of_bloodbank_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("past not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+def upcoming_appointment_of_bloodbank_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("upcoming not done")
+    else:
+        return HttpResponse("NO ACCESS")
+
+
+def pending_appointment_of_bloodbank_by_doctor(request):
+    if bool(user_info) and user_info['type'] == 'doctor':
+        return HttpResponse("pending not done")
     else:
         return HttpResponse("NO ACCESS")
 

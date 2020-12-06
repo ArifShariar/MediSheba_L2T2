@@ -1,153 +1,69 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
+
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/blood_bank_query.css' %}">
-    <title>Hospital History</title>
+    <title>Doctor Appointment</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/forsearch.css' %}">
 </head>
+
+<!------ Include the above in your HEAD tag ---------->
+
 <body style="background-color: #dde3d3">
-<div class="container">
-    <div class="row pt-1 pb-1">
-        <div class="col-lg-12">
-            <h4 class="text-center">Hospital History</h4>
-        </div>
-    </div>
-</div>
-<!---
-<section class="search-sec bottom-space-1">
-    <div class="container">
-        <form action="#" method="post" novalidate="novalidate">
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select class="form-control search-slt" id="select_area">
-                        <option selected disabled>Select Area</option>
-                        {% for i in opt %}
-                        <option>{{ i }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <select class="form-control search-slt" id="select_area">
-                        <option selected disabled>Select Blood Group</option>
 
-                        <option>A+</option>
-                        <option>A-</option>
-                        <option>B+</option>
-                        <option>B-</option>
-                        <option>O+</option>
-                        <option>O-</option>
-                        <option>AB+</option>
-                        <option>AB-</option>
+    <div class="main">
+        <div class="row">
+            <div class="col-md-4">
+                <a href="{% url 'past_appointment_of_hospital_by_doctor' %}">
+                <div class="one">
+                    <div class="px-2 pb-3">
 
-                    </select>
-                </div>
+                        <div><img src="{% static 'images/tick-mark.png' %}" width="150" /></div>
 
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                    <button type="button" class="btn btn-danger wrn-btn">Search</button>
+                        <div>
+                            <h4 class="project">Past Appointments</h4>
+                            <p class="quote2"><div style="text-align: center;">Show list past appointments</div></p>
+                        </div>
+                    </div>
                 </div>
+                 </a>
             </div>
-        </form>
-    </div>
-</section>
---->
+            <div class="col-md-4">
+                <a href="{% url 'upcoming_appointment_of_hospital_by_doctor' %}">
+                <div class="one">
+                    <div class="px-2 pb-3">
 
-<!---
-<section class="search_result bottom-space-1 center">
-    <div>
-        <h3>Search Result</h3>
-    </div>
-</section>
+                        <div><img src="{% static 'images/deadline.png' %}" width="200" /></div>
+                        <div>
+                            <h4 class="project">Upcoming Appointments</h4>
+                            <p class="quote2"><div style="text-align: center;">Show list upcoming appointments</div></p>
+                        </div>
+                    </div>
+                </div>
+                 </a>
+            </div>
+            <div class="col-md-4">
+                <a href="{% url 'pending_appointment_of_hospital_by_doctor' %}">
+                <div class="one">
+                    <div class="px-2 pb-3">
 
--->
-<section class="table-sec bottom-space">
-    <table class="table table-hover table-dark" border="1">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Hospital Name</th>
-            <th scope="col">Location</th>
-            <th scope="col">Entry Date</th>
-            <th scope="col">Exit Date</th>
-            <th scope="col">Payment</th>
-        </tr>
-        </thead>
-<!---
-        {% for d in b_banks %}
-            <tr>
-            <td>{{ d.id }}</td>
-            <td>{{ d.name }}</td>
-            <td>{{ d.a_plus}}</td>
-            <td>{{ d.a_minus }}</td>
-            <td>{{ d.b_plus }}</td>
-            <td>{{ d.b_minus }}</td>
-            <td>{{ d.o_plus}}</td>
-            <td>{{ d.o_minus }}</td>
-            <td>{{ d.ab_plus }}</td>
-            <td>{{ d.ab_minus }}</td>
-            <td><button type="button" class="btn btn-danger wrn-btn">Book</button></td>
-            </tr>
-        {% endfor %}
+                        <div><img src="{%static 'images/pending.png' %}" width="200" /></div>
 
-      -->
-    </table>
-</section>
-
-<div class="container">
-    <div class="row pt-1 pb-1">
-        <div class="col-lg-12">
-            <h4 class="text-center">Cabin History</h4>
+                        <div>
+                            <h4 class="project">Pending Appointments</h4>
+                            <p class="quote2"><div style="text-align: center;">Show list of pending appointments</div></p>
+                        </div>
+                    </div>
+                </div>
+                 </a>
+            </div>
         </div>
     </div>
-</div>
-
-<section class="table-sec bottom-space">
-    <table class="table table-hover table-dark" border="1">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Hospital Name</th>
-            <th scope="col">Location</th>
-            <th scope="col">Entry Date</th>
-            <th scope="col">Exit Date</th>
-            <th scope="col">Cabin ID</th>
-            <th scope="col">Cabin Type</th>
-            <th scope="col">Payment</th>
-        </tr>
-        </thead>
-<!---
-        {% for d in b_banks %}
-            <tr>
-            <td>{{ d.id }}</td>
-            <td>{{ d.name }}</td>
-            <td>{{ d.a_plus}}</td>
-            <td>{{ d.a_minus }}</td>
-            <td>{{ d.b_plus }}</td>
-            <td>{{ d.b_minus }}</td>
-            <td>{{ d.o_plus}}</td>
-            <td>{{ d.o_minus }}</td>
-            <td>{{ d.ab_plus }}</td>
-            <td>{{ d.ab_minus }}</td>
-            <td><button type="button" class="btn btn-danger wrn-btn">Book</button></td>
-            </tr>
-        {% endfor %}
-
-      -->
-    </table>
-</section>
-
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
 </body>
 
 </html>
