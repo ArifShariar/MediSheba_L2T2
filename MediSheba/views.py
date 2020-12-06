@@ -1582,7 +1582,7 @@ def bloodbank_history(request):
 
 
 def bloodbank_all_appointments(request):
-    return HttpResponse("blood banks appointment page")
+    return render(request,'bloodbank_tables/approval_table.html')
 
 
 # functions for hospital admin and management
@@ -1748,13 +1748,6 @@ def submit_changed_profile_hospital(request):
     else:
         return HttpResponse("Access not granted")
 
-
-def hospital_admin_view_appointments(request):
-    return HttpResponse("Hospital admin view appointments here")
-
-
-def hospital_admin_view_schedule(request):
-    return HttpResponse("Hospital admin view schedule")
 
 
 # TODO: CABIN MANAGEMENT BY HOSPITAL ADMIN

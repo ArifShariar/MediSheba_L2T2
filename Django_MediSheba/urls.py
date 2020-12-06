@@ -221,10 +221,6 @@ urlpatterns = [
          name='hospital_search_options'),
     path('hospital_admin/hospital_admin_edit_profile/', MediSheba_views.hospital_admin_edit_profile,
          name='hospital_admin_edit_profile'),
-    path('hospital_admin/hospital_admin_view_appointments/', MediSheba_views.hospital_admin_view_appointments,
-         name='hospital_admin_view_appointments'),
-    path('hospital_admin/hospital_admin_view_schedule/', MediSheba_views.hospital_admin_view_schedule,
-         name='hospital_admin_view_schedule'),
     path('hospital_admin/hospital_admin_cabin_management/', MediSheba_views.hospital_admin_cabin_management,
          name='hospital_admin_cabin_management'),
 
