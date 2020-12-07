@@ -18,7 +18,7 @@
 
     <div class="main">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <a href="{% url 'past_appointment_of_doctor_by_doctor' %}">
                 <div class="one">
                     <div class="px-2 pb-3">
@@ -33,12 +33,12 @@
                 </div>
                  </a>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <a href="{% url 'upcoming_appointment_of_doctor_by_doctor' %}">
                 <div class="one">
                     <div class="px-2 pb-3">
 
-                        <div><img src="{% static 'images/deadline.png' %}" width="200" /></div>
+                        <div><img src="{% static 'images/deadline.png' %}" width="150" /></div>
                         <div>
                             <h4 class="project">Upcoming Appointments</h4>
                             <p class="quote2"><div style="text-align: center;">Show list upcoming appointments</div></p>
@@ -47,6 +47,7 @@
                 </div>
                  </a>
             </div>
+            <!---
             <div class="col-md-4">
                 <a href="{% url 'pending_appointment_of_doctor_by_doctor' %}">
                 <div class="one">
@@ -62,6 +63,7 @@
                 </div>
                  </a>
             </div>
+            --->
         </div>
     </div>
 </body>
