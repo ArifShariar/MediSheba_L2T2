@@ -108,6 +108,9 @@ urlpatterns = [
     path('doctor/search_cabin/submit_book_cabin_by_doctor', MediSheba_views.submit_book_cabin_by_doctor,
          name='submit_book_cabin_by_doctor'),
     path('doctor/search_cabin/go_to_doctor_home', MediSheba_views.go_to_doctor_home, name='go_to_doctor_home'),
+    path('doctor/search_options/search_doctors/submit_appointment_for_doctor_by_doctor',
+         MediSheba_views.submit_appointment_for_doctor_by_doctor,
+         name='submit_appointment_for_doctor_by_doctor'),
 
     # URL FOR USERS
     path('users/search_options/', MediSheba_views.user_search_options, name='user_search_options'),

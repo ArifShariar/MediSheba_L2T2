@@ -934,7 +934,115 @@ def submit_appointment_for_doctor_by_user(request):
             conn.commit()
         return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
 
+def submit_appointment_for_doctor_by_doctor(request):
+    doctor_id = request.POST.get("doctor_id", "none")
+    selected_date = request.POST.get("appointment_date", "none")
 
+    if selected_date == "none":
+        return redirect("see_specific_doctor_details")
+
+    print(doctor_id)
+    print(selected_date)
+    day = day_name.FindDayName(selected_date).find_day_name()
+    print(day)
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT DOCTOR_ID, TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd'), OCCUPIED, MAX_CAPACITY FROM MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT WHERE TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd') = " + "\'" + selected_date + "\'" + " AND  DOCTOR_ID = " + str(
+        doctor_id)
+    c.execute(statement)
+    date_list = []
+
+    occupied_slot = 0
+    max_slot = 0
+    for row in c:
+        date_list.append(row[0])
+        date_list.append(row[1])
+        date_list.append(row[2])
+        date_list.append(row[3])
+        occupied_slot = row[2]
+        max_slot = row[3]
+
+    if bool(date_list):  # got some data from query, that means that the date already exists, now check for availability
+        if occupied_slot == max_slot:
+            print("No available slot on " + selected_date)
+            print("Suggest a new date")
+            print("If selected, add that date")
+            return HttpResponse("NO AVAILABLE SLOTS")
+        else:
+            print("Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
+            occupied_slot = occupied_slot + 1
+            query = "UPDATE MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT SET OCCUPIED = " + str(occupied_slot) + " WHERE DOCTOR_ID = " + str(doctor_id) + " AND APPOINTMENT_DATE = " + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')"
+            c.execute(query)
+            conn.commit()
+
+            if user_info['type'] == 'user':
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+                c.execute(query)
+                conn.commit()
+            elif user_info['type'] == 'doctor':
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str( doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+                c.execute(query)
+                conn.commit()
+            return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+    else:
+        print(" date NOT FOUND in database")
+        print(" ADD THIS DATE ")
+        max_capacity = 0
+        if day == 'Saturday':
+            statement1 = "SELECT SAT_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Sunday':
+            statement1 = "SELECT SUN_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Monday':
+            statement1 = "SELECT MON_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Tuesday':
+            statement1 = "SELECT TUES_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Wednesday':
+            statement1 = "SELECT WED_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Thursday':
+            statement1 = "SELECT THU_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+        elif day == 'Friday':
+            statement1 = "SELECT FRI_MAX FROM MEDI_SHEBA.DOCTOR_SCHEDULE"
+            c.execute(statement1)
+            for r in c:
+                max_capacity = r[0]
+
+        # insert in to appointment management
+        query = "INSERT INTO MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT(DOCTOR_ID, APPOINTMENT_DATE, OCCUPIED, MAX_CAPACITY) VALUES (" + str(doctor_id) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + str(1) + "," + str(max_capacity) + ")"
+        print(query)
+        c.execute(query)
+        conn.commit()
+
+        # insert in to doctor user history
+
+        if user_info['type'] == 'user':
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+            c.execute(query)
+            conn.commit()
+        elif user_info['type'] == 'doctor':
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+            c.execute(query)
+            conn.commit()
+        return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
 
 def submit_appointment(request):
     return HttpResponse("Appointment sent to doctor")
