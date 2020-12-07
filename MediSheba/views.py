@@ -496,11 +496,13 @@ def view_user_appointments_by_doctor(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def past_appointment_of_user_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return HttpResponse("past not done")
     else:
         return HttpResponse("NO ACCESS")
+
 
 def upcoming_appointment_of_user_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -515,17 +517,20 @@ def pending_appointment_of_user_by_doctor(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def view_doctor_appointments_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return render(request, 'appointment_history_pages/doctor_history/doctor_doctor_history.html')
     else:
         return HttpResponse("NO ACCESS")
 
+
 def past_appointment_of_doctor_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return HttpResponse("past not done")
     else:
         return HttpResponse("NO ACCESS")
+
 
 def upcoming_appointment_of_doctor_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -547,11 +552,13 @@ def view_hospital_appointments_by_doctor(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def past_appointment_of_hospital_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return HttpResponse("past not done")
     else:
         return HttpResponse("NO ACCESS")
+
 
 def upcoming_appointment_of_hospital_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -566,17 +573,20 @@ def pending_appointment_of_hospital_by_doctor(request):
     else:
         return HttpResponse("NO ACCESS")
 
+
 def view_bloodbank_appointments_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return render(request, 'appointment_history_pages/doctor_history/doctor_blood_bank_history.html')
     else:
         return HttpResponse("NO ACCESS")
 
+
 def past_appointment_of_bloodbank_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
         return HttpResponse("past not done")
     else:
         return HttpResponse("NO ACCESS")
+
 
 def upcoming_appointment_of_bloodbank_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
@@ -861,18 +871,21 @@ def submit_appointment_for_doctor_by_user(request):
             print("If selected, add that date")
             return HttpResponse("NO AVAILABLE SLOTS")
         else:
-            print("Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
+            print(
+                "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
             occupied_slot = occupied_slot + 1
             query = "UPDATE MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT SET OCCUPIED = " + str(occupied_slot) + " WHERE DOCTOR_ID = " + str(doctor_id) + " AND APPOINTMENT_DATE = " + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')"
             c.execute(query)
             conn.commit()
 
             if user_info['type'] == 'user':
-                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                    doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
             elif user_info['type'] == 'doctor':
-                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str( doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                    doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
             return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
@@ -917,7 +930,9 @@ def submit_appointment_for_doctor_by_user(request):
                 max_capacity = r[0]
 
         # insert in to appointment management
-        query = "INSERT INTO MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT(DOCTOR_ID, APPOINTMENT_DATE, OCCUPIED, MAX_CAPACITY) VALUES (" + str(doctor_id) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + str(1) + "," + str(max_capacity) + ")"
+        query = "INSERT INTO MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT(DOCTOR_ID, APPOINTMENT_DATE, OCCUPIED, MAX_CAPACITY) VALUES (" + str(
+            doctor_id) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + str(
+            1) + "," + str(max_capacity) + ")"
         print(query)
         c.execute(query)
         conn.commit()
@@ -925,14 +940,19 @@ def submit_appointment_for_doctor_by_user(request):
         # insert in to doctor user history
 
         if user_info['type'] == 'user':
-            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                doctor_id) + "," + str(user_info[
+                                           'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
             c.execute(query)
             conn.commit()
         elif user_info['type'] == 'doctor':
-            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                doctor_id) + "," + str(user_info[
+                                           'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
         return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+
 
 def submit_appointment_for_doctor_by_doctor(request):
     doctor_id = request.POST.get("doctor_id", "none")
@@ -949,8 +969,7 @@ def submit_appointment_for_doctor_by_doctor(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "SELECT DOCTOR_ID, TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd'), OCCUPIED, MAX_CAPACITY FROM MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT WHERE TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd') = " + "\'" + selected_date + "\'" + " AND  DOCTOR_ID = " + str(
-        doctor_id)
+    statement = "SELECT DOCTOR_ID, TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd'), OCCUPIED, MAX_CAPACITY FROM MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT WHERE TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd') = " + "\'" + selected_date + "\'" + " AND  DOCTOR_ID = " + str(doctor_id)
     c.execute(statement)
     date_list = []
 
@@ -971,18 +990,25 @@ def submit_appointment_for_doctor_by_doctor(request):
             print("If selected, add that date")
             return HttpResponse("NO AVAILABLE SLOTS")
         else:
-            print("Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
+            print(
+                "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
             occupied_slot = occupied_slot + 1
-            query = "UPDATE MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT SET OCCUPIED = " + str(occupied_slot) + " WHERE DOCTOR_ID = " + str(doctor_id) + " AND APPOINTMENT_DATE = " + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')"
+            query = "UPDATE MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT SET OCCUPIED = " + str(
+                occupied_slot) + " WHERE DOCTOR_ID = " + str(
+                doctor_id) + " AND APPOINTMENT_DATE = " + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')"
             c.execute(query)
             conn.commit()
 
             if user_info['type'] == 'user':
-                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                    doctor_id) + "," + str(user_info[
+                                               'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
             elif user_info['type'] == 'doctor':
-                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str( doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+                query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                    doctor_id) + "," + str(user_info[
+                                               'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
             return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
@@ -1027,7 +1053,9 @@ def submit_appointment_for_doctor_by_doctor(request):
                 max_capacity = r[0]
 
         # insert in to appointment management
-        query = "INSERT INTO MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT(DOCTOR_ID, APPOINTMENT_DATE, OCCUPIED, MAX_CAPACITY) VALUES (" + str(doctor_id) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + str(1) + "," + str(max_capacity) + ")"
+        query = "INSERT INTO MEDI_SHEBA.DOCTOR_APPOINTMENT_MANAGEMENT(DOCTOR_ID, APPOINTMENT_DATE, OCCUPIED, MAX_CAPACITY) VALUES (" + str(
+            doctor_id) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + str(
+            1) + "," + str(max_capacity) + ")"
         print(query)
         c.execute(query)
         conn.commit()
@@ -1035,14 +1063,19 @@ def submit_appointment_for_doctor_by_doctor(request):
         # insert in to doctor user history
 
         if user_info['type'] == 'user':
-            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                doctor_id) + "," + str(user_info[
+                                           'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "user" + "\'" + ")"
             c.execute(query)
             conn.commit()
         elif user_info['type'] == 'doctor':
-            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(doctor_id) + "," + str(user_info['pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
+            query = "INSERT INTO MEDI_SHEBA.DOCTOR_USER_HISTORY(DOCTOR_ID, USER_ID, APPOINTMENT_TIME, USER_TYPE) VALUES (" + str(
+                doctor_id) + "," + str(user_info[
+                                           'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
         return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+
 
 def submit_appointment(request):
     return HttpResponse("Appointment sent to doctor")
@@ -1690,7 +1723,7 @@ def bloodbank_history(request):
 
 
 def bloodbank_all_appointments(request):
-    return render(request,'bloodbank_tables/approval_table.html')
+    return render(request, 'bloodbank_tables/approval_table.html')
 
 
 # functions for hospital admin and management
@@ -1855,7 +1888,6 @@ def submit_changed_profile_hospital(request):
         return redirect("hospital_admin_home")
     else:
         return HttpResponse("Access not granted")
-
 
 
 # TODO: CABIN MANAGEMENT BY HOSPITAL ADMIN
