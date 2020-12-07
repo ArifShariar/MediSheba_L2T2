@@ -820,7 +820,7 @@ def see_specific_doctor_details(request):
     return render(request, "detail_showing_pages/see_doctors_details.html",
                   {'name': first_name + " " + last_name, 'first_name': first_name,
                    'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
-                   'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization})
+                   'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization,'doctor_id': doctor_id})
 
 
 # TODO: APPOINTMENT FOR DOCTOR BY USER
