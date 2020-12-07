@@ -96,7 +96,10 @@
             <td>{{ d.ab_plus }}</td>
             <td>{{ d.ab_minus }}</td>
                 <td>{{ d.location }}</td>
-            <td><button type="submit" class="btn btn-danger wrn-btn">Book</button></td>
+            <td><form action="see_specific_bloodbank_details" method="post">{% csrf_token %}
+                    <button type="submit" class="btn btn-danger wrn-btn">Book</button>
+                    <input type="hidden" id="{{ d.blood_bank_id }}" name="hospital_id" value="{{ d.hospital_id }}">
+                </form></td>
             </tr>
         {% endfor %}
     </table>
