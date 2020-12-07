@@ -14,6 +14,8 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <body>
+<form action="submit_blood_bank_appointment" method="post">
+    {% csrf_token %}
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
             <div class="col-md-3 border-right">
@@ -24,7 +26,7 @@
             <div class="col-md-5 border-right">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Hospital's Profile</h4>
+                        <h4 class="text-right">Bloodbank Details</h4>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-6"><label class="labels">Name</label><h4>{{ name }}</h4></div>
@@ -34,6 +36,14 @@
                         <div class="col-md-12"><label class="labels">Phone</label><h4>{{ phone }}</h4></div>
                         <div class="col-md-12"><label class="labels" >Location</label><h4>{{ location }}</h4></div>
                         <div class="col-md-12"><label class="labels">Email</label><h4>{{ email }}</h4></div>
+                        <div class="col-md-12"><label class="labels">A+</label><h4>{{ a_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">A-</label><h4>{{ a_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">B+</label><h4>{{ b_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">B-</label><h4>{{ b_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">AB+</label><h4>{{ ab_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">AB-</label><h4>{{ ab_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">O+</label><h4>{{ o_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">O-</label><h4>{{ o_neg }}</h4></div>
 
                     </div>
 
@@ -46,28 +56,32 @@
                 <div class="col-md-12">
                         <label class="labels">Get An Appointment</label><br>
                     </div>
-                    <div class="col-md-12"><label class="labels">Select Day</label>
-                        <select id="appointment_day" name = "appointment_day" class="form-control">
-                            <option selected disabled>Select Day </option>
-                            <option>Saturday</option>
-                            <option>Sunday</option>
-                            <option>Monday</option>
-                            <option>Tuesday</option>
+                    <div class="col-md-12"><label class="labels">Select Blood Group</label>
+                        <select id="blood_group" name = "blood_group" class="form-control">
+                            <option selected disabled>Select Blood Group </option>
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                            <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
                         </select>
                     </div>
+                    <div class="col-md-12"><label class="labels">Amount</label><input type="number" class="form-control" placeholder="amount" value="" id="amount" name="amount"></div>
+                     <div class="col-md-4">
+                <div class="mt-5 text-center">
+                            <button class="btn btn-primary profile-button" type="submit">Submit</button>
+                            <input type="hidden" id="{{ blood_bank_id }}" name="blood_bank_id" value="{{ blood_bank_id }}">
 
-                     <div class="mt-5 text-center">
-                         <form action="see_doctors_of_specific_hospital" method="post">{% csrf_token %}
-                                <button type="submit" class="btn btn-danger wrn-btn">See Doctor List</button>
-                                <input type="hidden" id="{{ hospital_id_for_doctor }}" name="hospital_id_for_doctor" value="{{ hospital_id_for_doctor }}">
-                         </form>
-                    </div>
-                </div>
+                        </div>
             </div>
         </div>
     </div>
     </div>
     </div>
+</form>
 </body>
 
 </html>

@@ -2008,6 +2008,50 @@ def see_blood_banks(request):
         return render(request, "query_pages/query_page_for_hospital_admin/bb_custom_query.html",
                       {'b_banks': bbankList, 'opt': location_names})
 
+def see_specific_bloodbank_details(request):
+    blood_bank_id = request.POST['blood_bank_id']
+    #hospital_id_for_doctor = hospital_id
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    c.execute(
+        "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id))
+
+    blood_bank_name = ""
+    phone = ""
+    location = ""
+    email = ""
+    a_pos = ""
+    a_neg = ""
+    b_pos = ""
+    b_neg = ""
+    ab_pos = ""
+    ab_neg = ""
+    o_pos = ""
+    o_neg=" "
+
+
+    for row in c:
+        blood_bank_name = row[0]
+        phone = row[1]
+        location = row[2]
+        email = row[3]
+        a_pos=row[4]
+        a_neg=row[5]
+        b_pos=row[6]
+        b_neg=row[7]
+        ab_pos=row[8]
+        ab_neg=row[9]
+        o_pos=row[10]
+        o_neg=row[11]
+
+    return render(request, "detail_showing_pages/see_bloodbank_details.html",
+                  {'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
 
 def search_blood_banks_by_hospital_admin(request):
     return see_blood_banks(request)
@@ -2051,6 +2095,154 @@ def custom_search_for_bloodbank_by_hospital_admin(request):
         return filter_search_bloodbank(request)
     else:
         return HttpResponse("No Access")
+
+def submit_blood_bank_appointment(request):
+    blood_group=request.POST.get('blood_group','No preference')
+    amount=request.POST.get('amount','No preference')
+    blood_bank_id=request.POST.get('blood_bank_id','No preference')
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement="SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+    c.execute(statement)
+
+    blood_bank_name = ""
+    phone = ""
+    location = ""
+    email = ""
+    a_pos = ""
+    a_neg = ""
+    b_pos = ""
+    b_neg = ""
+    ab_pos = ""
+    ab_neg = ""
+    o_pos = ""
+    o_neg = " "
+
+    for row in c:
+        blood_bank_name = row[0]
+        phone = row[1]
+        location = row[2]
+        email = row[3]
+        a_pos = row[4]
+        a_neg = row[5]
+        b_pos = row[6]
+        b_neg = row[7]
+        ab_pos = row[8]
+        ab_neg = row[9]
+        o_pos = row[10]
+        o_neg = row[11]
+    if blood_group=="A+":
+        if int(amount)>a_pos:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            n=a_pos-int(amount)
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET A_POS =  " + "\'" + str(a_pos-int(amount)) + "\'" +"WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            '''statement="SELECT A_POS FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+            c.execute(statement)
+            for row in c:
+                a_pos=row[0]
+            print(blood_bank_id)'''
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="A-":
+        if int(amount)>a_neg:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET A_NEG = " + "\'" + str(a_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="B+":
+        if int(amount)>b_pos:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET B_POS = " + "\'" + str(b_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="B-":
+        if int(amount)>b_neg:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET B_NEG = " + "\'" + str(b_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="AB+":
+        if int(amount)>ab_pos:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_POS = " + "\'" + str(ab_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="AB-":
+        if int(amount)>ab_neg:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_NEG = " + "\'" + str(ab_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group=="O+":
+        if int(amount)>o_pos:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET O_POS = " + "\'" + str(o_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request,"appointment_history_pages/blood_bank_history/appointment_confirmed.html",{'blood_group':blood_group,'amount':amount})
+    elif blood_group == "O-":
+        if int(amount) > o_neg:
+            return render(request, "detail_showing_pages/see_bloodbank_details.html",{'blood_bank_id': blood_bank_id,'name':blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos':a_pos,'a_neg':a_neg,'ab_pos':ab_pos,'ab_neg':ab_neg,
+                   'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
+                   })
+        else:
+            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET O_NEG = " + "\'" + str(o_neg - int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
+                blood_bank_id)
+            c.execute(statement)
+            conn.commit()
+            return render(request, "appointment_history_pages/blood_bank_history/appointment_confirmed.html",
+                              {'blood_group': blood_group, 'amount': amount})
 
 
 def filter_search_bloodbank(request):
