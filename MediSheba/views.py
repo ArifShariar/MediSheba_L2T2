@@ -2450,6 +2450,10 @@ def book_cabin_by_doctor(request):
 
 
 def check_cabin_availability_by_doctor(request):
+    entry_date =request.GET['entrydate']
+    #print(entry_date)
+    exit_date = request.GET['exitdate']
+    #print(exit_date)
     return HttpResponse("Incomplete")
 
 

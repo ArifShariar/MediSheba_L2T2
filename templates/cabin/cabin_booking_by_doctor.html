@@ -43,6 +43,7 @@
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center experience"><span><h4>Bookings</h4></span></div><br>
                     <br>
+                <form action="check_cabin_availability_by_doctor" method="get" onsubmit="return validation()">{% csrf_token %}
                 <div class="coc-form">
                       <div class="coc-block-row">
                            <label class="coc-block-label" for="entrydate">Entry Date</label>
@@ -55,8 +56,10 @@
                       <div class="coc-block">
                       <input class="coc-input" type="date"  name="exitdate" id="exitdate">
                 </div><br>
-                     <button type="button" onclick="myFunction()">Cost</button>
-                          <p id="example"></p>
+                          <button type="button" onclick="myFunction()">Cost</button>
+                          <p id="example"></p><br>
+                          <input type="submit" value="CHECK AVAILABILITY" >
+                </form>
                 <script>
                     function format_date(date){
                         var d = new Date(date),
@@ -194,11 +197,6 @@
                         }
                      }
                 </script>
-             <div class="mt-5 text">
-                 <form action="check_cabin_availability_by_doctor" method="post" onsubmit="return validation()">{% csrf_token %}
-                                <button type="submit" class="btn btn-danger wrn-btn">CHECK AVAILABILITY</button>
-                 </form>
-             </div>
             </div>
         </div>
     </div>
