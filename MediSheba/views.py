@@ -290,7 +290,7 @@ def signupSubmit(request):
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
 
-        statement = "INSERT INTO MEDI_SHEBA.BLOOD_BANK(NAME, FIRST_NAME, LAST_NAME, PASSWORD, GENDER, EMAIL, PHONE) " \
+        statement ="INSERT INTO MEDI_SHEBA.BLOOD_BANK(NAME, FIRST_NAME, LAST_NAME, PASSWORD, GENDER, EMAIL, PHONE) " \
                     "VALUES" \
                     " (" + "\'" + blood_bank_name + "\'," + "\'" + firstname + "\'," + "\'" + lastname + "\'," + "\'" + password + "\'," + "\'" + gender \
                     + "\'," + "\'" + email + "\'," + "\'" + phone + "\'" + ")"
@@ -1730,6 +1730,9 @@ def bloodbank_history(request):
 
 
 def bloodbank_all_appointments(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
     return render(request, 'bloodbank_tables/approval_table.html')
 
 
@@ -2147,7 +2150,22 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
-            n=a_pos-int(amount)
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info['f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET A_POS =  " + "\'" + str(a_pos-int(amount)) + "\'" +"WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2166,6 +2184,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET A_NEG = " + "\'" + str(a_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2179,6 +2215,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET B_POS = " + "\'" + str(b_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2192,6 +2246,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET B_NEG = " + "\'" + str(b_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2205,6 +2277,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_POS = " + "\'" + str(ab_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2218,6 +2308,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET AB_NEG = " + "\'" + str(ab_neg-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2231,6 +2339,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement="UPDATE MEDI_SHEBA.BLOOD_BANK SET O_POS = " + "\'" + str(o_pos-int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
@@ -2244,6 +2370,24 @@ def submit_blood_bank_appointment(request):
                    'b_pos': b_pos,'b_neg':b_neg,'o_pos':o_pos,'o_neg':o_neg,
                    })
         else:
+            if user_info['type']=='user':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
+            elif user_info['type']=='doctor':
+                statement = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,USER_TYPE) " \
+                            "VALUES" \
+                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+                    user_info['pk']) + "\'," + "\'" + user_info[
+                                'f_name'] + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + \
+                            user_info['type'] + "\'" + ")"
+                c.execute(statement)
+                conn.commit()
             statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET O_NEG = " + "\'" + str(o_neg - int(amount)) + "\'" + "WHERE BLOOD_BANK_ID = " + str(
                 blood_bank_id)
             c.execute(statement)
