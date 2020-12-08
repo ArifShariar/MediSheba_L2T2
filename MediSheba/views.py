@@ -2634,8 +2634,11 @@ def book_cabin_by_user(request):
         category = row[1]
         price = row[2]
         cabin_id_for_user = row[3]
+
+    # TODO: COPY CODE FROM HERE
     list_of_dates = []
     #  TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd')
+
     statement = "SELECT TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') FROM MEDI_SHEBA.CABIN_USER_APPOINTMENT WHERE CABIN_ID = " + str(
         cabin_id)
     c.execute(statement)

@@ -60,9 +60,7 @@
                                 </div><br>
                                 <button type="button" onclick="myFunction()">Cost</button>
                                 <p id="example"></p>
-                                <div>
-                                    <input id="jqDate" readonly/>
-                                </div>
+
                                 <div class="mt-5 text">
                                     <form action="check_cabin_availability_by_user" method="post" onsubmit="return validation()">{% csrf_token %}
                                         <button type="submit" class="btn btn-danger wrn-btn">CHECK AVAILABILITY</button>
@@ -81,11 +79,7 @@
         </div>
     </div>
 </div>
-<!----
-{% for i in date_list %}
-    <input disabled value="{{ i }}">
-{% endfor %}
---->
+
 </body>
 
 <script>
@@ -224,14 +218,6 @@
             }
         }
     }
-
-    var date_list = {{ date_list }}
-    $('#jqDate').datepicker({
-        beforeShowDay: function(date){
-            var string = jQuery.datepicker.formatDate('yyyy-mm-dd', date);
-            return [ date_list.indexOf(string) == -1 ]
-        }
-    });
 
 
 </script>
