@@ -16,37 +16,21 @@
     <tr>
         <th scope="col">Request No</th>
         <th scope="col">Name</th>
-        <th scope="col">Phone</th>
-        <th scope="col">Email</th>
+
         <th scope="col">Blood Type</th>
         <th scope="col">Amount (bags) </th>
-        <th scope="col">Date </th>
-        <th scope="col">Delivery Status </th>
+
     </tr>
     </thead>
     <tbody>
-    <tr class="table-danger">
-        <th scope="row">1</th>
-        <td>Harry Potter</td>
-        <td>0123456789</td>
-        <td>harry@gmail.com</td>
-        <td>B+</td>
-        <td>2</td>
-        <td>28-Oct-2020</td>
-        <td>
-            <button type = "button" class="btn btn-danger">Pending</button>
-        </td>
-    </tr>
-    <tr class="table-success">
-        <th scope="row">2</th>
-        <td>Jacob Banks</td>
-        <td> 0147852</td>
-        <td> jac@mail.com</td>
-        <td> O+</td>
-        <td> 1</td>
-        <td>23-Oct-2020</td>
-        <td>Delivered</td>
-    </tr>
+{% for d in user_details %}
+            <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.name }}</td>
+            <td>{{ d.blood_group }}</td>
+            <td>{{ d.amount }}</td>
+            </tr>
+        {% endfor %}
     </tbody>
 </table>
 

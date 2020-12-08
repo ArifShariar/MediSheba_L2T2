@@ -12,7 +12,7 @@ from .models import BloodBankList
 from .models import HospitalName
 from .models import HospitalCabinName
 from .models import CabinName
-
+from .models import UserAppointment_in_blood_bank
 # login
 user_info = {}  # holds user data across pages
 
@@ -1733,7 +1733,16 @@ def bloodbank_all_appointments(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    return render(request, 'bloodbank_tables/approval_table.html')
+    statement="SELECT USER_NAME,BLOOD_GROUP,AMOUNT FROM MEDI_SHEBA.USER_BBANK_HISTORY WHERE BLOOD_BANK_ID= " +str(user_info['pk'])
+    c.execute(statement)
+    conn.commit()
+    user_details=[]
+    index=1
+    for i in c:
+        user_details.append(UserAppointment_in_blood_bank(index,i[0],i[1],i[2]))
+        index=index+1
+    conn.close()
+    return render(request, 'bloodbank_tables/approval_table.html',{'user_details':user_details})
 
 
 # functions for hospital admin and management
