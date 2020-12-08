@@ -15,6 +15,7 @@ from .models import CabinName
 from .models import UserAppointment_in_blood_bank
 from .models import userCabinHistory
 from .models import doctor_user_history
+from .models import cabinBookingDetails
 
 # login
 user_info = {}  # holds user data across pages
@@ -2688,7 +2689,6 @@ def see_specific_hospital_cabin_details(request):
                       {'cab': cabinList})
 
 
-# TODO: DISABLE DATES FOR DOCTOR
 def book_cabin_by_doctor(request):
     cabin_id = request.POST['cabin_id']
     cabin_id_for_doctor = cabin_id
@@ -2719,11 +2719,66 @@ def book_cabin_by_doctor(request):
 
 
 def check_cabin_availability_by_doctor(request):
-    entry_date = request.GET['entrydate']
-    # print(entry_date)
-    exit_date = request.GET['exitdate']
-    # print(exit_date)
-    return HttpResponse("Incomplete")
+    inputed_entry_date = request.GET['entrydate']
+    inputed_exit_date = request.GET['exitdate']
+    cabin_id = request.GET['cabin_id_for_doctor']
+    list_of_dates = []
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    statement = "SELECT TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') FROM MEDI_SHEBA.CABIN_USER_APPOINTMENT WHERE CABIN_ID = " + str(
+        cabin_id)
+    c.execute(statement)
+
+    for r in c:
+        list_of_dates.append(r[0])
+        list_of_dates.append(r[1])
+
+    serial_dates = []
+    for x in range(0, len(list_of_dates), 2):
+        return_list = sequential_date_generator.FindSequenceOfDays(list_of_dates[x],
+                                                                   list_of_dates[x + 1]).generate_sequence()
+        for ss in return_list:
+            serial_dates.append(ss.strftime('%Y-%m-%d'))
+    '''
+    for x in serial_dates:
+        print(x)
+    '''
+    f=0
+    for x in serial_dates:
+        if x == inputed_entry_date or x == inputed_exit_date:
+            f = 1
+            break
+        elif inputed_entry_date < x  and inputed_exit_date > x:
+            f = 1
+            break
+    if f == 1:
+        cabinBookingList = []
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT CABIN_ID,ENTRY_DATE,EXIT_DATE from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        c.execute(statement)
+        index = 1
+        for row in c:
+            cabinBookingList.append(cabinBookingDetails(index, row[0], row[1], row[2]))
+            index = index + 1
+        conn.close()
+        return render(request, "cabin/cabin_booking_error_page_by_doctor.html", {'uch': cabinBookingList , 'cabin_id': request.GET['cabin_id_for_doctor']})
+    else:
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "INSERT INTO MEDI_SHEBA.CABIN_USER_APPOINTMENT(USER_ID,CABIN_ID,ENTRY_DATE,EXIT_DATE,USER_TYPE) " \
+                    "VALUES" \
+                    " (" + "\'" + str(user_info['pk']) + "\'," + "\'" + str(cabin_id) + "\'," + "TO_DATE(" + "\'" + inputed_entry_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," \
+                    + "TO_DATE(" + "\'" + inputed_exit_date + "\'," + "\'" + "yyyy-mm-dd" + "\'),"  + "\'" + \
+                    user_info['type'] + "\'" + ")"
+        c.execute(statement)
+        conn.commit()
+        return redirect("submit_book_cabin_by_doctor")
 
 
 def submit_book_cabin_by_doctor(request):
@@ -2747,7 +2802,6 @@ def custom_search_for_cabin_by_user(request):
     return filter_search_cabin(request)
 
 
-# TODO: DISABLE DATES
 def book_cabin_by_user(request):
     cabin_id = request.POST['cabin_id']
     cabin_id_for_user = cabin_id
@@ -2770,9 +2824,23 @@ def book_cabin_by_user(request):
         price = row[2]
         cabin_id_for_user = row[3]
 
-    # TODO: COPY CODE FROM HERE
+    return render(request, "cabin/cabin_booking_by_user.html",
+                  {'name': hospital_name,
+                   'category': category, 'price': price,
+                   'cabin_id_for_user': cabin_id_for_user,
+                   })
+
+
+def check_cabin_availability_by_user(request):
+    inputed_entry_date = request.GET['entrydate']
+    inputed_exit_date = request.GET['exitdate']
+    cabin_id = request.GET['cabin_id_for_user']
     list_of_dates = []
     #  TO_CHAR(APPOINTMENT_DATE,'yyyy-mm-dd')
+
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
 
     statement = "SELECT TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') FROM MEDI_SHEBA.CABIN_USER_APPOINTMENT WHERE CABIN_ID = " + str(
         cabin_id)
@@ -2784,26 +2852,51 @@ def book_cabin_by_user(request):
 
     serial_dates = []
     # day = day_name.FindDayName(selected_date).find_day_name()
-
     for x in range(0, len(list_of_dates), 2):
         return_list = sequential_date_generator.FindSequenceOfDays(list_of_dates[x],
                                                                    list_of_dates[x + 1]).generate_sequence()
         for ss in return_list:
             serial_dates.append(ss.strftime('%Y-%m-%d'))
-
+    '''
     for x in serial_dates:
         print(x)
+    '''
+    f = 0
+    for x in serial_dates:
+        if x == inputed_entry_date or x == inputed_exit_date:
+            f = 1
+            break
+        elif inputed_entry_date < x  and inputed_exit_date > x:
+            f = 1
+            break
+    if f == 1:
+        cabinBookingList = []
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "SELECT CABIN_ID,ENTRY_DATE,EXIT_DATE from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        c.execute(statement)
+        index = 1
+        for row in c:
+            cabinBookingList.append(cabinBookingDetails(index, row[0], row[1], row[2]))
+            index = index + 1
+        conn.close()
+        return render(request, "cabin/cabin_booking_error_page_by_user.html",
+                      {'uch': cabinBookingList, 'cabin_id': request.GET['cabin_id_for_user']})
+    else:
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+        statement = "INSERT INTO MEDI_SHEBA.CABIN_USER_APPOINTMENT(USER_ID,CABIN_ID,ENTRY_DATE,EXIT_DATE,USER_TYPE) " \
+                    "VALUES" \
+                    " (" + "\'" + str(user_info['pk']) + "\'," + "\'" + str(
+            cabin_id) + "\'," + "TO_DATE(" + "\'" + inputed_entry_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," \
+                    + "TO_DATE(" + "\'" + inputed_exit_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + \
+                    user_info['type'] + "\'" + ")"
+        c.execute(statement)
+        conn.commit()
+        return redirect("submit_book_cabin_by_user")
 
-    return render(request, "cabin/cabin_booking_by_user.html",
-                  {'name': hospital_name,
-                   'category': category, 'price': price,
-                   'cabin_id_for_user': cabin_id_for_user,
-                   'date_list': serial_dates
-                   })
-
-
-def check_cabin_availability_by_user(request):
-    return HttpResponse("Incomplete")
 
 
 def submit_book_cabin_by_user(request):
