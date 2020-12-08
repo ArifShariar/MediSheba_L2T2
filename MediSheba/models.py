@@ -93,3 +93,21 @@ class doctor_infos:
         self.hospital_name = hospital_full_name
         self.fees = fees
         self.specialization = specialization
+
+class UserAppointment_in_blood_bank:
+
+    def __init__(self, id, name, blood_group, amount):
+        self.id = id
+        self.name=name
+        self.blood_group=blood_group
+        self.amount=amount
+
+class userCabinHistory:
+    def __init__(self, id, cabin_id, user_id, hospital_name, entry_date, exit_date, user_type):
+        self.id = id
+        self.cabin_id = cabin_id
+        self.user_id = user_id
+        self.hospital_name = hospital_name
+        self.entry_date = entry_date
+        self.exit_date= exit_date
+        self.user_type = user_type
