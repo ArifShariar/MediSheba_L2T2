@@ -2033,7 +2033,7 @@ def see_specific_bloodbank_details(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-
+    print(blood_bank_id)
     c.execute(
         "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id))
 
@@ -2460,7 +2460,7 @@ def filter_search_bloodbank(request):
     index = 1
     for row in c:
         bbList.append(
-            BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[10],
+            BloodBankList(index, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
                           row[10]))
         index = index + 1
 
