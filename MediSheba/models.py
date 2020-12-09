@@ -131,3 +131,14 @@ class cabinBookingDetails:
         self.cabin_id = cabin_id
         self.entry_date = entry_date
         self.exit_date= exit_date
+
+
+
+class Todays_Appointments:
+    def __init__(self, index, user_id, doctor_id, f_name, l_name, appointment_date):
+        self.index = index
+        self.user_id = user_id
+        self.doctor_id = doctor_id
+        self.f_name = f_name
+        self.l_name = l_name
+        self.appointment_date = appointment_date

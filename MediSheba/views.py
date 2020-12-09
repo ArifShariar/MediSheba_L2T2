@@ -16,6 +16,7 @@ from .models import UserAppointment_in_blood_bank
 from .models import userCabinHistory
 from .models import doctor_user_history
 from .models import cabinBookingDetails
+from .models import Todays_Appointments
 
 # login
 user_info = {}  # holds user data across pages
@@ -495,21 +496,67 @@ def view_user_appointments_by_doctor(request):
 
 def past_appointment_of_user_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("past not done")
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+
+        statement = "SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM USERS U,DOCTOR_USER_HISTORY DUH WHERE DUH.USER_ID = U.USER_ID AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') < TO_CHAR((SELECT SYSDATE FROM DUAL),'yyyy-mm-dd') AND DUH.DOCTOR_ID =" + \
+                    str(user_info['pk'])
+        c.execute(statement)
+        past_appointment_list = []
+        index = 1
+        for r in c:
+            past_appointment_list.append(Todays_Appointments(index, r[0], user_info['pk'], r[1], r[2], r[3]))
+            index = index + 1
+
+        return render(request, 'appointment_history_pages/doctor_history/user/past_appointment_user.html',
+                      {'past_appointment': past_appointment_list})
     else:
         return HttpResponse("NO ACCESS")
 
 
 def upcoming_appointment_of_user_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("upcoming not done")
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+
+        statement = "SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM USERS U,DOCTOR_USER_HISTORY DUH WHERE DUH.USER_ID = U.USER_ID AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') > TO_CHAR((SELECT SYSDATE FROM DUAL),'yyyy-mm-dd') AND DUH.DOCTOR_ID =" + \
+                    str(user_info['pk'])
+        c.execute(statement)
+        future_appointment_list = []
+        index = 1
+        for r in c:
+            future_appointment_list.append(Todays_Appointments(index, r[0], user_info['pk'], r[1], r[2], r[3]))
+            index = index + 1
+        return render(request, 'appointment_history_pages/doctor_history/user/upcoming_appointment_user.html',{'upcoming_appointment':future_appointment_list})
     else:
         return HttpResponse("NO ACCESS")
 
 
-def pending_appointment_of_user_by_doctor(request):
+def add_user_problem_prescription(request):
+    user_id = request.POST.get("user_id","No result")
+    print(user_id)
+    return HttpResponse("Presiption")
+
+
+def todays_appointment_of_user_by_doctor(request):
     if bool(user_info) and user_info['type'] == 'doctor':
-        return HttpResponse("pending not done")
+        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+        c = conn.cursor()
+
+        statement = "SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM USERS U,DOCTOR_USER_HISTORY DUH WHERE DUH.USER_ID = U.USER_ID AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') = TO_CHAR((SELECT SYSDATE FROM DUAL),'yyyy-mm-dd') AND DUH.DOCTOR_ID =" + \
+                    str(user_info['pk'])
+        c.execute(statement)
+        todays_appointment_list = []
+        index = 1
+        for r in c:
+            todays_appointment_list.append(Todays_Appointments(index,r[0],user_info['pk'],r[1],r[2],r[3]))
+            index = index + 1
+
+        return render(request, 'appointment_history_pages/doctor_history/user/todays_appointment_user.html',
+                      {'todays_appointment':todays_appointment_list})
     else:
         return HttpResponse("NO ACCESS")
 
