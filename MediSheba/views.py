@@ -529,15 +529,53 @@ def upcoming_appointment_of_user_by_doctor(request):
         for r in c:
             future_appointment_list.append(Todays_Appointments(index, r[0], user_info['pk'], r[1], r[2], r[3]))
             index = index + 1
-        return render(request, 'appointment_history_pages/doctor_history/user/upcoming_appointment_user.html',{'upcoming_appointment':future_appointment_list})
+        return render(request, 'appointment_history_pages/doctor_history/user/upcoming_appointment_user.html',
+                      {'upcoming_appointment': future_appointment_list})
     else:
         return HttpResponse("NO ACCESS")
 
 
 def add_user_problem_prescription(request):
-    user_id = request.POST.get("user_id","No result")
+    user_id = request.POST.get("user_id", "No result")
     print(user_id)
-    return HttpResponse("Presiption")
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT FIRST_NAME, LAST_NAME, EMAIL FROM MEDI_SHEBA.USERS WHERE USER_ID = " + str(user_id)
+    c.execute(statement)
+    f_name = ""
+    l_name = ""
+    mail = ""
+    for r in c:
+        f_name = r[0]
+        l_name = r[1]
+        mail = r[2]
+    return render(request, 'appointment_history_pages/doctor_history/user/add_problem_and_prescription.html',
+                  {'name': f_name + " " + l_name,
+                   'email': mail,
+                   'user_id': user_id})
+
+
+def add_problem_and_prescription(request):
+    problem = request.POST.get("problem", "Not Specified")
+    prescription = request.POST.get("prescription", "Not Specified")
+    user_id = request.POST.get("user_id", "Not Specified")
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+
+    statement = "UPDATE MEDI_SHEBA.DOCTOR_USER_HISTORY SET PROBLEM =" + "\'" + problem + "\'" + " WHERE DOCTOR_ID = " + str(
+        user_info['pk']) + " AND USER_ID = " + str(user_id) + " AND TO_CHAR(APPOINTMENT_TIME,'yyyy-mm-dd') = TO_CHAR((SELECT SYSDATE FROM DUAL),'yyyy-mm-dd')"
+    c.execute(statement)
+    conn.commit()
+
+    statement = "UPDATE MEDI_SHEBA.DOCTOR_USER_HISTORY SET PRESCRIPTION =" + "\'" + prescription + "\'" + " WHERE DOCTOR_ID = " + str(
+        user_info['pk']) + " AND USER_ID = " + str(
+        user_id) + " AND TO_CHAR(APPOINTMENT_TIME,'yyyy-mm-dd') = TO_CHAR((SELECT SYSDATE FROM DUAL),'yyyy-mm-dd')"
+    c.execute(statement)
+    conn.commit()
+
+    return render(request,'appointment_history_pages/doctor_history/user/done.html')
 
 
 def todays_appointment_of_user_by_doctor(request):
@@ -552,11 +590,11 @@ def todays_appointment_of_user_by_doctor(request):
         todays_appointment_list = []
         index = 1
         for r in c:
-            todays_appointment_list.append(Todays_Appointments(index,r[0],user_info['pk'],r[1],r[2],r[3]))
+            todays_appointment_list.append(Todays_Appointments(index, r[0], user_info['pk'], r[1], r[2], r[3]))
             index = index + 1
 
         return render(request, 'appointment_history_pages/doctor_history/user/todays_appointment_user.html',
-                      {'todays_appointment':todays_appointment_list})
+                      {'todays_appointment': todays_appointment_list})
     else:
         return HttpResponse("NO ACCESS")
 
@@ -1944,22 +1982,23 @@ def bloodbank_all_appointments(request):
     user_details = []
     index = 1
     for i in c:
-        user_details.append(UserAppointment_in_blood_bank(index, i[0], i[1], i[2],i[3],i[4],i[5],i[6]))
+        user_details.append(UserAppointment_in_blood_bank(index, i[0], i[1], i[2], i[3], i[4], i[5], i[6]))
         index = index + 1
     conn.close()
     return render(request, 'bloodbank_tables/approval_table.html', {'user_details': user_details})
 
+
 def bloodbank_pending_status_changed(request):
-    blood_bank_id=request.POST['blood_bank_id']
-    user_id=request.POST['user_id']
+    blood_bank_id = request.POST['blood_bank_id']
+    user_id = request.POST['user_id']
     amount = request.POST['amount']
     pending_status = "PENDING"
-    DONE="DONE"
+    DONE = "DONE"
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement="UPDATE MEDI_SHEBA.USER_BBANK_HISTORY SET PENDING_STATUS = " + "\'" + DONE + "\'" + "WHERE USER_ID = " + str(
-            user_id) + " AND BLOOD_BANK_ID = " + str(blood_bank_id) + " AND AMOUNT = " + amount
+    statement = "UPDATE MEDI_SHEBA.USER_BBANK_HISTORY SET PENDING_STATUS = " + "\'" + DONE + "\'" + "WHERE USER_ID = " + str(
+        user_id) + " AND BLOOD_BANK_ID = " + str(blood_bank_id) + " AND AMOUNT = " + amount
 
     c.execute(statement)
     conn.commit()
@@ -1971,10 +2010,11 @@ def bloodbank_pending_status_changed(request):
     user_details = []
     index = 1
     for i in c:
-        user_details.append(UserAppointment_in_blood_bank(index, i[0], i[1], i[2], i[3], i[4], i[5],i[6]))
+        user_details.append(UserAppointment_in_blood_bank(index, i[0], i[1], i[2], i[3], i[4], i[5], i[6]))
         index = index + 1
     conn.close()
     return render(request, 'bloodbank_tables/approval_table.html', {'user_details': user_details})
+
 
 # functions for hospital admin and management
 
@@ -2395,15 +2435,15 @@ def submit_blood_bank_appointment(request):
     c = conn.cursor()
     statement = "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(
         blood_bank_id)
-    pending_status= "PENDING"
+    pending_status = "PENDING"
     c.execute(statement)
     conn.commit()
-    statement2="INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,USER_TYPE) " \
-                            "VALUES" \
-                            " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
-                    user_info[
-                        'pk']) + "\'," + "\'" + name + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + pending_status + "\',"+"\'" + \
-                            user_info['type'] + "\'" + ")"
+    statement2 = "INSERT INTO MEDI_SHEBA.USER_BBANK_HISTORY(BLOOD_BANK_ID,USER_ID,USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,USER_TYPE) " \
+                 "VALUES" \
+                 " (" + "\'" + str(blood_bank_id) + "\'," + "\'" + str(
+        user_info[
+            'pk']) + "\'," + "\'" + name + "\'," + "\'" + blood_group + "\'," + "\'" + amount + "\'," + "\'" + pending_status + "\'," + "\'" + \
+                 user_info['type'] + "\'" + ")"
     blood_bank_name = ""
     phone = ""
     location = ""

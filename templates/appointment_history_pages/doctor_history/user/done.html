@@ -4,7 +4,7 @@
 
 
 <head>
-    <title>Doctor Appointment</title>
+    <title>Appointment Complete</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css"></script>
@@ -23,8 +23,8 @@
 
                         <div><img class="marginauto" src="{% static 'images/checkmark.png' %}" width ="100"></div>
                         <div><br>
-                            <a href="{% url 'go_to_hospital_admin_home' %}">Go To Home</a><br>
-                            <a href="{% url 'hospital_admin_cabin_management' %}">Go To Cabin Management</a>
+                            <a href="{% url 'go_to_doctor_home' %}">Go To Home</a><br>
+                            <a href="{% url 'todays_appointment_of_user_by_doctor' %}">Go To Today's Appointment</a>
                         </div>
                     </div>
                 </div>
