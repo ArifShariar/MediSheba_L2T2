@@ -142,3 +142,12 @@ class Todays_Appointments:
         self.f_name = f_name
         self.l_name = l_name
         self.appointment_date = appointment_date
+
+class cabinBookingHistory:
+    def __init__(self, id, user_id, cabin_id, entry_date, exit_date, user_type):
+        self.id = id
+        self.user_id = user_id
+        self.cabin_id = cabin_id
+        self.entry_date = entry_date
+        self.exit_date = exit_date
+        self.user_type = user_type
