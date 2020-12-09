@@ -1928,11 +1928,11 @@ def submit_changed_profile_bloodbank(request):
         phone_number = request.POST['phone']
         location = request.POST['address']
         email = request.POST['email']
-        blood_type = request.POST['blood_type']
+        #blood_type = request.POST['blood_type']
         name = request.POST['name']
-        fee = request.POST['fee']
-        specialization = request.POST['specialization']
-        additional_details = request.POST['additional_details']
+        #fee = request.POST['fee']
+        #specialization = request.POST['specialization']
+        #additional_details = request.POST['additional_details']
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -2148,11 +2148,11 @@ def submit_changed_profile_hospital(request):
         phone_number = request.POST['phone']
         location = request.POST['address']
         email = request.POST['email']
-        blood_type = request.POST['blood_type']
-        hospital_name = request.POST['hospital_name']
-        fee = request.POST['fee']
-        specialization = request.POST['specialization']
-        additional_details = request.POST['additional_details']
+        #blood_type = request.POST['blood_type']
+        #hospital_name = request.POST['hospital_name']
+        #fee = request.POST['fee']
+        #specialization = request.POST['specialization']
+        #additional_details = request.POST['additional_details']
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -2202,7 +2202,7 @@ def submit_changed_profile_hospital(request):
         else:
             print("EMAIL NOT CHANGED ")
 
-        if blood_type != "":
+        '''if blood_type != "":
             c = conn.cursor()
             statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE HOSPITAL_ID = " + str(
                 user_info['pk'])
@@ -2245,7 +2245,7 @@ def submit_changed_profile_hospital(request):
             conn.commit()
         else:
             print("SPECIALIZATION NOT CHANGED ")
-        print(additional_details)
+        print(additional_details)'''
 
         '''
         UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
