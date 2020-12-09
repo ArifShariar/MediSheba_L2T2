@@ -19,6 +19,7 @@
 
         <th scope="col">Blood Type</th>
         <th scope="col">Amount (bags) </th>
+        <th scope="col">Pending Status </th>
 
     </tr>
     </thead>
@@ -29,6 +30,16 @@
             <td>{{ d.name }}</td>
             <td>{{ d.blood_group }}</td>
             <td>{{ d.amount }}</td>
+                <td>{{ d.pending_status }}</td>
+                <td>
+                <form action="bloodbank_pending_status_changed" method="post">{% csrf_token %}
+                    <button type="submit" class="btn btn-danger wrn-btn">{{d.pending_status}}</button>
+                    <input type="hidden" id="{{ d.blood_bank_id }}" name="blood_bank_id" value="{{ d.blood_bank_id }}">
+                    <input type="hidden" id="{{ d.user_id }}" name="user_id" value="{{ d.user_id }}">
+                    <input type="hidden" id="{{ d.amount }}" name="amount" value="{{ d.amount }}">
+                    <input type="hidden" id="{{ d.pending_status }}" name="pending_status" value="{{ d.pending_status }}">
+                </form>
+            </td>
             </tr>
         {% endfor %}
     </tbody>

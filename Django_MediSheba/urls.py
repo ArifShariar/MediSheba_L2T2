@@ -223,6 +223,7 @@ urlpatterns = [
          MediSheba_views.custom_search_for_bloodbank_by_blood_bank_admin,
          name='custom_search_for_bloodbank_by_blood_bank_admin'),
     path("bloodbank/bloodbank_search_options/see_specific_bloodbank_details",MediSheba_views.see_specific_bloodbank_details,name='see_specific_bloodbank_details'),
+    path('bloodbank/bloodbank_all_appointments/bloodbank_pending_status_changed',MediSheba_views.bloodbank_pending_status_changed,name='bloodbank_pending_status_changed'),
 
     # URL FOR HOSPITAL ADMIN
     path('hospital_admin/hospital_search_options/', MediSheba_views.hospital_search_options,
