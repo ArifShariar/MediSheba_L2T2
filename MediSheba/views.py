@@ -651,10 +651,7 @@ def pending_appointment_of_hospital_by_doctor(request):
 
 
 def view_bloodbank_appointments_by_doctor(request):
-    if bool(user_info) and user_info['type'] == 'doctor':
-        return render(request, 'appointment_history_pages/doctor_history/doctor_blood_bank_history.html')
-    else:
-        return HttpResponse("NO ACCESS")
+    return render(request, 'appointment_history_pages/doctor_history/blood_bank/bloodbank_appointment_options.html')
 
 
 def past_appointment_of_bloodbank_by_doctor(request):
@@ -1581,6 +1578,113 @@ def upcoming_appointment_of_hospital_by_user(request):
 def pending_appointment_of_hospital_by_user(request):
     return HttpResponse("pending hospital appointment")
 
+def past_appointment_of_bloodbank_by_user(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c2=conn.cursor()
+    done="DONE"
+    user_type="user"
+    statement = "SELECT USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,BLOOD_BANK_ID,USER_ID,USER_TYPE FROM MEDI_SHEBA.USER_BBANK_HISTORY WHERE USER_ID= " + str(
+        user_info['pk']) + " AND PENDING_STATUS= " +"\'" + done + "\'" + "AND USER_TYPE=" +"\'" + user_type + "\'"
+    c.execute(statement)
+    conn.commit()
+    blood_bank_name=[]
+    blood_bank_id=[]
+    user_details = []
+    index = 1
+    for i in c:
+        blood_bank_id=i[4]
+        statement = "SELECT NAME FROM BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+        c2.execute(statement)
+        conn.commit()
+        for row in c2:
+            blood_bank_name.append(row[0])
+            user_details.append(UserAppointment_in_blood_bank(index, row[0], i[1], i[2], i[3], i[4], i[5], i[6]))
+            index = index + 1
+    conn.close()
+    return render(request, 'appointment_history_pages/user_history/blood_bank/user_list_bloodbank_booking.html',{'user_details': user_details,'blood_bank_name':blood_bank_name})
+
+def pending_appointment_of_bloodbank_by_user(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c2 = conn.cursor()
+    done = "PENDING"
+    user_type = "user"
+    statement = "SELECT USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,BLOOD_BANK_ID,USER_ID,USER_TYPE FROM MEDI_SHEBA.USER_BBANK_HISTORY WHERE USER_ID= " + str(
+        user_info['pk']) + " AND PENDING_STATUS= " + "\'" + done + "\'" + "AND USER_TYPE=" +"\'" + user_type + "\'"
+    c.execute(statement)
+    conn.commit()
+    blood_bank_name = []
+    blood_bank_id = []
+    user_details = []
+    index = 1
+    for i in c:
+        blood_bank_id = i[4]
+        statement = "SELECT NAME FROM BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+        c2.execute(statement)
+        conn.commit()
+        for row in c2:
+            blood_bank_name.append(row[0])
+            user_details.append(UserAppointment_in_blood_bank(index, row[0], i[1], i[2], i[3], i[4], i[5], i[6]))
+            index = index + 1
+    conn.close()
+    return render(request, 'appointment_history_pages/user_history/blood_bank/user_list_bloodbank_booking.html',{'user_details': user_details,'blood_bank_name':blood_bank_name})
+
+def pending_appointment_of_bloodbank_by_doctor(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c2 = conn.cursor()
+    done = "PENDING"
+    user_type = "doctor"
+    statement = "SELECT USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,BLOOD_BANK_ID,USER_ID,USER_TYPE FROM MEDI_SHEBA.USER_BBANK_HISTORY WHERE USER_ID= " + str(
+        user_info['pk']) + " AND PENDING_STATUS= " + "\'" + done + "\'" + "AND USER_TYPE=" +"\'" + user_type + "\'"
+    c.execute(statement)
+    conn.commit()
+    blood_bank_name = []
+    blood_bank_id = []
+    user_details = []
+    index = 1
+    for i in c:
+        blood_bank_id = i[4]
+        statement = "SELECT NAME FROM BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+        c2.execute(statement)
+        conn.commit()
+        for row in c2:
+            blood_bank_name.append(row[0])
+            user_details.append(UserAppointment_in_blood_bank(index, row[0], i[1], i[2], i[3], i[4], i[5], i[6]))
+            index = index + 1
+    conn.close()
+    return render(request, 'appointment_history_pages/doctor_history/blood_bank/doclist_bloodbank_booking.html',{'user_details': user_details,'blood_bank_name':blood_bank_name})
+
+def past_appointment_of_bloodbank_by_doctor(request):
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    c2 = conn.cursor()
+    done = "DONE"
+    user_type = "doctor"
+    statement = "SELECT USER_NAME,BLOOD_GROUP,AMOUNT,PENDING_STATUS,BLOOD_BANK_ID,USER_ID,USER_TYPE FROM MEDI_SHEBA.USER_BBANK_HISTORY WHERE USER_ID= " + str(
+        user_info['pk']) + " AND PENDING_STATUS= " + "\'" + done + "\'" + "AND USER_TYPE=" +"\'" + user_type + "\'"
+    c.execute(statement)
+    conn.commit()
+    blood_bank_name = []
+    blood_bank_id = []
+    user_details = []
+    index = 1
+    for i in c:
+        blood_bank_id = i[4]
+        statement = "SELECT NAME FROM BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(blood_bank_id)
+        c2.execute(statement)
+        conn.commit()
+        for row in c2:
+            blood_bank_name.append(row[0])
+            user_details.append(UserAppointment_in_blood_bank(index, row[0], i[1], i[2], i[3], i[4], i[5], i[6]))
+            index = index + 1
+    conn.close()
+    return render(request, 'appointment_history_pages/doctor_history/blood_bank/doclist_bloodbank_booking.html',{'user_details': user_details,'blood_bank_name':blood_bank_name})
 
 def user_modify_appointment(request):
     return HttpResponse("user modify appointment")

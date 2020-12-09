@@ -43,6 +43,9 @@ urlpatterns = [
          MediSheba_views.pending_appointment_of_hospital_by_doctor, name='pending_appointment_of_hospital_by_doctor'),
 
     path('doctor/view_bloodbank_appointments_by_doctor/', MediSheba_views.view_bloodbank_appointments_by_doctor, name='view_bloodbank_appointments_by_doctor'),
+    path('doctor/view_bloodbank_appointments_by_doctor/past_appointment_of_bloodbank_by_doctor',MediSheba_views.past_appointment_of_bloodbank_by_doctor,name='past_appointment_of_bloodbank_by_doctor'),
+    path('doctor/view_bloodbank_appointments_by_doctor/pending_appointment_of_bloodbank_by_doctor',
+         MediSheba_views.pending_appointment_of_bloodbank_by_doctor, name='pending_appointment_of_bloodbank_by_doctor'),
     path('doctor/view_bloodbank_appointments_by_doctor/past_appointment_of_bloodbank_by_doctor',
          MediSheba_views.past_appointment_of_bloodbank_by_doctor, name='past_appointment_of_bloodbank_by_doctor'),
     path('doctor/view_bloodbank_appointments_by_doctor/upcoming_appointment_of_bloodbank_by_doctor',
@@ -147,7 +150,9 @@ urlpatterns = [
 
     path('users/user_blood_bank_appointment/', MediSheba_views.user_blood_bank_appointment,
          name='user_blood_bank_appointment'),
-
+    path('users/user_blood_bank_appointment/past_appointment_of_bloodbank_by_user',MediSheba_views.past_appointment_of_bloodbank_by_user,name='past_appointment_of_bloodbank_by_user'),
+    path('users/user_blood_bank_appointment/pending_appointment_of_bloodbank_by_user',
+         MediSheba_views.pending_appointment_of_bloodbank_by_user, name='pending_appointment_of_bloodbank_by_user'),
     path('users/user_hospital_appointment/', MediSheba_views.user_hospital_appointment,
          name='user_hospital_appointment'),
     path('users/user_hospital_appointment/past_appointment_of_hospital_by_user',
