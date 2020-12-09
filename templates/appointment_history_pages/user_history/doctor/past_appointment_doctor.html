@@ -28,6 +28,7 @@
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Date</th>
+            <th scope="col">Problem and Prescription</th>
         </tr>
         </thead>
 
@@ -37,15 +38,16 @@
             <td>{{ app.doc_f_name }}</td>
             <td>{{ app.doc_l_name }}</td>
             <td>{{ app.appointment_time }}</td>
-                <!--
             <td>
-                <form action="see_specific_bloodbank_details" method="post">
+                <form action="check_users_prescription" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger wrn-btn">Book</button>
-                    <input type="hidden" id="{{ app.doc_id }}" name="blood_bank_id" value="{{ app.doc_id }}">
+                    <button type="submit" class="btn btn-danger wrn-btn">Problem and Prescription</button>
+                    <input type="hidden" id="{{ app.doc_id }}" name="doc_id" value="{{ app.doc_id }}">
+                    <input type="hidden" id="{{ app.user_id }}" name="user_id" value="{{ app.user_id }}">
+                    <input type="hidden" id="{{ app.appointment_time }}" name="appointment_time" value="{{ app.appointment_time }}">
                 </form>
             </td>
-            -->
+
             </tr>
         {% endfor %}
     </table>
