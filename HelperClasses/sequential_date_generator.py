@@ -18,5 +18,5 @@ class FindSequenceOfDays:
     def generate_sequence(self):
         start = datetime.datetime.strptime(self.enter_day, "%Y-%m-%d")
         end = datetime.datetime.strptime(self.exit_day, "%Y-%m-%d")
-        date_generated = [start + datetime.timedelta(days=x) for x in range(0, (end-start).days)]
+        date_generated = [start + datetime.timedelta(days=x) for x in range(0, (end-start).days+1)]
         return date_generated
