@@ -1960,7 +1960,49 @@ def submit_changed_profile_bloodbank(request):
 
 
 def bloodbank_collection(request):
-    return HttpResponse("etate kaaj kora lagbe")
+    blood_bank_id = user_info['pk']
+    # hospital_id_for_doctor = hospital_id
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    print(blood_bank_id)
+    c.execute(
+        "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(
+            blood_bank_id))
+
+    blood_bank_name = ""
+    phone = ""
+    location = ""
+    email = ""
+    a_pos = ""
+    a_neg = ""
+    b_pos = ""
+    b_neg = ""
+    ab_pos = ""
+    ab_neg = ""
+    o_pos = ""
+    o_neg = " "
+
+    for row in c:
+        blood_bank_name = row[0]
+        phone = row[1]
+        location = row[2]
+        email = row[3]
+        a_pos = row[4]
+        a_neg = row[5]
+        b_pos = row[6]
+        b_neg = row[7]
+        ab_pos = row[8]
+        ab_neg = row[9]
+        o_pos = row[10]
+        o_neg = row[11]
+
+    return render(request, "detail_showing_pages/see_bloodbank_collection.html",
+                  {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
+                   'phone': phone, 'location': location, 'email': email,
+                   'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
+                   'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                   })
 
 
 def bloodbank_calender(request):
@@ -1992,13 +2034,13 @@ def bloodbank_pending_status_changed(request):
     blood_bank_id = request.POST['blood_bank_id']
     user_id = request.POST['user_id']
     amount = request.POST['amount']
-    pending_status = "PENDING"
+    blood_group=request.POST['blood_group']
     DONE = "DONE"
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
     statement = "UPDATE MEDI_SHEBA.USER_BBANK_HISTORY SET PENDING_STATUS = " + "\'" + DONE + "\'" + "WHERE USER_ID = " + str(
-        user_id) + " AND BLOOD_BANK_ID = " + str(blood_bank_id) + " AND AMOUNT = " + amount
+        user_id) + " AND BLOOD_BANK_ID = " + str(blood_bank_id) + " AND AMOUNT = " + amount +"AND BLOOD_GROUP =" + "\'" + blood_group + "\'"
 
     c.execute(statement)
     conn.commit()

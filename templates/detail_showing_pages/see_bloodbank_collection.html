@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <title>{{ name }}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/profile_editor_css.css' %}">
+</head>
+
+<!------ Include the above in your HEAD tag ---------->
+
+<body>
+<form action="#" method="post">
+    {% csrf_token %}
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="{% static 'images/user.png' %}" width="128" height="128">
+                    <span> {{ name }} </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Bloodbank Collection</h4>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12"><label class="labels">A+</label><h4>{{ a_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">A-</label><h4>{{ a_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">B+</label><h4>{{ b_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">B-</label><h4>{{ b_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">AB+</label><h4>{{ ab_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">AB-</label><h4>{{ ab_neg }}</h4></div>
+                        <div class="col-md-12"><label class="labels">O+</label><h4>{{ o_pos }}</h4></div>
+                        <div class="col-md-12"><label class="labels">O-</label><h4>{{ o_neg }}</h4></div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+    </div>
+</form>
+</body>
+
