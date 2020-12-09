@@ -33,6 +33,8 @@ urlpatterns = [
          MediSheba_views.todays_appointment_of_user_by_doctor, name='todays_appointment_of_user_by_doctor'),
     path('doctor/view_user_appointments_by_doctor/todays_appointment_of_user_by_doctor/add_user_problem_prescription',
          MediSheba_views.add_user_problem_prescription, name='add_user_problem_prescription'),
+    path('doctor/view_user_appointments_by_doctor/todays_appointment_of_user_by_doctor/add_problem_and_prescription',
+         MediSheba_views.add_problem_and_prescription, name = 'add_problem_and_prescription' ),
 
     path('doctor/view_hospital_appointments_by_doctor/', MediSheba_views.view_hospital_appointments_by_doctor, name='view_hospital_appointments_by_doctor'),
     path('doctor/view_hospital_appointments_by_doctor/past_appointment_of_hospital_by_doctor',
