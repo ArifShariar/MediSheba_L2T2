@@ -458,9 +458,7 @@ def submit_changed_profile_doctor(request):
             print("SPECIALIZATION NOT CHANGED ")
         print(additional_details)
 
-
-
-        #TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES
+        # TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES
 
         c = conn.cursor()
         statement = "SELECT DOCTOR_ID, FIRST_NAME, LAST_NAME,EMAIL from MEDI_SHEBA.DOCTOR  WHERE DOCTOR_ID=" + str(
@@ -696,59 +694,69 @@ def filter_search_doctor(request):
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION= " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
 
         elif area == "No Preferences":
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
 
         else:
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER = " + "\'" + gender + "\'" + " AND  LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
 
     elif gender == "No Preferences":
         if specialization == "No Preferences":
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID !=" + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID !=" + str(
+                    user_info['pk'])
 
         elif area == "No Preferences":
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION = " + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
         else:
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(user_info['type'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE LOCATION = " + "\'" + area + "\'" + " AND SPECIALIZATION =" + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['type'])
 
     elif area == "No Preferences":
         if specialization == "No Preferences":
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE GENDER= " + "\'" + gender + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
         elif gender == "No Preferences":
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND DOCTOR_ID != " + str(
+                    user_info['pk'])
         else:
             if user_info['type'] != 'doctor':
                 statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'"
             else:
-                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND DOCTOR_ID !=" + str(user_info['pk'])
+                statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND DOCTOR_ID !=" + str(
+                    user_info['pk'])
     else:
         if user_info['type'] != 'doctor':
             statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND LOCATION = " + "\'" + area + "\'"
         else:
-            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(user_info['pk'])
+            statement = "SELECT FIRST_NAME || ' ' || LAST_NAME,PHONE, GENDER, SPECIALIZATION, LOCATION, NVL(HOSPITAL_ID,-1), DOCTOR_ID FROM MEDI_SHEBA.DOCTOR WHERE SPECIALIZATION= " + "\'" + specialization + "\'" + " AND GENDER = " + "\'" + gender + "\'" + " AND LOCATION = " + "\'" + area + "\'" + " AND DOCTOR_ID != " + str(
+                user_info['pk'])
 
     location_names = json_extractor.JsonExtractor('name').extract("HelperClasses/zilla_names.json")
     location_names.sort()
@@ -1484,26 +1492,23 @@ def past_appointment_of_doctor_by_user(request):
 
 
 def upcoming_appointment_of_doctor_by_user(request):
-    if bool(user_info) and user_info['pk'] == 'user':
-        dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
-        conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
-        c = conn.cursor()
-        statement = "SELECT D.DOCTOR_ID, D.FIRST_NAME, D.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM DOCTOR D,DOCTOR_USER_HISTORY DUH WHERE D.DOCTOR_ID = DUH.DOCTOR_ID AND DUH.USER_ID = " + str(
-            user_info[
-                'pk']) + " AND DUH.USER_TYPE = " + "\'" + "user" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') > (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT D.DOCTOR_ID, D.FIRST_NAME, D.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM DOCTOR D,DOCTOR_USER_HISTORY DUH WHERE D.DOCTOR_ID = DUH.DOCTOR_ID AND DUH.USER_ID = " + str(
+        user_info[
+            'pk']) + " AND DUH.USER_TYPE = " + "\'" + "user" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') > (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
 
-        c.execute(statement)
-        upcoming_appointment = []
+    c.execute(statement)
+    upcoming_appointment = []
 
-        index = 1
-        for r in c:
-            upcoming_appointment.append(doctor_user_history(index, user_info['pk'], r[0], r[1], r[2], r[3]))
-            index = index + 1
+    index = 1
+    for r in c:
+        upcoming_appointment.append(doctor_user_history(index, user_info['pk'], r[0], r[1], r[2], r[3]))
+        index = index + 1
 
-        return render(request, 'appointment_history_pages/user_history/doctor/upcoming_appointment_doctor.html',
-                      {'upcoming_appointment': upcoming_appointment})
-    else:
-        return HttpResponse("NO ACCESS")
+    return render(request, 'appointment_history_pages/user_history/doctor/upcoming_appointment_doctor.html',
+                  {'upcoming_appointment': upcoming_appointment})
 
 
 def pending_appointment_of_doctor_by_user(request):
@@ -2746,12 +2751,12 @@ def check_cabin_availability_by_doctor(request):
     for x in serial_dates:
         print(x)
     '''
-    f=0
+    f = 0
     for x in serial_dates:
         if x == inputed_entry_date or x == inputed_exit_date:
             f = 1
             break
-        elif inputed_entry_date < x  and inputed_exit_date > x:
+        elif inputed_entry_date < x and inputed_exit_date > x:
             f = 1
             break
     if f == 1:
@@ -2766,15 +2771,17 @@ def check_cabin_availability_by_doctor(request):
             cabinBookingList.append(cabinBookingDetails(index, row[0], row[1], row[2]))
             index = index + 1
         conn.close()
-        return render(request, "cabin/cabin_booking_error_page_by_doctor.html", {'uch': cabinBookingList , 'cabin_id': request.GET['cabin_id_for_doctor']})
+        return render(request, "cabin/cabin_booking_error_page_by_doctor.html",
+                      {'uch': cabinBookingList, 'cabin_id': request.GET['cabin_id_for_doctor']})
     else:
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
         statement = "INSERT INTO MEDI_SHEBA.CABIN_USER_APPOINTMENT(USER_ID,CABIN_ID,ENTRY_DATE,EXIT_DATE,USER_TYPE) " \
                     "VALUES" \
-                    " (" + "\'" + str(user_info['pk']) + "\'," + "\'" + str(cabin_id) + "\'," + "TO_DATE(" + "\'" + inputed_entry_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," \
-                    + "TO_DATE(" + "\'" + inputed_exit_date + "\'," + "\'" + "yyyy-mm-dd" + "\'),"  + "\'" + \
+                    " (" + "\'" + str(user_info['pk']) + "\'," + "\'" + str(
+            cabin_id) + "\'," + "TO_DATE(" + "\'" + inputed_entry_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," \
+                    + "TO_DATE(" + "\'" + inputed_exit_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + \
                     user_info['type'] + "\'" + ")"
         c.execute(statement)
         conn.commit()
@@ -2866,7 +2873,7 @@ def check_cabin_availability_by_user(request):
         if x == inputed_entry_date or x == inputed_exit_date:
             f = 1
             break
-        elif inputed_entry_date < x  and inputed_exit_date > x:
+        elif inputed_entry_date < x and inputed_exit_date > x:
             f = 1
             break
     if f == 1:
@@ -2896,7 +2903,6 @@ def check_cabin_availability_by_user(request):
         c.execute(statement)
         conn.commit()
         return redirect("submit_book_cabin_by_user")
-
 
 
 def submit_book_cabin_by_user(request):
