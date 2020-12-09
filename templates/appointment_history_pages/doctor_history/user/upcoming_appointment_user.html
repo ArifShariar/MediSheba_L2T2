@@ -34,9 +34,9 @@
         {% for app in upcoming_appointment %}
             <tr>
             <td>{{ app.index }}</td>
-            <td>{{ app.doc_f_name }}</td>
-            <td>{{ app.doc_l_name }}</td>
-            <td>{{ app.appointment_time }}</td>
+            <td>{{ app.f_name }}</td>
+            <td>{{ app.l_name }}</td>
+            <td>{{ app.appointment_date }}</td>
                 <!--
             <td>
                 <form action="see_specific_bloodbank_details" method="post">
