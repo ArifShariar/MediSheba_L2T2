@@ -104,6 +104,8 @@ urlpatterns = [
     path('doctor/search_options/search_blood_banks/custom_search_for_bloodbank_by_doctor',
          MediSheba_views.custom_search_for_bloodbank_by_doctor, name='custom_search_for_bloodbank_by_doctor'),
 
+    path('users/cabin_booking_history_by_doctor', MediSheba_views.cabin_booking_history_by_doctor,
+         name='cabin_booking_history_by_doctor'),
     path('doctor/search_cabin/', MediSheba_views.search_cabin_by_doctor, name='search_cabin_by_doctor'),
     path('doctor/search_cabin/custom_search_for_cabin_by_doctor', MediSheba_views.custom_search_for_cabin_by_doctor,
          name='custom_search_for_cabin_by_doctor'),
@@ -177,6 +179,8 @@ urlpatterns = [
          name='see_specific_hospital_details'),
     path('users/user_modify_appointment/', MediSheba_views.user_modify_appointment, name='user_modify_appointment'),
 
+    path('users/cabin_booking_history_by_user', MediSheba_views.cabin_booking_history_by_user,
+         name='cabin_booking_history_by_user'),
     path('users/search_cabin_by_user/', MediSheba_views.search_cabin_by_user,
          name='search_cabin_by_user'),
     path('users/search_cabin_by_user/custom_search_for_cabin_by_user',

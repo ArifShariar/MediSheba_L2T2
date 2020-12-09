@@ -17,6 +17,7 @@ from .models import userCabinHistory
 from .models import doctor_user_history
 from .models import cabinBookingDetails
 from .models import Todays_Appointments
+from .models import cabinBookingHistory
 
 # login
 user_info = {}  # holds user data across pages
@@ -2292,7 +2293,7 @@ def check_cabin_history(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,CU.ENTRY_DATE,CU.EXIT_DATE,CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.EXIT_DATE<SYSDATE and H.HOSPITAL_ID= " + str(
+    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,TO_CHAR(CU.ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(CU.EXIT_DATE,'yyyy-mm-dd'),CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.EXIT_DATE<SYSDATE and H.HOSPITAL_ID= " + str(
         user_info['pk'])
     c.execute(statement)
     index = 1
@@ -2308,7 +2309,7 @@ def check_occupied_cabin(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,CU.ENTRY_DATE,CU.EXIT_DATE,CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.ENTRY_DATE<=SYSDATE and CU.EXIT_DATE>=SYSDATE and H.HOSPITAL_ID= " + str(
+    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,TO_CHAR(CU.ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(CU.EXIT_DATE,'yyyy-mm-dd'),CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.ENTRY_DATE<=SYSDATE and CU.EXIT_DATE>=SYSDATE and H.HOSPITAL_ID= " + str(
         user_info['pk'])
     c.execute(statement)
     index = 1
@@ -2324,7 +2325,7 @@ def check_cabin_pending_appointments(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,CU.ENTRY_DATE,CU.EXIT_DATE,CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.ENTRY_DATE>SYSDATE and H.HOSPITAL_ID= " + str(
+    statement = "select CU.CABIN_ID,CU.USER_ID,H.HOSPITAL_NAME,TO_CHAR(CU.ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(CU.EXIT_DATE,'yyyy-mm-dd'),CU.USER_TYPE from MEDI_SHEBA.CABIN_USER_APPOINTMENT CU JOIN MEDI_SHEBA.HOSPITAL H ON CU.CABIN_ID in (SELECT C.CABIN_ID FROM MEDI_SHEBA.CABIN C where C.HOSPITAL_ID=H.HOSPITAL_ID) and CU.ENTRY_DATE>SYSDATE and H.HOSPITAL_ID= " + str(
         user_info['pk'])
     c.execute(statement)
     index = 1
@@ -2813,7 +2814,7 @@ def filter_search_cabin(request):
     index = 1
     for row in c:
         hospitalcabinList.append(HospitalCabinName(index, row[0], row[1], row[2], row[3]))
-    index = index + 1
+        index = index + 1
     conn.close()
     if user_info['type'] == 'doctor':
         return render(request, "query_pages/query_page_for_doctors/cabin_custom_query_by_doctor.html",
@@ -2972,6 +2973,20 @@ def submit_book_cabin_by_doctor(request):
 def go_to_doctor_home(request):
     return redirect("doctor_home")
 
+def cabin_booking_history_by_doctor(request):
+    cabinBookingList = []
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(user_info['pk']) +   " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
+    c.execute(statement)
+    print(statement)
+    index = 1
+    for row in c:
+        cabinBookingList.append(cabinBookingHistory(index, row[0], row[1], row[2], row[3], row[4]))
+        index = index + 1
+    conn.close()
+    return render(request, "cabin/cabin_booking_history_by_doctor.html", {'cbh': cabinBookingList})
 
 '''
   cabin search for users
@@ -3089,6 +3104,20 @@ def submit_book_cabin_by_user(request):
 def go_to_user_home(request):
     return redirect("user_home")
 
+def cabin_booking_history_by_user(request):
+    cabinBookingList = []
+    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
+    conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
+    c = conn.cursor()
+    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(user_info['pk']) +   " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
+    c.execute(statement)
+    print(statement)
+    index = 1
+    for row in c:
+        cabinBookingList.append(cabinBookingHistory(index, row[0], row[1], row[2], row[3], row[4]))
+        index = index + 1
+    conn.close()
+    return render(request, "cabin/cabin_booking_history_by_user.html", {'cbh': cabinBookingList})
 
 '''
   cabin ends
