@@ -96,11 +96,15 @@ class doctor_infos:
 
 class UserAppointment_in_blood_bank:
 
-    def __init__(self, id, name, blood_group, amount):
+    def __init__(self, id, name, blood_group, amount,pending_status,blood_bank_id,user_id,user_type):
         self.id = id
         self.name=name
         self.blood_group=blood_group
         self.amount=amount
+        self.pending_status=pending_status
+        self.blood_bank_id=blood_bank_id
+        self.user_id=user_id
+        self.user_type=user_type
 
 class userCabinHistory:
     def __init__(self, id, cabin_id, user_id, hospital_name, entry_date, exit_date, user_type):
