@@ -2451,12 +2451,13 @@ def see_specific_bloodbank_details(request):
         ab_neg = row[9]
         o_pos = row[10]
         o_neg = row[11]
+    msg=""
 
     return render(request, "detail_showing_pages/see_bloodbank_details.html",
                   {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                    'phone': phone, 'location': location, 'email': email,
                    'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                   'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                   'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                    })
 
 
@@ -2550,11 +2551,12 @@ def submit_blood_bank_appointment(request):
         o_neg = row[11]
     if blood_group == "A+":
         if int(amount) > a_pos:
+            msg="Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2573,11 +2575,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "A-":
         if int(amount) > a_neg:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2595,11 +2598,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "B+":
         if int(amount) > b_pos:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2617,11 +2621,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "B-":
         if int(amount) > b_neg:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2639,11 +2644,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "AB+":
         if int(amount) > ab_pos:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2661,11 +2667,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "AB-":
         if int(amount) > ab_neg:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2683,11 +2690,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "O+":
         if int(amount) > o_pos:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2705,11 +2713,12 @@ def submit_blood_bank_appointment(request):
                           {'blood_group': blood_group, 'amount': amount})
     elif blood_group == "O-":
         if int(amount) > o_neg:
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
                            })
         else:
             if user_info['type'] == 'user':
