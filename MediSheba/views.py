@@ -371,17 +371,20 @@ def submit_changed_profile_doctor(request):
         hospital_name = request.POST['hospital_name']
         fee = request.POST['fee']
         specialization = request.POST['specialization']
-        additional_details = request.POST['additional_details']
+        # additional_details = request.POST['additional_details']
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
 
         if first_name != "":
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(
-                user_info['pk'])
-            c.execute(statement)
-            conn.commit()
+            # statement = "UPDATE MEDI_SHEBA.DOCTOR SET FIRST_NAME = " + "\'" + first_name + "\'" + "WHERE DOCTOR_ID = " + str(user_info['pk'])
+            # c.execute(statement)
+            # conn.commit()
+            data = [user_info['pk'], first_name]
+            # TODO: UPDATE FUNCTION USED HERE
+            result = c.callfunc('insert_doctors_first_name', str, data)
+            print(result)
         else:
             print("First Name NOT CHANGED ")
 
@@ -464,7 +467,6 @@ def submit_changed_profile_doctor(request):
             conn.commit()
         else:
             print("SPECIALIZATION NOT CHANGED ")
-        print(additional_details)
 
         # TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES
 
@@ -1033,7 +1035,7 @@ def submit_appointment_for_doctor_by_user(request):
             print("No available slot on " + selected_date)
             print("Suggest a new date")
             print("If selected, add that date")
-            return HttpResponse("NO AVAILABLE SLOTS")
+            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
         else:
             print(
                 "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
@@ -1056,7 +1058,7 @@ def submit_appointment_for_doctor_by_user(request):
                                                'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
-            return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+            return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
     else:
         print(" date NOT FOUND in database")
         print(" ADD THIS DATE ")
@@ -1119,8 +1121,16 @@ def submit_appointment_for_doctor_by_user(request):
                                            'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
-        return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+        return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
 
+
+def go_to_your_home(request):
+    if user_info['type'] == 'user':
+        return redirect("user_home")
+    elif user_info['type'] == 'doctor':
+        return redirect("doctor_home")
+    elif user_info['type'] == 'blood_bank_admin':
+        return redirect("blood_bank_admin_home")
 
 def submit_appointment_for_doctor_by_doctor(request):
     doctor_id = request.POST.get("doctor_id", "none")
@@ -1157,7 +1167,7 @@ def submit_appointment_for_doctor_by_doctor(request):
             print("No available slot on " + selected_date)
             print("Suggest a new date")
             print("If selected, add that date")
-            return HttpResponse("NO AVAILABLE SLOTS")
+            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
         else:
             print(
                 "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
@@ -1180,7 +1190,7 @@ def submit_appointment_for_doctor_by_doctor(request):
                                                'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
-            return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
     else:
         print(" date NOT FOUND in database")
         print(" ADD THIS DATE ")
@@ -1243,7 +1253,7 @@ def submit_appointment_for_doctor_by_doctor(request):
                                            'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
-        return HttpResponse("APPOINTMENT WAS MADE SUCCESSFULLY")
+        return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
 
 
 def submit_appointment(request):
@@ -1807,11 +1817,17 @@ def submit_changed_blood_group_collection(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         if a_pos != "":
+            # c = conn.cursor()
+            # statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET A_POS = " + "\'" + a_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(user_info['pk'])
+            # c.execute(statement)
+            # conn.commit()
+
+            # TODO: 1. PROCEDURE HERE for update
             c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.BLOOD_BANK SET A_POS = " + "\'" + a_pos + "\'" + "WHERE BLOOD_BANK_ID = " + str(
-                user_info['pk'])
-            c.execute(statement)
-            conn.commit()
+            data = [user_info['pk'], a_pos]
+            c.callproc('update_a_pos_blood', data)
+
+
         else:
             print("First Name NOT CHANGED ")
 
@@ -2278,10 +2294,15 @@ def add_cabin_to_hospital_form_submission(request):
                 prev_cabin_count = row[0]
             prev_cabin_count = prev_cabin_count + 1
 
-            statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(
-                prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
-            c.execute(statement3)
-            conn.commit()
+            # statement3 = "UPDATE MEDI_SHEBA.HOSPITAL SET AVAILABLE_CABIN = " + str(prev_cabin_count) + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
+            # c.execute(statement3)
+            # conn.commit()
+
+            # TODO : PROCEDURE IN HOSPITAL CABIN ADD
+            c = conn.cursor()
+            data = [user_info['pk'], prev_cabin_count]
+            c.callproc('update_cabin_count_in_hospital', data)
+
             return render(request, 'cabin/cabin_add_confirmation.html')
     return HttpResponse("NO ACCESS")
 
@@ -2404,8 +2425,6 @@ def see_specific_bloodbank_details(request):
         "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(
             blood_bank_id))
 
-    details = c2.callfunc('get_blood_bank_details', int, [blood_bank_id])
-    print(details)
     blood_bank_name = ""
     phone = ""
     location = ""

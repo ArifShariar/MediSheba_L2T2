@@ -9,20 +9,22 @@ except Exception as e:
 else:
     try:
         c = conn.cursor()
-        id = [1075]
-        result = c.callfunc('insert_into_doctor_schedule', str, id)
+        data = [2, 1]
+        # cursor.callproc('myproc', [123, outVal])
+        # result = c.callfunc('update_a_pos_blood', str, data)
+        c.callproc('update_cabin_count_in_hospital', data)
+
 
     except Exception as e:
         print("Fuck 2", e)
 
     else:
-        print("Doc name: ", result)
+        print("Done")
 
     finally:
         c.close()
 finally:
     conn.close()
-
 
 '''
 
