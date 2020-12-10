@@ -217,9 +217,15 @@ def signupSubmit(request):
             user_info['email'] = email
             user_info['type'] = "doctor"
 
-            statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES (" + str(user_info['pk']) + ")"
-            c3.execute(statement)
-            conn.commit()
+            # statement = "INSERT INTO MEDI_SHEBA.DOCTOR_SCHEDULE(DOCTOR_ID) VALUES (" + str(user_info['pk']) + ")"
+
+            # TODO: DOCTOR SCHEDULE INSERT SQL FUNCTION HERE
+            id = [return_id]
+            result = c3.callfunc('insert_into_doctor_schedule', str, id)
+            print(result)
+
+            # c3.execute(statement)
+            # conn.commit()
 
             return redirect("doctor_home")
         else:
@@ -2206,56 +2212,6 @@ def submit_changed_profile_hospital(request):
         else:
             print("EMAIL NOT CHANGED ")
 
-        '''if blood_type != "":
-            c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET BLOOD_GROUP = " + "\'" + blood_type + "\'" + "WHERE HOSPITAL_ID = " + str(
-                user_info['pk'])
-            c.execute(statement)
-            conn.commit()
-        else:
-            print("BLOOD NOT CHANGED ")
-
-        if hospital_name != "":
-            c = conn.cursor()
-            statement_1 = "SELECT HOSPITAL_ID FROM MEDI_SHEBA.HOSPITAL WHERE HOSPITAL_NAME = " + "\'" + hospital_name + "\'"
-            c.execute(statement_1)
-
-            hospital_id = 0
-            for r in c:
-                hospital_id = r[0]
-
-            c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET HOSPITAL_ID = " + str(hospital_id) + " WHERE HOSPITAL_ID = " \
-                        + str(user_info['pk'])
-            c.execute(statement)
-            conn.commit()
-        else:
-            print("HOSPITAL NOT CHANGED ")
-
-        if fee != "":
-            c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET FEES = " + fee + " WHERE HOSPITAL_ID = " + str(
-                user_info['pk'])
-            c.execute(statement)
-            conn.commit()
-        else:
-            print("FEES NOT CHANGED ")
-
-        if specialization != "":
-            c = conn.cursor()
-            statement = "UPDATE MEDI_SHEBA.DOCTOR SET SPECIALIZATION = " + "\'" + specialization + "\'" \
-                        + " WHERE HOSPITAL_ID = " + str(user_info['pk'])
-            c.execute(statement)
-            conn.commit()
-        else:
-            print("SPECIALIZATION NOT CHANGED ")
-        print(additional_details)'''
-
-        '''
-        UPDATE DICTIONARY HERE, CAUSE NOT UPDATING THE DICTIONARY WILL SHOW WRONG INFORMATION ON THE PAGES
-        UPDATE EMAIL, FIRST NAME, LAST NAME
-        '''
-
         '''
         TODO: HANDLE MULTI VALUE DICT KEY ERROR IF SOMETHING IS NOT GIVEN AS INPUT, SPECIALLY DROP DOWN BOXES 
         '''
@@ -2439,11 +2395,17 @@ def see_specific_bloodbank_details(request):
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
+    c2 = conn.cursor()
     print(blood_bank_id)
+
+    statement = ""
+
     c.execute(
         "SELECT NAME, PHONE, LOCATION, EMAIL,A_POS,A_NEG,B_POS,B_NEG,AB_POS,AB_NEG,O_POS,O_NEG FROM MEDI_SHEBA.BLOOD_BANK WHERE BLOOD_BANK_ID = " + str(
             blood_bank_id))
 
+    details = c2.callfunc('get_blood_bank_details', int, [blood_bank_id])
+    print(details)
     blood_bank_name = ""
     phone = ""
     location = ""
@@ -2988,7 +2950,8 @@ def check_cabin_availability_by_doctor(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
-        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(
+            cabin_id)
         c.execute(statement)
         index = 1
         for row in c:
@@ -3122,7 +3085,8 @@ def check_cabin_availability_by_user(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
-        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(
+            cabin_id)
         c.execute(statement)
         index = 1
         for row in c:
