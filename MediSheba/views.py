@@ -1584,9 +1584,10 @@ def check_users_prescription(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
-        patient_name = user_info['f_name'] + " "+user_info['l_name']
+        patient_name = user_info['f_name'] + " " + user_info['l_name']
         patient_email = user_info['email']
-        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME, EMAIL FROM MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID = " + str(doctor_id)
+        statement = "SELECT FIRST_NAME || ' ' || LAST_NAME, EMAIL FROM MEDI_SHEBA.DOCTOR WHERE DOCTOR_ID = " + str(
+            doctor_id)
         c.execute(statement)
         doctor_name = ""
         doctor_email = ""
@@ -1594,7 +1595,9 @@ def check_users_prescription(request):
             doctor_name = r[0]
             doctor_email = r[1]
 
-        statement = "SELECT PROBLEM, PRESCRIPTION FROM MEDI_SHEBA.DOCTOR_USER_HISTORY WHERE USER_ID = " + str(user_id) + " AND DOCTOR_ID = " + str(doctor_id) + " AND TO_CHAR(APPOINTMENT_TIME,'yyyy-mm-dd') = " + "\'" + appointment_date + "\'"
+        statement = "SELECT PROBLEM, PRESCRIPTION FROM MEDI_SHEBA.DOCTOR_USER_HISTORY WHERE USER_ID = " + str(
+            user_id) + " AND DOCTOR_ID = " + str(
+            doctor_id) + " AND TO_CHAR(APPOINTMENT_TIME,'yyyy-mm-dd') = " + "\'" + appointment_date + "\'"
         c.execute(statement)
         problem = ""
         prescription = ""
@@ -1605,12 +1608,12 @@ def check_users_prescription(request):
 
         return render(request, 'appointment_history_pages/user_history/doctor/show_problem_and_prescription.html',
                       {
-                          'patient_name' : patient_name,
-                          'patient_email' : patient_email,
-                          'doctor_name' : doctor_name,
+                          'patient_name': patient_name,
+                          'patient_email': patient_email,
+                          'doctor_name': doctor_name,
                           'doctor_email': doctor_email,
-                          'problem' : problem,
-                          'prescription':prescription
+                          'problem': problem,
+                          'prescription': prescription
                       })
     else:
         return HttpResponse("NO ACCESS")
@@ -1928,11 +1931,11 @@ def submit_changed_profile_bloodbank(request):
         phone_number = request.POST['phone']
         location = request.POST['address']
         email = request.POST['email']
-        #blood_type = request.POST['blood_type']
+        # blood_type = request.POST['blood_type']
         name = request.POST['name']
-        #fee = request.POST['fee']
-        #specialization = request.POST['specialization']
-        #additional_details = request.POST['additional_details']
+        # fee = request.POST['fee']
+        # specialization = request.POST['specialization']
+        # additional_details = request.POST['additional_details']
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -2086,13 +2089,14 @@ def bloodbank_pending_status_changed(request):
     blood_bank_id = request.POST['blood_bank_id']
     user_id = request.POST['user_id']
     amount = request.POST['amount']
-    blood_group=request.POST['blood_group']
+    blood_group = request.POST['blood_group']
     DONE = "DONE"
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
     statement = "UPDATE MEDI_SHEBA.USER_BBANK_HISTORY SET PENDING_STATUS = " + "\'" + DONE + "\'" + "WHERE USER_ID = " + str(
-        user_id) + " AND BLOOD_BANK_ID = " + str(blood_bank_id) + " AND AMOUNT = " + amount +"AND BLOOD_GROUP =" + "\'" + blood_group + "\'"
+        user_id) + " AND BLOOD_BANK_ID = " + str(
+        blood_bank_id) + " AND AMOUNT = " + amount + " AND BLOOD_GROUP =" + "\'" + blood_group + "\'"
 
     c.execute(statement)
     conn.commit()
@@ -2148,11 +2152,11 @@ def submit_changed_profile_hospital(request):
         phone_number = request.POST['phone']
         location = request.POST['address']
         email = request.POST['email']
-        #blood_type = request.POST['blood_type']
-        #hospital_name = request.POST['hospital_name']
-        #fee = request.POST['fee']
-        #specialization = request.POST['specialization']
-        #additional_details = request.POST['additional_details']
+        # blood_type = request.POST['blood_type']
+        # hospital_name = request.POST['hospital_name']
+        # fee = request.POST['fee']
+        # specialization = request.POST['specialization']
+        # additional_details = request.POST['additional_details']
 
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
@@ -3015,12 +3019,14 @@ def submit_book_cabin_by_doctor(request):
 def go_to_doctor_home(request):
     return redirect("doctor_home")
 
+
 def cabin_booking_history_by_doctor(request):
     cabinBookingList = []
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(user_info['pk']) +   " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
+    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(
+        user_info['pk']) + " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
     c.execute(statement)
     print(statement)
     index = 1
@@ -3029,6 +3035,7 @@ def cabin_booking_history_by_doctor(request):
         index = index + 1
     conn.close()
     return render(request, "cabin/cabin_booking_history_by_doctor.html", {'cbh': cabinBookingList})
+
 
 '''
   cabin search for users
@@ -3146,12 +3153,14 @@ def submit_book_cabin_by_user(request):
 def go_to_user_home(request):
     return redirect("user_home")
 
+
 def cabin_booking_history_by_user(request):
     cabinBookingList = []
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
     c = conn.cursor()
-    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(user_info['pk']) +   " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
+    statement = "SELECT USER_ID,CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd'),USER_TYPE from CABIN_USER_APPOINTMENT where USER_ID= " + str(
+        user_info['pk']) + " AND USER_TYPE = " + "\'" + user_info['type'] + "\'"
     c.execute(statement)
     print(statement)
     index = 1
@@ -3160,6 +3169,7 @@ def cabin_booking_history_by_user(request):
         index = index + 1
     conn.close()
     return render(request, "cabin/cabin_booking_history_by_user.html", {'cbh': cabinBookingList})
+
 
 '''
   cabin ends
