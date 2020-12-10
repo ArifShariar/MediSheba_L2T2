@@ -2988,7 +2988,7 @@ def check_cabin_availability_by_doctor(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
-        statement = "SELECT CABIN_ID,ENTRY_DATE,EXIT_DATE from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
         c.execute(statement)
         index = 1
         for row in c:
@@ -3122,7 +3122,7 @@ def check_cabin_availability_by_user(request):
         dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
         conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
         c = conn.cursor()
-        statement = "SELECT CABIN_ID,ENTRY_DATE,EXIT_DATE from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
+        statement = "SELECT CABIN_ID,TO_CHAR(ENTRY_DATE,'yyyy-mm-dd'),TO_CHAR(EXIT_DATE,'yyyy-mm-dd') from CABIN_USER_APPOINTMENT where CABIN_ID = " + str(cabin_id)
         c.execute(statement)
         index = 1
         for row in c:
