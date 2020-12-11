@@ -965,6 +965,7 @@ def see_specific_doctor_details(request):
     hospital_id = ""
     fees = ""
     specialization = ""
+    msg = ""
     for row in c:
         first_name = row[0]
         last_name = row[1]
@@ -991,12 +992,14 @@ def see_specific_doctor_details(request):
                       {'name': first_name + " " + last_name, 'first_name': first_name,
                        'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
                        'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization,
-                       'doctor_id': doctor_id})
+                       'doctor_id': doctor_id,
+                       'msg': msg})
     return render(request, "detail_showing_pages/see_doctors_details.html",
                   {'name': first_name + " " + last_name, 'first_name': first_name,
                    'last_name': last_name, 'phone': phone, 'location': location, 'email': email,
                    'hospital_name': hospital_full_name, 'fees': fees, 'specialization': specialization,
-                   'doctor_id': doctor_id})
+                   'doctor_id': doctor_id,
+                   'msg': msg})
 
 
 # TODO: APPOINTMENT FOR DOCTOR BY USER
@@ -1020,6 +1023,8 @@ def submit_appointment_for_doctor_by_user(request):
     c.execute(statement)
     date_list = []
 
+    msg = ""
+
     occupied_slot = 0
     max_slot = 0
     for row in c:
@@ -1035,7 +1040,8 @@ def submit_appointment_for_doctor_by_user(request):
             print("No available slot on " + selected_date)
             print("Suggest a new date")
             print("If selected, add that date")
-            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
+            msg = "No slot available on " + selected_date
+            return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
         else:
             print(
                 "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
@@ -1121,7 +1127,7 @@ def submit_appointment_for_doctor_by_user(request):
                                            'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
-        return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
+        return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
 
 
 def go_to_your_home(request):
@@ -1131,6 +1137,7 @@ def go_to_your_home(request):
         return redirect("doctor_home")
     elif user_info['type'] == 'blood_bank_admin':
         return redirect("blood_bank_admin_home")
+
 
 def submit_appointment_for_doctor_by_doctor(request):
     doctor_id = request.POST.get("doctor_id", "none")
@@ -1151,7 +1158,7 @@ def submit_appointment_for_doctor_by_doctor(request):
         doctor_id)
     c.execute(statement)
     date_list = []
-
+    msg = ""
     occupied_slot = 0
     max_slot = 0
     for row in c:
@@ -1167,7 +1174,8 @@ def submit_appointment_for_doctor_by_doctor(request):
             print("No available slot on " + selected_date)
             print("Suggest a new date")
             print("If selected, add that date")
-            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
+            msg = "No Slot Available on " + selected_date
+            return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_failed.html')
         else:
             print(
                 "Ok , found available slot on that DATE, increase occupied by 1 , add this appointment to doctor_user_history")
@@ -1190,7 +1198,7 @@ def submit_appointment_for_doctor_by_doctor(request):
                                                'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
                 c.execute(query)
                 conn.commit()
-            return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
+            return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
     else:
         print(" date NOT FOUND in database")
         print(" ADD THIS DATE ")
@@ -1253,7 +1261,7 @@ def submit_appointment_for_doctor_by_doctor(request):
                                            'pk']) + "," + "TO_DATE(" + "\'" + selected_date + "\'," + "\'" + "yyyy-mm-dd" + "\')," + "\'" + "doctor" + "\'" + ")"
             c.execute(query)
             conn.commit()
-        return render(request,'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
+        return render(request, 'appointment_history_pages/user_history/doctor/doctor_appointment_successful.html')
 
 
 def submit_appointment(request):
@@ -2451,13 +2459,13 @@ def see_specific_bloodbank_details(request):
         ab_neg = row[9]
         o_pos = row[10]
         o_neg = row[11]
-    msg=""
+    msg = ""
 
     return render(request, "detail_showing_pages/see_bloodbank_details.html",
                   {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                    'phone': phone, 'location': location, 'email': email,
                    'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                   'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                   'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                    })
 
 
@@ -2551,12 +2559,12 @@ def submit_blood_bank_appointment(request):
         o_neg = row[11]
     if blood_group == "A+":
         if int(amount) > a_pos:
-            msg="Invalid Amount"
+            msg = "Invalid Amount"
             return render(request, "detail_showing_pages/see_bloodbank_details.html",
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2580,7 +2588,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2603,7 +2611,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2626,7 +2634,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2649,7 +2657,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2672,7 +2680,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2695,7 +2703,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
@@ -2718,7 +2726,7 @@ def submit_blood_bank_appointment(request):
                           {'blood_bank_id': blood_bank_id, 'name': blood_bank_name,
                            'phone': phone, 'location': location, 'email': email,
                            'a_pos': a_pos, 'a_neg': a_neg, 'ab_pos': ab_pos, 'ab_neg': ab_neg,
-                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg,'msg':msg,
+                           'b_pos': b_pos, 'b_neg': b_neg, 'o_pos': o_pos, 'o_neg': o_neg, 'msg': msg,
                            })
         else:
             if user_info['type'] == 'user':
