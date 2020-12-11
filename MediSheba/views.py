@@ -55,9 +55,6 @@ def submit(request):
     password = request.POST['pass']
     user = request.POST['User']
 
-    print("EMAIL: " + email)
-    print("PASS: " + password)
-    print("User Type: " + user)
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
