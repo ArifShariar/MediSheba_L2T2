@@ -1471,7 +1471,7 @@ def submit_changed_profile_user(request):
     phone_number = request.POST['phone']
     email = request.POST['email']
     blood_type = request.POST['blood_type']
-    bio = request.POST['additional_details']
+    # bio = request.POST['additional_details']
 
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='ORCL')
     conn = cx_Oracle.connect(user='MEDI_SHEBA', password='1234', dsn=dsn_tns)
