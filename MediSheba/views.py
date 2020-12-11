@@ -624,7 +624,7 @@ def past_appointment_of_doctor_by_doctor(request):
         c = conn.cursor()
         statement = "SELECT D.DOCTOR_ID, D.FIRST_NAME, D.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM DOCTOR D,DOCTOR_USER_HISTORY DUH WHERE D.DOCTOR_ID = DUH.DOCTOR_ID AND DUH.USER_ID = " + str(
             user_info[
-                'pk']) + " AND DUH.USER_TYPE = " + "\'" + "doctor" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') < (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
+                'pk']) + " AND DUH.USER_TYPE = " + "\'" + "doctor" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') <= (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
 
         c.execute(statement)
         past_appointment = []
@@ -1583,7 +1583,7 @@ def past_appointment_of_doctor_by_user(request):
         c = conn.cursor()
         statement = "SELECT D.DOCTOR_ID, D.FIRST_NAME, D.LAST_NAME, TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') FROM DOCTOR D,DOCTOR_USER_HISTORY DUH WHERE D.DOCTOR_ID = DUH.DOCTOR_ID AND DUH.USER_ID = " + str(
             user_info[
-                'pk']) + " AND DUH.USER_TYPE = " + "\'" + "user" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') < (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
+                'pk']) + " AND DUH.USER_TYPE = " + "\'" + "user" + "\'" + " AND TO_CHAR(DUH.APPOINTMENT_TIME,'yyyy-mm-dd') <= (SELECT TO_CHAR(SYSDATE,'yyyy-mm-dd') FROM DUAL)"
 
         c.execute(statement)
         past_appointment = []
