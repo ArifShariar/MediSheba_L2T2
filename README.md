@@ -11,10 +11,8 @@
 3. After installing necessary libraries, run "py manage.py runserver"<br>
 4. Your system should have oracle 11g installed <br>
 5. You have to change the Username and Password of Database in the files <br>
-
-<i> Project still under development </i>
 </p>
-<hr>
+<p> Demo video of the project: <a href="https://youtu.be/BO4YH7lxSU0">Watch here on YouTube!</a></p>
 <p>
 The ERD we are following:<br>
 <img src="External_Files/MEDI_SHEBA_ERD.png">
