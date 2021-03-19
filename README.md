@@ -19,7 +19,7 @@ The ERD we are following:<br>
 </p>
 <p>
 Group members:<br>
-1. <a href="https://github.com/1705095">Arif Shariar Rahman (1705095)</a> <br>
+1. <a href="https://github.com/ArifShariar">Arif Shariar Rahman (1705095)</a> <br>
 2. <a href="https://github.com/MdShamim097">Mohammad Shamim Ahsan (1705097) </a><br>
 3. <a href="https://github.com/AnikIslamPantha">Anik Islam Pantha (1705104)</a> <br>
 Instructor:  Shehab Sarar Ahmed (SSA)<br>
